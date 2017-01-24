@@ -1,0 +1,6 @@
+node_modules
+.DS_Store
+data
+config.json
+npm-debug.log
+builds/presentation/*

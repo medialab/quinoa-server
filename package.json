@@ -1,0 +1,38 @@
+{
+  "name": "quinoa-server",
+  "version": "0.0.1",
+  "description": "Server application for quinoa client applications services",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha -R spec --recursive $(find tests -name '*.spec.js')",
+    "start": "node server",
+    "build-presentation-app": "node services/presentationAppBuilder/",
+    "postinstall": "npm run build-presentation-app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/medialab/quinoa-server.git"
+  },
+  "author": "Robin de Mourat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/medialab/quinoa-server/issues"
+  },
+  "homepage": "https://github.com/medialab/quinoa-server#readme",
+  "dependencies": {
+    "cors": "^2.8.1",
+    "css-loader": "^0.26.1",
+    "express": "^4.14.0",
+    "image-webpack-loader": "^3.1.0",
+    "kotatsu": "^0.14.0",
+    "node-sass": "^4.3.0",
+    "quinoa-presentation-player": "git+https://github.com/medialab/quinoa-presentation-player.git",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.1",
+    "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}
