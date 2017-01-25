@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/medialab/quinoa-server#readme",
   "dependencies": {
+    "body-parser": "^1.16.0",
     "cors": "^2.8.1",
     "css-loader": "^0.26.1",
     "express": "^4.14.0",
@@ -28,11 +29,14 @@
     "node-sass": "^4.3.0",
     "quinoa-presentation-player": "git+https://github.com/medialab/quinoa-presentation-player.git",
     "sass-loader": "^4.1.1",
+    "script-loader": "^0.7.0",
     "style-loader": "^0.13.1",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.2.0"
+    "mocha": "^3.2.0",
+    "request": "^2.79.0",
+    "supertest": "^2.0.1"
   }
 }

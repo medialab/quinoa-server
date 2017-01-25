@@ -13,6 +13,7 @@ const buildSEOHTML = (presentation = {metadata: {}, order: [], slides: {}}) => {
     const slide = presentation.slides[slideId];
     return html + `
 <h2>${slide.title}</h2>
+<p>${slide.markdown}</p>
     `
   }, '');
   return `
@@ -36,10 +37,9 @@ module.exports = function bundlePresentation (presentation = {}, options = {}) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Presentation</title>
+  <title>${presJSON.metadata ? presJSON.metadata.title: 'Quinoa presentation'}</title>
   <style>
     body{
-      margin: 0;
       position: absolute;
       padding: 0;
       left: 0;
