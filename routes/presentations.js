@@ -1,11 +1,46 @@
 const app = require('../server');
 
+const manager = require('../services/presentationsManager');
 
 app.get('/presentations/:id?', (req, res) => {
   if (req.params.id) {
-    req.json('get presentation ' + id);
+    manager.getPresentation(req.params.id, (err, presentation) => {
+      if (err) {
+        return res.status(500).send(err);
+      } else res.send(presentation);
+    });
   }
   else {
-    res.json('get all presentations');
+    manager.getPresentations(null, (err, presentations) => {
+      if (err) {
+        return res.status(500).send(err);
+      } else res.send(presentations);
+    });
   }
-})
+});
+
+app.patch('/presentations/:id', (req, res) => {
+  manager.updatePresentation(req.params.id, req.body, (err, presentation) => {
+    if (err) {
+      return res.status(500).send(err);
+    } else res.send(presentation);
+  });
+});
+
+app.put('/presentations/:id', (req, res) => {
+  manager.createPresentation(req.body, (err, presentation) => {
+    if (err) {
+      return res.status(500).send(err);
+    } else res.send(presentation);
+  });
+});
+
+app.delete('/presentations/:id', (req, res) => {
+  manager.updatePresentation(req.params.id, (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    } else res.send({
+      status: 'deleted'
+    });
+  });
+});
