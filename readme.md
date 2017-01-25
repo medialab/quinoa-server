@@ -12,7 +12,3 @@ To see with which front-end applications this application works and how they pla
 
 * [bulgur - presentations making application](https://github.com/medialab/bulgur)
 * [fonio - stories making application](https://github.com/medialab/fonio)
-
-
-For now test server is there : https://quinoa-server-nepntvogdo.now.sh
-(using Now - https://zeit.co/now)

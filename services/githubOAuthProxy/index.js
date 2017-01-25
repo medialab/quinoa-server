@@ -6,7 +6,7 @@
 
 // integrate https://github.com/robindemourat/github-oauth-proxy/blob/master/server.js
 
-const config = require('');
+const config = require('../../config');
 
 function getToken(code, res) {
     if (typeof code != 'string') {
