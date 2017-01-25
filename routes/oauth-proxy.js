@@ -1,5 +1,8 @@
 const app = require('../server');
 
-app.get('/oauth-proxy', (req, res) => {
-  res.json('get oauth proxy');
-})
+const getToke = require('../services/githubOAuthProxy');
+
+app.get('/oauth-proxy/:code', (req, res) => {
+  const code = req.params.code;
+  return getToken(code, res);
+});
