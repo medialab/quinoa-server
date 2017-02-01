@@ -4,7 +4,18 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 
-const config = require('./config');
+let config;
+
+if (process.env.MODE === 'production') {
+  config = {
+    github_client_id: process.env.GITHUB_CLIENT_ID
+    github_client_secret: process.env.GITHUB_CLIENT_SECRET,
+    port: process.env.PORT || 3000
+  };
+}
+else { 
+  config = require('./config');
+}
 
 const app = express();
 
