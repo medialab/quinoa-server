@@ -28,6 +28,7 @@ function getToken(code, res) {
     }
 
     console.log('getting token');
+    console.log('environment variables', process.env);
 
     const ghreq = https.request({
         hostname: 'github.com',
