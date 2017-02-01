@@ -107,7 +107,7 @@ function getPresentation (id, callback) {
  * @param {function} callback - callbacks an error
  */
 function createPresentation (presentation, callback) {
-  const id = uuid();
+  const id = presentation.id || uuid();
   const addr = presentationsPath + '/' + id + '.json';
   const contents = typeof presentation === 'string' ? presentation : JSON.stringify(presentation);
   fs.writeFile(addr, contents, callback); 

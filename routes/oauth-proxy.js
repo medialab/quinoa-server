@@ -19,7 +19,7 @@ app.post('/oauth-proxy', cors(), (req, res) => {
       return;
   }
 
-  console.log('request is a post as expected', req.body);
+  console.log('request is a post as expected');
 
   const lcHeaders = {};
   for (k in req.headers)
@@ -31,7 +31,14 @@ app.post('/oauth-proxy', cors(), (req, res) => {
       return;
   }
 
-  req.on('data', function(chunk) {
+  if (!req.body.code) {
+    res.writeHead(415, 'Request body must contain a code prop');
+    res.end();
+    return;
+  }
+  getToken(req.body.code, res);
+
+  /*req.on('data', function(chunk) {
       data += chunk;
       if (data.length > 1e6) {
           // body too large
@@ -43,5 +50,5 @@ app.post('/oauth-proxy', cors(), (req, res) => {
       const body = data != '' ? JSON.parse(data) : undefined;
       console.log('got body,', body, ' getting token');
       getToken(body['code'], res);
-  });
+  });*/
 });
