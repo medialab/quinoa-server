@@ -41,7 +41,7 @@ function getToken(code, res) {
         const data = '';
 
         if (ghres.statusCode === 404) {
-            console.log('res not found');
+            console.log('resource not found, returning a 404');
             res.writeHead(500);
             res.end();
             return;
@@ -66,6 +66,7 @@ function getToken(code, res) {
         client_secret: config.client_secret,
         code: code
     };
+    console.log('data', data);
     ghreq.write(JSON.stringify(data));
     ghreq.end();
 }
