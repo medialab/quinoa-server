@@ -15,7 +15,6 @@ if (process.env.NODE_ENV === 'production') {
     github_client_secret: process.env.GITHUB_CLIENT_SECRET,
     port: process.env.PORT || 3000
   };
-  console.log('config is set from environment variables', config);
 }
 else { 
   config = require('../../config');
@@ -28,7 +27,7 @@ function getToken(code, res) {
         return;
     }
 
-    console.log('getting token');
+    // console.log('getting token');
 
     var ghreq = https.request({
         hostname: 'github.com',
@@ -42,7 +41,6 @@ function getToken(code, res) {
         var data = '';
 
         if (ghres.statusCode === 404) {
-            console.log('resource not found, returning a 404');
             res.writeHead(500);
             res.end();
             return;
@@ -51,7 +49,6 @@ function getToken(code, res) {
         ghres.on('data', function(chunk) { data += chunk; });
         ghres.on('end', function() {
             const body = JSON.parse(data);
-            console.log('got final response');
             if (body['error'] != null)
                 res.writeHead(400, body['error']);
             else
