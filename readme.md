@@ -18,7 +18,7 @@ To see with which front-end applications this application works and how they pla
 ## Github OAuth proxy
 
 ```
-GET /oauth-proxy/:code
+POST /oauth-proxy
 ```
 
 Returns the token associated to a specific code after dialoging with github oAuth endpoint.
