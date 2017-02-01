@@ -8,7 +8,7 @@ let config;
 
 if (process.env.MODE === 'production') {
   config = {
-    github_client_id: process.env.GITHUB_CLIENT_ID
+    github_client_id: process.env.GITHUB_CLIENT_ID,
     github_client_secret: process.env.GITHUB_CLIENT_SECRET,
     port: process.env.PORT || 3000
   };

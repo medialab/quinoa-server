@@ -13,7 +13,6 @@ To see with which front-end applications this application works and how they pla
 * [bulgur - presentations making application](https://github.com/medialab/bulgur)
 * [fonio - stories making application](https://github.com/medialab/fonio)
 
-
 # Routes
 
 ## Github OAuth proxy
@@ -70,4 +69,19 @@ DELETE /presentations/:id
 
 Deletes the given presentation.
 
+# Deployment
 
+You have to set the following values as environment variables in production mode :
+
+* ``MODE=production` : lets the app know it must use env. variables for secrets
+* ``GITHUB_CLIENT_SECRET`` : the github client secret to use for the oauth resolution process
+* ``GITHUB_CLIENT_ID`` : the github client id to use for the oauth resolution process
+* ``PORT`` (optional) : the port to serve the application to
+
+Example for a heroku deployment (in the terminal, after having setup the heroku distant repo) :
+
+```
+heroku config:set MODE=production
+heroku config:set GITHUB_CLIENT_SECRET=xxxxxxxxxxxxxxx
+heroku config:set GITHUB_CLIENT_ID=xxxxxxxxxx
+```
