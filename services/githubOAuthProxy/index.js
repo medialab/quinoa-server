@@ -41,6 +41,7 @@ function getToken(code, res) {
         const data = '';
 
         if (ghres.statusCode === 404) {
+            console.log('res not found');
             res.writeHead(500);
             res.end();
             return;
@@ -49,6 +50,7 @@ function getToken(code, res) {
         ghres.on('data', function(chunk) { data += chunk; });
         ghres.on('end', function() {
             const body = JSON.parse(data);
+            console.log('got final response');
             if (body['error'] != null)
                 res.writeHead(400, body['error']);
             else
