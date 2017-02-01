@@ -7,7 +7,7 @@ const https = require('https');
 
 // integrates code from https://github.com/robindemourat/github-oauth-proxy/blob/master/server.js
 
-let config;
+var config;
 
 if (process.env.NODE_ENV === 'production') {
   config = {
@@ -30,7 +30,7 @@ function getToken(code, res) {
 
     console.log('getting token');
 
-    const ghreq = https.request({
+    var ghreq = https.request({
         hostname: 'github.com',
         path: '/login/oauth/access_token',
         method: 'POST',
@@ -39,7 +39,7 @@ function getToken(code, res) {
             "Accept": "application/json"
         }
     }, function(ghres) {
-        const data = '';
+        var data = '';
 
         if (ghres.statusCode === 404) {
             console.log('resource not found, returning a 404');
@@ -62,7 +62,7 @@ function getToken(code, res) {
         });
     });
 
-    data = {
+    var data = {
         client_id: config.client_id || process.env.GITHUB_CLIENT_ID,
         client_secret: config.client_secret || process.env.GITHUB_CLIENT_SECRET,
         code: code
