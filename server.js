@@ -6,7 +6,7 @@ const express = require('express');
 
 let config;
 
-if (process.env.MODE === 'production') {
+if (process.env.NODE_ENV === 'production') {
   config = {
     github_client_id: process.env.GITHUB_CLIENT_ID,
     github_client_secret: process.env.GITHUB_CLIENT_SECRET,

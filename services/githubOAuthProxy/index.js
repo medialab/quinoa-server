@@ -9,12 +9,13 @@ const https = require('https');
 
 let config;
 
-if (process.env.MODE === 'production') {
+if (process.env.NODE_ENV === 'production') {
   config = {
     github_client_id: process.env.GITHUB_CLIENT_ID,
     github_client_secret: process.env.GITHUB_CLIENT_SECRET,
     port: process.env.PORT || 3000
   };
+  console.log('config is set from environment variables', config);
 }
 else { 
   config = require('../../config');
@@ -28,7 +29,6 @@ function getToken(code, res) {
     }
 
     console.log('getting token');
-    console.log('environment variables', process.env);
 
     const ghreq = https.request({
         hostname: 'github.com',
@@ -63,8 +63,8 @@ function getToken(code, res) {
     });
 
     const data = {
-        client_id: config.client_id,
-        client_secret: config.client_secret,
+        client_id: config.client_id || process.env.GITHUB_CLIENT_ID,
+        client_secret: config.client_secret || process.env.GITHUB_CLIENT_SECRET,
         code: code
     };
     console.log('data', data);
