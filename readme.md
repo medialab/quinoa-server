@@ -12,3 +12,62 @@ To see with which front-end applications this application works and how they pla
 
 * [bulgur - presentations making application](https://github.com/medialab/bulgur)
 * [fonio - stories making application](https://github.com/medialab/fonio)
+
+
+# Routes
+
+## Github OAuth proxy
+
+```
+GET /oauth-proxy/:code
+```
+
+Returns the token associated to a specific code after dialoging with github oAuth endpoint.
+
+## Presentation rendering to html as a service
+
+```
+POST /render-presentation
+```
+
+Returns an all-in-one html representation of a quinoa presentation.
+
+## Presentations management on server
+
+```
+GET /presentations
+```
+
+Returns an object where each keys is a presentation id and the content the related presentation.
+
+```
+GET /presentation/:id
+```
+
+Returns the json representation of a stored presentation.
+
+```
+GET /presentations/:id?format=html
+```
+
+Returns the all-in-one/embeddable representation of a stored presentation.
+
+```
+PATCH /presentations/:id
+```
+
+Updates the given presentation.
+
+```
+PUT /presentations/:id
+```
+
+Creates the given presentation.
+
+```
+DELETE /presentations/:id
+```
+
+Deletes the given presentation.
+
+
