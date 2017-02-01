@@ -4,9 +4,20 @@
  */
 
 
-// integrate https://github.com/robindemourat/github-oauth-proxy/blob/master/server.js
+// integrates code from https://github.com/robindemourat/github-oauth-proxy/blob/master/server.js
 
-const config = require('../../config');
+let config;
+
+if (process.env.MODE === 'production') {
+  config = {
+    github_client_id: process.env.GITHUB_CLIENT_ID,
+    github_client_secret: process.env.GITHUB_CLIENT_SECRET,
+    port: process.env.PORT || 3000
+  };
+}
+else { 
+  config = require('../../config');
+}
 
 function getToken(code, res) {
     if (typeof code != 'string') {
