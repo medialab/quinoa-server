@@ -73,7 +73,7 @@ Deletes the given presentation.
 
 You have to set the following values as environment variables in production mode :
 
-* ``MODE=production` : lets the app know it must use env. variables for secrets
+* ``MODE=production`` : lets the app know it must use env. variables for secrets
 * ``GITHUB_CLIENT_SECRET`` : the github client secret to use for the oauth resolution process
 * ``GITHUB_CLIENT_ID`` : the github client id to use for the oauth resolution process
 * ``PORT`` (optional) : the port to serve the application to
