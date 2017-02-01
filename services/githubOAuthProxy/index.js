@@ -3,6 +3,7 @@
  * @module services/githubOAuthProxy
  */
 
+const https = require('https');
 
 // integrates code from https://github.com/robindemourat/github-oauth-proxy/blob/master/server.js
 
