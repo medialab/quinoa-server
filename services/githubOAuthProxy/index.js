@@ -62,12 +62,11 @@ function getToken(code, res) {
         });
     });
 
-    const data = {
+    data = {
         client_id: config.client_id || process.env.GITHUB_CLIENT_ID,
         client_secret: config.client_secret || process.env.GITHUB_CLIENT_SECRET,
         code: code
     };
-    console.log('data', data);
     ghreq.write(JSON.stringify(data));
     ghreq.end();
 }
