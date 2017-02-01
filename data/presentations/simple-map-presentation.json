@@ -1,4 +1,6 @@
 {
+    "id": "fbbfe376-e022-4ede-ae1e-4011645238e3",
+    "type": "presentation",
     "metadata": {
         "title": "A good map presentation",
         "authors": ["Michel", "Martine"],
@@ -48,9 +50,12 @@
                             }
                         },
                         "colorsMap": {
-                            "accélérée": "#F24D98",
-                            "normale": "#813B7C",
-                            "noCategory": "brown"
+                            "main": {
+                                "accélérée": "#F24D98",
+                                "normale": "#813B7C",
+                                "default": "brown"
+                            },
+                            "default": "lightgrey"
                         },
                         "tilesUrl": "http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png"
                     }
@@ -76,9 +81,12 @@
                             }
                         },
                         "colorsMap": {
-                            "accélérée": "#F24D98",
-                            "normale": "#813B7C",
-                            "noCategory": "brown"
+                            "main": {
+                                "accélérée": "#F24D98",
+                                "normale": "#813B7C",
+                                "default": "brown"
+                            },
+                            "default": "lightgrey"
                         },
                         "tilesUrl": "http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png"
                     }
@@ -104,9 +112,12 @@
                             }
                         },
                         "colorsMap": {
-                            "accélérée": "#F24D98",
-                            "normale": "#813B7C",
-                            "noCategory": "brown"
+                            "main": {
+                                "accélérée": "#F24D98",
+                                "normale": "#813B7C",
+                                "default": "brown"
+                            },
+                            "default": "lightgrey"
                         },
                         "tilesUrl": "http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png"
                     }
