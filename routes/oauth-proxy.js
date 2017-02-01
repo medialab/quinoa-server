@@ -41,6 +41,7 @@ app.post('/oauth-proxy', cors(), (req, res) => {
   });
   req.on('end', function() {
       const body = data != '' ? JSON.parse(data) : undefined;
+      console.log('got body,', body, ' getting token');
       getToken(body['code'], res);
   });
 });
