@@ -19,7 +19,7 @@ app.post('/oauth-proxy', cors(), (req, res) => {
       return;
   }
 
-  console.log('request is a post as expected');
+  console.log('request is a post as expected', req.body);
 
   const lcHeaders = {};
   for (k in req.headers)
