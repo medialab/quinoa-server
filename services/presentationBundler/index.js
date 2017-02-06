@@ -122,6 +122,9 @@ module.exports = function bundlePresentation (presentation = {}, options = {}) {
     {
       font-size: 6rem;
     }
+    #mount{
+      background: white;
+    }
   </style>
 </head>
 <body>
