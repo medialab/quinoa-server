@@ -7,7 +7,8 @@
     "test": "mocha -R spec --recursive $(find tests -name '*.spec.js')",
     "start": "node server",
     "build-presentation-app": "node services/presentationAppBuilder/",
-    "postinstall": "npm run build-presentation-app"
+    "postinstall": "npm run build-presentation-app",
+    "prerestart": "npm install && npm run build-presentation-app"
   },
   "repository": {
     "type": "git",
