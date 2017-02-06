@@ -8,7 +8,7 @@
     "start": "node server",
     "build-presentation-app": "node services/presentationAppBuilder/",
     "postinstall": "npm run build-presentation-app",
-    "prerestart": "rm -rf node_modules && npm install && npm run build-presentation-app"
+    "reinstall": "rm -rf node_modules && npm install && npm run build-presentation-app"
   },
   "repository": {
     "type": "git",
