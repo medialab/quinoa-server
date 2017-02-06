@@ -31,7 +31,7 @@ function getPresentations (filterFunction, callback) {
           } else {
             const resp = {
               id: fileName.split('.')[0],
-              content: content
+              content: content.toString('utf8')
             };
             return fileCb(null, resp);
           }
@@ -46,7 +46,9 @@ function getPresentations (filterFunction, callback) {
     // parse files contents to json
     (parsedFiles, convertCallback) => {
       try {
-        const converted = parsedFiles.map((fileDesc) => {
+        const converted = parsedFiles
+        .filter(file => typeof file.id === 'string')
+        .map((fileDesc) => {
           return {
             id: fileDesc.id,
             content: JSON.parse(fileDesc.content)
@@ -54,6 +56,7 @@ function getPresentations (filterFunction, callback) {
         });
         return convertCallback(null, converted);
       } catch (convertError) {
+        console.log(convertError);
         return convertCallback(convertError);
       }
     },
