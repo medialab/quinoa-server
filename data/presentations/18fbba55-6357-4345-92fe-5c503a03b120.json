@@ -1,12 +1,15 @@
-{
+﻿{
   "type": "presentation",
   "metadata": {
-    "title": "Map test",
-    "authors": ["Thomas", "Bibi"],
-    "description": ""
+    "title": "Mon essai de carte",
+    "authors": [
+      "Marcel",
+      "Philippe"
+    ],
+    "description": "Une super carte"
   },
   "datasets": {
-    "cf6a7ed9-c6d3-475f-9617-5a10b0f7d4ff": {
+    "d733b651-d960-46f9-9d5e-8472cfc674a4": {
       "metadata": {
         "format": "csv",
         "fileName": "histoiredufort.csv",
@@ -17,7 +20,7 @@
     }
   },
   "visualizations": {
-    "46d3c74f-072f-4f86-97d0-3cf54d11a23e": {
+    "68cc7749-493d-4b61-ae86-fdc61c1283cc": {
       "metadata": {
         "visualizationType": "map"
       },
@@ -451,34 +454,90 @@
             "acceptedValueTypes": [
               "string",
               "number"
-            ]
+            ],
+            "mappedField": "Période"
           }
         }
       },
       "datasets": [
-        "cf6a7ed9-c6d3-475f-9617-5a10b0f7d4ff"
+        "d733b651-d960-46f9-9d5e-8472cfc674a4"
       ],
       "colorsMap": {
-        "default": "brown",
+        "default": "#d8d8d8",
         "main": {
-          "default": "#7bdcb5"
+          "1870": "#16a400",
+          "1871": "#ffd1bf",
+          "default": "#ff4700",
+          "Avant 1840": "#ffa380",
+          "Après 1871": "#1feb00",
+          "1840-1846": "#c8ffbf"
         }
       }
     }
   },
   "slides": {
-    "79359515-a1ea-4fe0-944e-74abfbda5358": {
+    "53f94707-2f34-42cf-9469-faf1206654e5": {
       "views": {
-        "46d3c74f-072f-4f86-97d0-3cf54d11a23e": {
+        "68cc7749-493d-4b61-ae86-fdc61c1283cc": {
           "viewParameters": {
-            "cameraX": 48.823183274345446,
-            "cameraY": 2.2679901123046875,
+            "cameraX": 48.826983403182346,
+            "cameraY": 2.278289794921875,
+            "cameraZoom": 13,
+            "tilesUrl": "http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png",
+            "colorsMap": {
+              "default": "#d8d8d8",
+              "main": {
+                "1870": "#16a400",
+                "1871": "#ffd1bf",
+                "default": "#ff4700",
+                "Avant 1840": "#ffa380",
+                "Après 1871": "#1feb00",
+                "1840-1846": "#c8ffbf"
+              }
+            }
+          },
+          "dataMap": {
+            "main": {
+              "title": {
+                "id": "title",
+                "acceptedValueTypes": [
+                  "string"
+                ],
+                "mappedField": "Evénement"
+              },
+              "category": {
+                "id": "category",
+                "acceptedValueTypes": [
+                  "string",
+                  "number"
+                ],
+                "mappedField": "Période"
+              }
+            }
+          }
+        }
+      },
+      "title": "Je recalcule tout ici",
+      "markdown": "Test qui va bien",
+      "id": "53f94707-2f34-42cf-9469-faf1206654e5"
+    },
+    "708368e3-632f-4182-88d4-eabe1a7e0b5d": {
+      "views": {
+        "68cc7749-493d-4b61-ae86-fdc61c1283cc": {
+          "viewParameters": {
+            "cameraX": 48.82124778199317,
+            "cameraY": 2.273097038269043,
             "cameraZoom": 15,
             "tilesUrl": "http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png",
             "colorsMap": {
-              "default": "brown",
+              "default": "#d8d8d8",
               "main": {
-                "default": "#7bdcb5"
+                "1870": "#16a400",
+                "1871": "#ffd1bf",
+                "default": "#ff4700",
+                "Avant 1840": "#ffa380",
+                "Après 1871": "#1feb00",
+                "1840-1846": "#c8ffbf"
               }
             }
           },
@@ -496,28 +555,34 @@
                 "acceptedValueTypes": [
                   "string",
                   "number"
-                ]
+                ],
+                "mappedField": "Période"
               }
             }
           }
         }
       },
-      "title": "Histoire du fort",
-      "markdown": "​Ja suis trop près\n",
-      "id": "79359515-a1ea-4fe0-944e-74abfbda5358"
+      "title": "",
+      "markdown": "Dans le cadre du partenariat entre Forccast et le Microlycée 93, rattaché au lycée Germaine Tillion (Le Bourget), les lycéens de cet établissement ont passé deux jours à Sciences Po les 10 et 11 janvier 2017. Pour les élèves du Microlycée, il s’agit d’une étape importante pour préparer une étude de controverse, qu’ils présenteront lors d’une épreuve anticipée du baccalauréat à la mi-mars.\n\nPendant deux jours au début du mois de janvier 2017, les élèves du Microlycée 93 ont quitté les locaux de leur établissement pour s’établir à Sciences Po. Ils ont ont pu y suivre différentes formations constitutives des activités du programme Forccast : techniques d’arts oratoires, initiation au débat, méthode de réalisation et d’analyse d’entretiens pour enquêter sur une controverse. Tous ces modules développent chez les élèves les compétences nécessaires à la réalisation et la présentation de leurs études de controverse, qu’ils réalisent depuis plusieurs années dans le cadre des travaux personnels encadrés (TPE).\n\nPour en savoir plus sur les controverses au lycée, voir le diptyque réalisé en 2016 : du point de vue de l’enseignant  / du point de vue de l’élève\n\nToute une journée du programme a été consacrée à l’élaboration d’un protocole de recherche : les élèves doivent apprendre à enquêter en profondeur sur un sujet donné, à vérifier par eux-mêmes les sources d’une information, ainsi qu’à percevoir les intérêts de chacun des acteurs engagés.\n\nIls ont donc tout d’abord appris à réaliser un questionnaire pour mener des entretiens pertinents, qui permettent d’établir et de recouper des informations. Dans une seconde partie, l’accent a été mis sur les techniques de réalisation concrète d’un entretien. Les élèves du Microlycée ont pour cela conduit un entretien avec un professionnel qui fait face à des controverses quotidiennement dans le cadre de son activité.\n\nCette année, c’est Grégoire Koenig, Directeur de cabinet du Président du directoire de la Société du Grand Paris (SGP) qui s’est prêté au jeu des questions-réponses pendant une demi-journée. La SGP est l’établissement public chargé de construire deux cents kilomètres de lignes nouvelles de métro en rocade autour de Paris, afin de faciliter le trajet de banlieue à banlieue, désengorger le réseau actuel et ainsi permettre un développement de l’aire métropolitaine parisienne. Ce chantier colossal, connu sous le nom de Grand Paris Express, est d’ores et déjà engagé et doit se poursuivre pendant plusieurs décennies. On imagine aisément les discussions, les négociations, les interrogations par lesquelles il a pu passer et qu’il ne manquera pas de susciter tout au long de sa construction !\n\nForccast a rencontré Grégoire Koenig après cette intervention devant les élèves du Microlycée, et l’a interrogé sur sa participation à cette rencontre :\n\n\n\n \n\nPour quelles raisons est-il important que la Société du Grand Paris aille à la rencontre du public, et plus particulièrement de lycéens ?\n\n« Le Grand Paris Express est un projet dont la réalisation prend effet entre 2016 et 2030. Les lycéens d’aujourd’hui sont les futurs voyageurs de demain, attendus sur ce réseau de transport. En quelque sorte, le Grand Paris Express est le réseau de la jeunesse d’aujourd’hui, qui sera dans quelques années étudiante, salariée et de toutes les façons usagère de la métropole du Grand Paris. C’est donc important de partager avec eux ce que sera leur futur métro et de recueillir leur avis. »\n\n \n\nLe Microlycée 93 est situé sur la commune du Bourget. Ce territoire est-il directement concerné par le Grand Paris Express ?\n\n« Au cœur de ce réseau de 200 kilomètres, le Bourget prend une place à part. Desservie à la fois par la ligne 17 à la gare du Bourget Aéroport et par les lignes 16 et 17 pour la gare du Bourget RER, la ville du Bourget sera, en cas de victoire à la candidature pour l’organisation des Jeux Olympiques et Paralympiques de 2024, au cœur de ce fabuleux événement que nous appelons de nos vœux. Aussi, c’est une façon parmi tant d’autres de démontrer que toutes les villes et tous les territoires d’Ile-de-France comptent pour réaliser non seulement le métro du Grand Paris, mais également propulser les grand parisiens dans la ville de demain. »\n\n\n\nQue retenez vous de cette expérience avec les élèves du Microlycée 93 à Sciences Po ? Quels ont été les faits marquants pour vous ?\n\n« Ce fut une intervention difficile et donc intéressante. Difficile car il faut répondre aux controverses très bien posées par tous les lycéens – je pense à la dimension environnementale, foncière et immobilière, politique etc. – et intéressante en ce que l’exercice permet de réinterroger la façon de présenter les finalités du projet. C’est donc un exercice à la fois de pédagogie pour les lycéens mais également réflexif pour celui qui le présente ; car c’est également un exercice de confrontation au meilleur vecteur d’analyse : « le bon sens » ; celui d’usagers quotidiens des transports en commun. C’est, d’une certaine façon, mettre en relief un projet qui aujourd’hui n’existe que sur une carte ! »",
+      "id": "708368e3-632f-4182-88d4-eabe1a7e0b5d"
     },
-    "98659fd3-4bd1-45e4-8266-a25847f68f72": {
+    "6c2c8594-09e4-4802-bf38-1675dae2859f": {
       "views": {
-        "46d3c74f-072f-4f86-97d0-3cf54d11a23e": {
+        "68cc7749-493d-4b61-ae86-fdc61c1283cc": {
           "viewParameters": {
-            "cameraX": 48.828283009369194,
-            "cameraY": 2.296314239501953,
-            "cameraZoom": 13,
+            "cameraX": 48.857487002645485,
+            "cameraY": 2.33184814453125,
+            "cameraZoom": 9,
             "tilesUrl": "http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png",
             "colorsMap": {
-              "default": "brown",
+              "default": "#d8d8d8",
               "main": {
-                "default": "#7bdcb5"
+                "1870": "#abb8c3",
+                "1871": "#fcb900",
+                "default": "#abb8c3",
+                "Avant 1840": "#abb8c3",
+                "Après 1871": "#abb8c3",
+                "1840-1846": "#abb8c3"
               }
             }
           },
@@ -535,100 +600,22 @@
                 "acceptedValueTypes": [
                   "string",
                   "number"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "title": "Avec un dezoom",
-      "markdown": "Ja dézoomé​\n",
-      "id": "98659fd3-4bd1-45e4-8266-a25847f68f72"
-    },
-    "8d0636d7-1f78-4d7b-ae0b-174a214e14a8": {
-      "views": {
-        "46d3c74f-072f-4f86-97d0-3cf54d11a23e": {
-          "viewParameters": {
-            "cameraX": 48.828283009369194,
-            "cameraY": 2.2875595092773438,
-            "cameraZoom": 13,
-            "tilesUrl": "http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png",
-            "colorsMap": {
-              "default": "brown",
-              "main": {
-                "default": "#eb144c"
-              }
-            }
-          },
-          "dataMap": {
-            "main": {
-              "title": {
-                "id": "title",
-                "acceptedValueTypes": [
-                  "string"
                 ],
-                "mappedField": "Evénement"
-              },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
+                "mappedField": "Période"
               }
             }
           }
         }
       },
-      "title": "C'est mieux en rouge",
-      "markdown": "​Oh oui",
-      "id": "8d0636d7-1f78-4d7b-ae0b-174a214e14a8"
-    },
-    "27ae4193-75d5-423a-bb23-634d03d58d6a": {
-      "views": {
-        "46d3c74f-072f-4f86-97d0-3cf54d11a23e": {
-          "viewParameters": {
-            "cameraX": 48.81567222798506,
-            "cameraY": 2.2630763053894043,
-            "cameraZoom": 18,
-            "tilesUrl": "http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png",
-            "colorsMap": {
-              "default": "brown",
-              "main": {
-                "default": "#eb144c"
-              }
-            }
-          },
-          "dataMap": {
-            "main": {
-              "title": {
-                "id": "title",
-                "acceptedValueTypes": [
-                  "string"
-                ],
-                "mappedField": "Evénement"
-              },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              }
-            }
-          }
-        }
-      },
-      "title": "Très très",
-      "markdown": "​\ntrès près",
-      "id": "27ae4193-75d5-423a-bb23-634d03d58d6a"
+      "title": "Titre de slide",
+      "markdown": "Qui va assez bien\n",
+      "id": "6c2c8594-09e4-4802-bf38-1675dae2859f"
     }
   },
   "order": [
-    "79359515-a1ea-4fe0-944e-74abfbda5358",
-    "98659fd3-4bd1-45e4-8266-a25847f68f72",
-    "8d0636d7-1f78-4d7b-ae0b-174a214e14a8",
-    "27ae4193-75d5-423a-bb23-634d03d58d6a"
+    "53f94707-2f34-42cf-9469-faf1206654e5",
+    "708368e3-632f-4182-88d4-eabe1a7e0b5d",
+    "6c2c8594-09e4-4802-bf38-1675dae2859f"
   ],
-  "id": "ef775e76-3bc7-430c-9a14-0fd0d933e068"
+  "id": "18fbba55-6357-4345-92fe-5c503a03b120"
 }

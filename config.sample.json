@@ -1,5 +1,7 @@
 {
   "github_client_id":"[client id]",
   "github_client_secret":"[client secret]",
+  "adminUserName": "my user name",
+  "adminPassword": "my password",
   "port": 3001
 }

@@ -23,9 +23,13 @@ function getPresentations (filterFunction, callback) {
       fs.readdir(presentationsPath, listCallback),
     // read all files contents
     (filesList, parsedCallback) =>
-      asyncMap(filesList, (fileName, fileCb) => {
+      asyncMap(
+        filesList
+        .filter(fileName => fileName.indexOf('.json') === fileName.length - 5)
+      , (fileName, fileCb) => {
         const addr = presentationsPath + '/' + fileName;
-        fs.readFile(addr, (fileErr, content) => {
+        console.log(fileName);
+        fs.readFile(addr, 'utf-8', (fileErr, content) => {
           if (fileErr) {
             return fileCb(fileErr);
           } else {
@@ -51,12 +55,12 @@ function getPresentations (filterFunction, callback) {
         .map((fileDesc) => {
           return {
             id: fileDesc.id,
-            content: JSON.parse(fileDesc.content)
+            content: JSON.parse(fileDesc.content.trim())
           }
         });
         return convertCallback(null, converted);
       } catch (convertError) {
-        console.log(convertError);
+        console.log('convert error', convertError);
         return convertCallback(convertError);
       }
     },
@@ -94,10 +98,10 @@ function getPresentation (id, callback) {
   const addr = presentationsPath + '/' + id + '.json';
   waterfall([
     (readCallback) =>
-      fs.readFile(addr, readCallback),
+      fs.readFile(addr, 'utf-8', readCallback),
     (strContent, convertCallback) => {
       try{
-        return convertCallback(null, JSON.parse(strContent));
+        return convertCallback(null, JSON.parse(strContent.trim()));
       } catch (error) {
         return convertCallback(error);
       }

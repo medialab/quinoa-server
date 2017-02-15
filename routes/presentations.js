@@ -45,7 +45,7 @@ app.put('/presentations/:id', (req, res) => {
 });
 
 app.delete('/presentations/:id', (req, res) => {
-  manager.updatePresentation(req.params.id, (err) => {
+  manager.deletePresentation(req.params.id, (err) => {
     if (err) {
       return res.status(500).send(err);
     } else res.send({

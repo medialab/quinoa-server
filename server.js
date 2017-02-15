@@ -34,6 +34,7 @@ module.exports = app;
 require('./routes/presentations');
 require('./routes/render-presentation');
 require('./routes/oauth-proxy');
+require('./routes/dashboard');
 
 app.listen(config.port, function(){
   console.log('app listening on %s', config.port);
