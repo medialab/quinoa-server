@@ -132,7 +132,7 @@ const renderPresentationItem = (presentation, baseUrl) =>
 `;
 
 const renderDashboard = (req, res) => {
-  const baseUrl = req.protocol + '://' + req.get('host');
+  const baseUrl = /*req.protocol +*/ 'https://' + req.get('host');
   return manager.getPresentations(null, (err, presentations) => {
     if (err) {
       return res.status(500).send(err);
