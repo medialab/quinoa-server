@@ -1,3 +1,7 @@
+/**
+ * This module serves a dashboard interface to locally stored documents
+ * @module routes/dashboard
+ */
 const basicAuth = require('../services/basic-auth-connect');
 
 var config;
