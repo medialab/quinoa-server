@@ -23,8 +23,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
-app.use(bodyParser.json({limit: '10mb'}));
-app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
+app.use(bodyParser.json({limit: '20mb'}));
+app.use(bodyParser.urlencoded({limit: '20mb', extended: true}));
 
 // allow cross-origin requests
 app.use(cors());
@@ -35,6 +35,7 @@ require('./routes/presentations');
 require('./routes/render-presentation');
 require('./routes/oauth-proxy');
 require('./routes/dashboard');
+require('./routes/gist-presentation');
 
 app.listen(config.port, function(){
   console.log('app listening on %s', config.port);

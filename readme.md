@@ -75,6 +75,16 @@ Deletes the given presentation.
 GET /dashboard
 ```
 
+Displays a protected dashboard to all locally stored documents, with facilities for producing embed code and deleting documents.
+
+## Gist-based presentation playing
+
+```
+GET /gist-presentation/:id
+```
+
+Displays as an html static application the content of a gist-stored quinoa presentation.
+
 # Deployment
 
 You have to set the following values as environment variables in production mode :
