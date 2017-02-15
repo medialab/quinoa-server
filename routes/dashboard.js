@@ -8,7 +8,7 @@ var config;
 
 if (process.env.NODE_ENV === 'production') {
   config = {
-    adminUserName: process.env.ADMIN_USER_NAME,
+    adminUserName: process.env.ADMIN_USERNAME,
     adminPassword: process.env.ADMIN_PASSWORD,
     port: process.env.PORT || 3000
   };

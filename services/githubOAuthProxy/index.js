@@ -27,8 +27,6 @@ function getToken(code, res) {
         return;
     }
 
-    // console.log('getting token');
-
     var ghreq = https.request({
         hostname: 'github.com',
         path: '/login/oauth/access_token',
