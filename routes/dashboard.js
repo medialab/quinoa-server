@@ -120,8 +120,8 @@ const renderPresentationItem = (presentation, baseUrl) =>
       </p>
     </div>
     <div class="links-container">
-      <a href="/presentations/${presentation.id}" target="blank">Open JSON representation</a>
-      <a href="/presentations/${presentation.id}?format=html" target="blank">View presentation</a>
+      <a href="/presentations/${presentation.id}" target="blank">Open presentation as JSON</a>
+      <a href="/presentations/${presentation.id}?format=html" target="blank">Open presentation as a html page</a>
     </div>
     <div class="operations-container">
       <button class="embed-btn">Copy embed code</button>
@@ -250,7 +250,7 @@ const renderDashboard = (req, res) => {
           var html = document.querySelector('#' + id + ' .embed-placeholder').innerHTML;
           embedBtn.addEventListener('click', function(event) {
             copyTextToClipboard(html);
-            alert('★★★★★ The html code has been copied to your clipboard ! Paste it to any html page you want to embed your presentation into. ★★★★★');
+            alert('★★★★★ The html code of your presentation embed kit has been copied to your clipboard ! Paste it inside any html code you want to embed your presentation into. ★★★★★');
           });
           deleteBtn.addEventListener('click', function(event) {
             var finalId = id.split('presentation-')[1];
