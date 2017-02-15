@@ -46,6 +46,8 @@ var http = require('http');
 module.exports = function basicAuth(callback, realm) {
   var username, password;
 
+  console.log(callback, realm);
+
   // user / pass strings
   if ('string' == typeof callback) {
     username = callback;
