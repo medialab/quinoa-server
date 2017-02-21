@@ -21,7 +21,6 @@ else {
 }
 
 function getToken(code, res) {
-    console.log('get token from code', code);
     if (typeof code != 'string') {
         res.writeHead(400, 'Must supply code');
         res.end();
