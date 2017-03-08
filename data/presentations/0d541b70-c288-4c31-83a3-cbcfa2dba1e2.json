@@ -1,16 +1,14 @@
 ﻿{
   "type": "presentation",
   "metadata": {
-    "title": "Test",
-    "authors": [],
-    "description": "",
-    "serverJSONUrl": "https://quinoa-server.herokuapp.com/presentations/b70993f2-1ad3-457d-bec3-5ced737b8ec6",
-    "serverHTMLUrl": "https://quinoa-server.herokuapp.com/presentations/b70993f2-1ad3-457d-bec3-5ced737b8ec6?format=html",
-    "gistUrl": "https://gist.github.com/262bee943ceefe51bf9808d99a52f8ea",
-    "gistId": "262bee943ceefe51bf9808d99a52f8ea"
+    "title": "My nice network",
+    "authors": [
+      "Robin de Mourat"
+    ],
+    "description": "Pendant deux jours au début du mois de janvier 2017, les élèves du Microlycée 93 ont quitté les locaux de leur établissement pour s’établir à Sciences Po. Ils ont ont pu y suivre différentes formations constitutives des activités du programme Forccast : techniques d’arts oratoires, initiation au débat, méthode de réalisation et d’analyse d’entretiens pour enquêter sur une controverse. Tous ces modules développent chez les élèves les compétences nécessaires à la réalisation et la présentation de leurs études de controverse, qu’ils réalisent depuis plusieurs années dans le cadre des travaux personnels encadrés (TPE)."
   },
   "datasets": {
-    "d6026add-7b46-4dcc-ba9a-a2a8ccede3a4": {
+    "22b8ede4-0445-45d4-aaaf-1db203fd371f": {
       "metadata": {
         "format": "gexf",
         "fileName": "arctic.gexf",
@@ -21,7 +19,7 @@
     }
   },
   "visualizations": {
-    "39dc4294-a04e-4a3e-89f2-b23eccc26058": {
+    "736e6287-205d-473e-ad95-26702310a025": {
       "metadata": {
         "visualizationType": "network"
       },
@@ -87859,31 +87857,46 @@
           }
         }
       },
+      "flattenedDataMap": {
+        "nodes": {
+          "label": "label",
+          "size": "size",
+          "category": "color"
+        },
+        "edges": {
+          "label": "label",
+          "type": "type",
+          "weight": "weight",
+          "id": "id",
+          "source": "source",
+          "target": "target"
+        }
+      },
       "datasets": [
-        "d6026add-7b46-4dcc-ba9a-a2a8ccede3a4"
+        "22b8ede4-0445-45d4-aaaf-1db203fd371f"
       ],
       "colorsMap": {
         "default": "#d8d8d8",
         "nodes": {
-          "default": "#ff4700",
-          "rgb(255,51,51)": "#ffd1bf",
-          "rgb(0,204,204)": "#ffa380",
-          "rgb(255,255,51)": "#1feb00",
-          "rgb(204,204,255)": "#16a400",
-          "rgb(153,0,0)": "#c8ffbf",
-          "rgb(102,102,0)": "#90ff80",
-          "rgb(255,204,102)": "#0052bd",
-          "rgb(153,255,0)": "#003a84",
-          "rgb(102,0,102)": "#bfdbff",
-          "rgb(153,255,255)": "#80b7ff",
-          "rgb(102,255,102)": "#ff4700",
-          "rgb(0,153,0)": "#ff4700",
-          "rgb(255,153,153)": "#ff4700",
-          "rgb(255,255,0)": "#ff4700",
-          "rgb(204,0,0)": "#ff4700",
-          "rgb(0,204,51)": "#ff4700",
-          "rgb(51,153,255)": "#ff4700",
-          "rgb(255,204,51)": "#ff4700"
+          "default": "#000000",
+          "rgb(255,51,51)": "#ff3333",
+          "rgb(0,204,204)": "#00cccc",
+          "rgb(255,255,51)": "#ffff33",
+          "rgb(204,204,255)": "#ccccff",
+          "rgb(153,0,0)": "#990000",
+          "rgb(102,102,0)": "#666600",
+          "rgb(255,204,102)": "#ffcc66",
+          "rgb(153,255,0)": "#99ff00",
+          "rgb(102,0,102)": "#660066",
+          "rgb(153,255,255)": "#99ffff",
+          "rgb(102,255,102)": "#66ff66",
+          "rgb(0,153,0)": "#009900",
+          "rgb(255,153,153)": "#ff9999",
+          "rgb(255,255,0)": "#ffff00",
+          "rgb(204,0,0)": "#cc0000",
+          "rgb(0,204,51)": "#00cc33",
+          "rgb(51,153,255)": "#3399ff",
+          "rgb(255,204,51)": "#ffcc33"
         },
         "edges": {
           "default": "#d8d8d8"
@@ -87892,7 +87905,7 @@
       "viewParameters": {
         "cameraX": 0,
         "cameraY": 0,
-        "cameraRatio": 2,
+        "cameraRatio": 5,
         "cameraAngle": 0,
         "labelThreshold": 7,
         "minNodeSize": 1,
@@ -87900,41 +87913,152 @@
         "colorsMap": {
           "default": "#d8d8d8",
           "nodes": {
-            "default": "#ff4700",
-            "rgb(255,51,51)": "#ffd1bf",
-            "rgb(0,204,204)": "#ffa380",
-            "rgb(255,255,51)": "#1feb00",
-            "rgb(204,204,255)": "#16a400",
-            "rgb(153,0,0)": "#c8ffbf",
-            "rgb(102,102,0)": "#90ff80",
-            "rgb(255,204,102)": "#0052bd",
-            "rgb(153,255,0)": "#003a84",
-            "rgb(102,0,102)": "#bfdbff",
-            "rgb(153,255,255)": "#80b7ff",
-            "rgb(102,255,102)": "#ff4700",
-            "rgb(0,153,0)": "#ff4700",
-            "rgb(255,153,153)": "#ff4700",
-            "rgb(255,255,0)": "#ff4700",
-            "rgb(204,0,0)": "#ff4700",
-            "rgb(0,204,51)": "#ff4700",
-            "rgb(51,153,255)": "#ff4700",
-            "rgb(255,204,51)": "#ff4700"
+            "default": "#000000",
+            "rgb(255,51,51)": "#ff3333",
+            "rgb(0,204,204)": "#00cccc",
+            "rgb(255,255,51)": "#ffff33",
+            "rgb(204,204,255)": "#ccccff",
+            "rgb(153,0,0)": "#990000",
+            "rgb(102,102,0)": "#666600",
+            "rgb(255,204,102)": "#ffcc66",
+            "rgb(153,255,0)": "#99ff00",
+            "rgb(102,0,102)": "#660066",
+            "rgb(153,255,255)": "#99ffff",
+            "rgb(102,255,102)": "#66ff66",
+            "rgb(0,153,0)": "#009900",
+            "rgb(255,153,153)": "#ff9999",
+            "rgb(255,255,0)": "#ffff00",
+            "rgb(204,0,0)": "#cc0000",
+            "rgb(0,204,51)": "#00cc33",
+            "rgb(51,153,255)": "#3399ff",
+            "rgb(255,204,51)": "#ffcc33"
           },
           "edges": {
             "default": "#d8d8d8"
+          }
+        },
+        "dataMap": {
+          "nodes": {
+            "label": {
+              "id": "label",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ],
+              "mappedField": "label"
+            },
+            "category": {
+              "id": "category",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ],
+              "mappedField": "color"
+            },
+            "description": {
+              "id": "description",
+              "acceptedValueTypes": [
+                "string"
+              ]
+            },
+            "size": {
+              "id": "size",
+              "acceptedValueTypes": [
+                "number"
+              ],
+              "mappedField": "size"
+            }
+          },
+          "edges": {
+            "label": {
+              "id": "label",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ],
+              "mappedField": "label"
+            },
+            "type": {
+              "id": "type",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ],
+              "mappedField": "type"
+            },
+            "category": {
+              "id": "category",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ]
+            },
+            "description": {
+              "id": "description",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ]
+            },
+            "weight": {
+              "id": "weight",
+              "acceptedValueTypes": [
+                "number"
+              ],
+              "mappedField": "weight"
+            },
+            "id": {
+              "id": "id",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ],
+              "mappedField": "id"
+            },
+            "source": {
+              "id": "source",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ],
+              "mappedField": "source"
+            },
+            "target": {
+              "id": "target",
+              "acceptedValueTypes": [
+                "string",
+                "number"
+              ],
+              "mappedField": "target"
+            }
+          }
+        },
+        "flattenedDataMap": {
+          "nodes": {
+            "label": "label",
+            "size": "size",
+            "category": "color"
+          },
+          "edges": {
+            "label": "label",
+            "type": "type",
+            "weight": "weight",
+            "id": "id",
+            "source": "source",
+            "target": "target"
           }
         }
       }
     }
   },
   "slides": {
-    "d5e86897-e056-4dde-b826-b6428f87ecde": {
+    "427fe23d-e67c-4425-8724-073c7259d540": {
       "views": {
-        "39dc4294-a04e-4a3e-89f2-b23eccc26058": {
+        "736e6287-205d-473e-ad95-26702310a025": {
           "viewParameters": {
-            "cameraX": 0,
-            "cameraY": 0,
-            "cameraRatio": 2,
+            "cameraX": -15.069108637249732,
+            "cameraY": 2.074201823498372,
+            "cameraRatio": 0.877370681375132,
             "cameraAngle": 0,
             "labelThreshold": 7,
             "minNodeSize": 1,
@@ -87942,140 +88066,190 @@
             "colorsMap": {
               "default": "#d8d8d8",
               "nodes": {
-                "default": "#ff4700",
-                "rgb(255,51,51)": "#ffd1bf",
-                "rgb(0,204,204)": "#ffa380",
-                "rgb(255,255,51)": "#1feb00",
-                "rgb(204,204,255)": "#16a400",
-                "rgb(153,0,0)": "#c8ffbf",
-                "rgb(102,102,0)": "#90ff80",
-                "rgb(255,204,102)": "#0052bd",
-                "rgb(153,255,0)": "#003a84",
-                "rgb(102,0,102)": "#bfdbff",
-                "rgb(153,255,255)": "#80b7ff",
-                "rgb(102,255,102)": "#ff4700",
-                "rgb(0,153,0)": "#ff4700",
-                "rgb(255,153,153)": "#ff4700",
-                "rgb(255,255,0)": "#ff4700",
-                "rgb(204,0,0)": "#ff4700",
-                "rgb(0,204,51)": "#ff4700",
-                "rgb(51,153,255)": "#ff4700",
-                "rgb(255,204,51)": "#ff4700"
+                "default": "#000000",
+                "rgb(255,51,51)": "#ff3333",
+                "rgb(0,204,204)": "#00cccc",
+                "rgb(255,255,51)": "#ffff33",
+                "rgb(204,204,255)": "#ccccff",
+                "rgb(153,0,0)": "#990000",
+                "rgb(102,102,0)": "#666600",
+                "rgb(255,204,102)": "#ffcc66",
+                "rgb(153,255,0)": "#99ff00",
+                "rgb(102,0,102)": "#660066",
+                "rgb(153,255,255)": "#99ffff",
+                "rgb(102,255,102)": "#66ff66",
+                "rgb(0,153,0)": "#009900",
+                "rgb(255,153,153)": "#ff9999",
+                "rgb(255,255,0)": "#ffff00",
+                "rgb(204,0,0)": "#cc0000",
+                "rgb(0,204,51)": "#00cc33",
+                "rgb(51,153,255)": "#3399ff",
+                "rgb(255,204,51)": "#ffcc33"
               },
               "edges": {
                 "default": "#d8d8d8"
               }
-            }
-          },
-          "dataMap": {
-            "nodes": {
-              "label": {
-                "id": "label",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "label"
+            },
+            "dataMap": {
+              "nodes": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "color"
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string"
+                  ]
+                },
+                "size": {
+                  "id": "size",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "size"
+                }
               },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "color"
-              },
-              "description": {
-                "id": "description",
-                "acceptedValueTypes": [
-                  "string"
-                ]
-              },
-              "size": {
-                "id": "size",
-                "acceptedValueTypes": [
-                  "number"
-                ],
-                "mappedField": "size"
+              "edges": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "type": {
+                  "id": "type",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "type"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "weight": {
+                  "id": "weight",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "weight"
+                },
+                "id": {
+                  "id": "id",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "id"
+                },
+                "source": {
+                  "id": "source",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "source"
+                },
+                "target": {
+                  "id": "target",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "target"
+                }
               }
             },
-            "edges": {
-              "label": {
-                "id": "label",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "label"
+            "flattenedDataMap": {
+              "nodes": {
+                "label": "label",
+                "size": "size",
+                "category": "color"
               },
-              "type": {
-                "id": "type",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "type"
-              },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              },
-              "description": {
-                "id": "description",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              },
-              "weight": {
-                "id": "weight",
-                "acceptedValueTypes": [
-                  "number"
-                ],
-                "mappedField": "weight"
-              },
-              "id": {
+              "edges": {
+                "label": "label",
+                "type": "type",
+                "weight": "weight",
                 "id": "id",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "id"
-              },
-              "source": {
-                "id": "source",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "source"
-              },
-              "target": {
-                "id": "target",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "target"
+                "source": "source",
+                "target": "target"
               }
+            },
+            "shownCategories": {
+              "default": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "nodes": [
+                "default",
+                "rgb(255,51,51)",
+                "rgb(0,204,204)",
+                "rgb(255,255,51)",
+                "rgb(204,204,255)",
+                "rgb(153,0,0)",
+                "rgb(102,102,0)",
+                "rgb(255,204,102)",
+                "rgb(153,255,0)",
+                "rgb(102,0,102)",
+                "rgb(153,255,255)",
+                "rgb(102,255,102)",
+                "rgb(0,153,0)",
+                "rgb(255,153,153)",
+                "rgb(255,255,0)",
+                "rgb(204,0,0)",
+                "rgb(0,204,51)",
+                "rgb(51,153,255)",
+                "rgb(255,204,51)"
+              ],
+              "edges": [
+                "default"
+              ]
             }
           }
         }
       },
-      "title": "Slide 1",
+      "title": "Title 1",
       "markdown": "",
-      "id": "d5e86897-e056-4dde-b826-b6428f87ecde"
+      "id": "427fe23d-e67c-4425-8724-073c7259d540"
     },
-    "b3f9c313-16ad-403e-a9b0-7a047e75200e": {
+    "f3f58bfe-ae1b-489d-935e-bc10ce01f812": {
       "views": {
-        "39dc4294-a04e-4a3e-89f2-b23eccc26058": {
+        "736e6287-205d-473e-ad95-26702310a025": {
           "viewParameters": {
-            "cameraX": 0,
-            "cameraY": 0,
-            "cameraRatio": 2,
+            "cameraX": 40.34209769625924,
+            "cameraY": -46.00316837763441,
+            "cameraRatio": 0.0625,
             "cameraAngle": 0,
             "labelThreshold": 7,
             "minNodeSize": 1,
@@ -88083,140 +88257,190 @@
             "colorsMap": {
               "default": "#d8d8d8",
               "nodes": {
-                "default": "#ff4700",
-                "rgb(255,51,51)": "#ffd1bf",
-                "rgb(0,204,204)": "#ffa380",
-                "rgb(255,255,51)": "#1feb00",
-                "rgb(204,204,255)": "#16a400",
-                "rgb(153,0,0)": "#c8ffbf",
-                "rgb(102,102,0)": "#90ff80",
-                "rgb(255,204,102)": "#0052bd",
-                "rgb(153,255,0)": "#003a84",
-                "rgb(102,0,102)": "#bfdbff",
-                "rgb(153,255,255)": "#80b7ff",
-                "rgb(102,255,102)": "#ff4700",
-                "rgb(0,153,0)": "#ff4700",
-                "rgb(255,153,153)": "#ff4700",
-                "rgb(255,255,0)": "#ff4700",
-                "rgb(204,0,0)": "#ff4700",
-                "rgb(0,204,51)": "#ff4700",
-                "rgb(51,153,255)": "#ff4700",
-                "rgb(255,204,51)": "#ff4700"
+                "default": "#000000",
+                "rgb(255,51,51)": "#ff3333",
+                "rgb(0,204,204)": "#00cccc",
+                "rgb(255,255,51)": "#ffff33",
+                "rgb(204,204,255)": "#ccccff",
+                "rgb(153,0,0)": "#990000",
+                "rgb(102,102,0)": "#666600",
+                "rgb(255,204,102)": "#ffcc66",
+                "rgb(153,255,0)": "#99ff00",
+                "rgb(102,0,102)": "#660066",
+                "rgb(153,255,255)": "#99ffff",
+                "rgb(102,255,102)": "#66ff66",
+                "rgb(0,153,0)": "#009900",
+                "rgb(255,153,153)": "#ff9999",
+                "rgb(255,255,0)": "#ffff00",
+                "rgb(204,0,0)": "#cc0000",
+                "rgb(0,204,51)": "#00cc33",
+                "rgb(51,153,255)": "#3399ff",
+                "rgb(255,204,51)": "#ffcc33"
               },
               "edges": {
                 "default": "#d8d8d8"
               }
-            }
-          },
-          "dataMap": {
-            "nodes": {
-              "label": {
-                "id": "label",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "label"
+            },
+            "dataMap": {
+              "nodes": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "color"
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string"
+                  ]
+                },
+                "size": {
+                  "id": "size",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "size"
+                }
               },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "color"
-              },
-              "description": {
-                "id": "description",
-                "acceptedValueTypes": [
-                  "string"
-                ]
-              },
-              "size": {
-                "id": "size",
-                "acceptedValueTypes": [
-                  "number"
-                ],
-                "mappedField": "size"
+              "edges": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "type": {
+                  "id": "type",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "type"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "weight": {
+                  "id": "weight",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "weight"
+                },
+                "id": {
+                  "id": "id",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "id"
+                },
+                "source": {
+                  "id": "source",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "source"
+                },
+                "target": {
+                  "id": "target",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "target"
+                }
               }
             },
-            "edges": {
-              "label": {
-                "id": "label",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "label"
+            "flattenedDataMap": {
+              "nodes": {
+                "label": "label",
+                "size": "size",
+                "category": "color"
               },
-              "type": {
-                "id": "type",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "type"
-              },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              },
-              "description": {
-                "id": "description",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              },
-              "weight": {
-                "id": "weight",
-                "acceptedValueTypes": [
-                  "number"
-                ],
-                "mappedField": "weight"
-              },
-              "id": {
+              "edges": {
+                "label": "label",
+                "type": "type",
+                "weight": "weight",
                 "id": "id",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "id"
-              },
-              "source": {
-                "id": "source",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "source"
-              },
-              "target": {
-                "id": "target",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "target"
+                "source": "source",
+                "target": "target"
               }
+            },
+            "shownCategories": {
+              "default": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "nodes": [
+                "default",
+                "rgb(255,51,51)",
+                "rgb(0,204,204)",
+                "rgb(255,255,51)",
+                "rgb(204,204,255)",
+                "rgb(153,0,0)",
+                "rgb(102,102,0)",
+                "rgb(255,204,102)",
+                "rgb(153,255,0)",
+                "rgb(102,0,102)",
+                "rgb(153,255,255)",
+                "rgb(102,255,102)",
+                "rgb(0,153,0)",
+                "rgb(255,153,153)",
+                "rgb(255,255,0)",
+                "rgb(204,0,0)",
+                "rgb(0,204,51)",
+                "rgb(51,153,255)",
+                "rgb(255,204,51)"
+              ],
+              "edges": [
+                "default"
+              ]
             }
           }
         }
       },
-      "title": "Slide 2",
-      "markdown": "",
-      "id": "b3f9c313-16ad-403e-a9b0-7a047e75200e"
+      "title": "Title 2",
+      "markdown": "Toute une journée du programme a été consacrée à l’élaboration d’un protocole de recherche : les élèves doivent apprendre à enquêter en profondeur sur un sujet donné, à vérifier par eux-mêmes les sources d’une information, ainsi qu’à percevoir les intérêts de chacun des acteurs engagés.",
+      "id": "f3f58bfe-ae1b-489d-935e-bc10ce01f812"
     },
-    "5e0ce480-f055-450a-b76c-9394bf94bd67": {
+    "aa5269fd-d567-49a1-bec8-b8d6e6c947a6": {
       "views": {
-        "39dc4294-a04e-4a3e-89f2-b23eccc26058": {
+        "736e6287-205d-473e-ad95-26702310a025": {
           "viewParameters": {
-            "cameraX": 0,
-            "cameraY": 0,
-            "cameraRatio": 2,
+            "cameraX": 30.44830505709782,
+            "cameraY": -60.5754211019807,
+            "cameraRatio": 0.13919606697024361,
             "cameraAngle": 0,
             "labelThreshold": 7,
             "minNodeSize": 1,
@@ -88224,140 +88448,190 @@
             "colorsMap": {
               "default": "#d8d8d8",
               "nodes": {
-                "default": "#ff4700",
-                "rgb(255,51,51)": "#ffd1bf",
-                "rgb(0,204,204)": "#ffa380",
-                "rgb(255,255,51)": "#1feb00",
-                "rgb(204,204,255)": "#16a400",
-                "rgb(153,0,0)": "#c8ffbf",
-                "rgb(102,102,0)": "#90ff80",
-                "rgb(255,204,102)": "#0052bd",
-                "rgb(153,255,0)": "#003a84",
-                "rgb(102,0,102)": "#bfdbff",
-                "rgb(153,255,255)": "#80b7ff",
-                "rgb(102,255,102)": "#ff4700",
-                "rgb(0,153,0)": "#ff4700",
-                "rgb(255,153,153)": "#ff4700",
-                "rgb(255,255,0)": "#ff4700",
-                "rgb(204,0,0)": "#ff4700",
-                "rgb(0,204,51)": "#ff4700",
-                "rgb(51,153,255)": "#ff4700",
-                "rgb(255,204,51)": "#ff4700"
+                "default": "#000000",
+                "rgb(255,51,51)": "#ff3333",
+                "rgb(0,204,204)": "#00cccc",
+                "rgb(255,255,51)": "#ffff33",
+                "rgb(204,204,255)": "#ccccff",
+                "rgb(153,0,0)": "#990000",
+                "rgb(102,102,0)": "#666600",
+                "rgb(255,204,102)": "#ffcc66",
+                "rgb(153,255,0)": "#99ff00",
+                "rgb(102,0,102)": "#660066",
+                "rgb(153,255,255)": "#99ffff",
+                "rgb(102,255,102)": "#66ff66",
+                "rgb(0,153,0)": "#009900",
+                "rgb(255,153,153)": "#ff9999",
+                "rgb(255,255,0)": "#ffff00",
+                "rgb(204,0,0)": "#cc0000",
+                "rgb(0,204,51)": "#00cc33",
+                "rgb(51,153,255)": "#3399ff",
+                "rgb(255,204,51)": "#ffcc33"
               },
               "edges": {
                 "default": "#d8d8d8"
               }
-            }
-          },
-          "dataMap": {
-            "nodes": {
-              "label": {
-                "id": "label",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "label"
+            },
+            "dataMap": {
+              "nodes": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "color"
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string"
+                  ]
+                },
+                "size": {
+                  "id": "size",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "size"
+                }
               },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "color"
-              },
-              "description": {
-                "id": "description",
-                "acceptedValueTypes": [
-                  "string"
-                ]
-              },
-              "size": {
-                "id": "size",
-                "acceptedValueTypes": [
-                  "number"
-                ],
-                "mappedField": "size"
+              "edges": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "type": {
+                  "id": "type",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "type"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "weight": {
+                  "id": "weight",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "weight"
+                },
+                "id": {
+                  "id": "id",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "id"
+                },
+                "source": {
+                  "id": "source",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "source"
+                },
+                "target": {
+                  "id": "target",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "target"
+                }
               }
             },
-            "edges": {
-              "label": {
-                "id": "label",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "label"
+            "flattenedDataMap": {
+              "nodes": {
+                "label": "label",
+                "size": "size",
+                "category": "color"
               },
-              "type": {
-                "id": "type",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "type"
-              },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              },
-              "description": {
-                "id": "description",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              },
-              "weight": {
-                "id": "weight",
-                "acceptedValueTypes": [
-                  "number"
-                ],
-                "mappedField": "weight"
-              },
-              "id": {
+              "edges": {
+                "label": "label",
+                "type": "type",
+                "weight": "weight",
                 "id": "id",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "id"
-              },
-              "source": {
-                "id": "source",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "source"
-              },
-              "target": {
-                "id": "target",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "target"
+                "source": "source",
+                "target": "target"
               }
+            },
+            "shownCategories": {
+              "default": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "nodes": [
+                "default",
+                "rgb(255,51,51)",
+                "rgb(0,204,204)",
+                "rgb(255,255,51)",
+                "rgb(204,204,255)",
+                "rgb(153,0,0)",
+                "rgb(102,102,0)",
+                "rgb(255,204,102)",
+                "rgb(153,255,0)",
+                "rgb(102,0,102)",
+                "rgb(153,255,255)",
+                "rgb(102,255,102)",
+                "rgb(0,153,0)",
+                "rgb(255,153,153)",
+                "rgb(255,255,0)",
+                "rgb(204,0,0)",
+                "rgb(0,204,51)",
+                "rgb(51,153,255)",
+                "rgb(255,204,51)"
+              ],
+              "edges": [
+                "default"
+              ]
             }
           }
         }
       },
-      "title": "Slide 3",
-      "markdown": "/* eslint react/prefer-stateless-function:0 */\n",
-      "id": "5e0ce480-f055-450a-b76c-9394bf94bd67"
+      "title": "Title 3",
+      "markdown": "C’est très largement un concept vide. Les problèmes se posent depuis que la presse existe. Nous serons toujours confrontés à des événements sur lesquels les informations manquent, sont parcellaires, voire sont contradictoires. Plutôt que de s’épuiser dans la recherche vaine d’une « vérité des faits » qui, je le rappelle encore, n’existe pas en tant que telle, la tache d’un vrai journaliste serait plus de nous faire comprendre la complexité d’un problème, de nous présenter les diverses interprétations qui peuvent en exister puis de nous présenter son opinion. Mais, tant que les journalistes s’obstineront à vouloir mélanger les deux, à nous faire prendre des vessies pour des lanternes, ils ne peuvent espérer nulle rédemption. La seule solution passe par le pluralisme le plus large dans les sources d’informations, quitte à laisser aux gens la liberté de se faire, à partir de ces diverses sources, une opinion.\n\n",
+      "id": "aa5269fd-d567-49a1-bec8-b8d6e6c947a6"
     },
-    "38321331-a4bb-4745-b4a8-2b2fe54a1be8": {
+    "3257c7e1-4a3b-4a9f-b986-515bba3c05aa": {
       "views": {
-        "39dc4294-a04e-4a3e-89f2-b23eccc26058": {
+        "736e6287-205d-473e-ad95-26702310a025": {
           "viewParameters": {
-            "cameraX": 0,
-            "cameraY": 0,
-            "cameraRatio": 2,
+            "cameraX": 27.891921515023093,
+            "cameraY": -39.63898736159039,
+            "cameraRatio": 0.3251335650552035,
             "cameraAngle": 0,
             "labelThreshold": 7,
             "minNodeSize": 1,
@@ -88365,139 +88639,443 @@
             "colorsMap": {
               "default": "#d8d8d8",
               "nodes": {
-                "default": "#ff4700",
-                "rgb(255,51,51)": "#ffd1bf",
-                "rgb(0,204,204)": "#ffa380",
-                "rgb(255,255,51)": "#1feb00",
-                "rgb(204,204,255)": "#16a400",
-                "rgb(153,0,0)": "#c8ffbf",
-                "rgb(102,102,0)": "#90ff80",
-                "rgb(255,204,102)": "#0052bd",
-                "rgb(153,255,0)": "#003a84",
-                "rgb(102,0,102)": "#bfdbff",
-                "rgb(153,255,255)": "#80b7ff",
-                "rgb(102,255,102)": "#ff4700",
-                "rgb(0,153,0)": "#ff4700",
-                "rgb(255,153,153)": "#ff4700",
-                "rgb(255,255,0)": "#ff4700",
-                "rgb(204,0,0)": "#ff4700",
-                "rgb(0,204,51)": "#ff4700",
-                "rgb(51,153,255)": "#ff4700",
-                "rgb(255,204,51)": "#ff4700"
+                "1": "#ff0000",
+                "2": "#b0004e",
+                "3": "#770087",
+                "4": "#5d00a1",
+                "5": "#3e00c0",
+                "6": "#2e00d0",
+                "7": "#2400da",
+                "8": "#1400ea",
+                "9": "#0a00f4",
+                "10": "#f90005",
+                "11": "#ef000f",
+                "12": "#e4001a",
+                "13": "#df001f",
+                "14": "#da0024",
+                "15": "#d0002e",
+                "16": "#ca0034",
+                "17": "#c50039",
+                "18": "#bb0043",
+                "19": "#b60048",
+                "20": "#ab0053",
+                "21": "#a1005d",
+                "22": "#9c0062",
+                "23": "#960068",
+                "24": "#91006d",
+                "25": "#8c0072",
+                "26": "#870077",
+                "27": "#82007c",
+                "28": "#7c0082",
+                "30": "#72008c",
+                "31": "#6d0091",
+                "35": "#680096",
+                "38": "#62009c",
+                "40": "#5800a6",
+                "41": "#5300ab",
+                "44": "#4e00b0",
+                "45": "#4800b6",
+                "47": "#4300bb",
+                "51": "#3900c5",
+                "53": "#3400ca",
+                "62": "#2900d5",
+                "73": "#1f00df",
+                "78": "#1a00e4",
+                "88": "#0f00ef",
+                "104": "#f4000a",
+                "118": "#ea0014",
+                "143": "#d50029",
+                "170": "#c0003e",
+                "209": "#a60058",
+                "default": "#000000",
+                "NaN": "#0500f9"
               },
               "edges": {
                 "default": "#d8d8d8"
               }
-            }
-          },
-          "dataMap": {
-            "nodes": {
-              "label": {
-                "id": "label",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "label"
+            },
+            "dataMap": {
+              "nodes": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "occurrences"
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string"
+                  ]
+                },
+                "size": {
+                  "id": "size",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "size"
+                }
               },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "color"
-              },
-              "description": {
-                "id": "description",
-                "acceptedValueTypes": [
-                  "string"
-                ]
-              },
-              "size": {
-                "id": "size",
-                "acceptedValueTypes": [
-                  "number"
-                ],
-                "mappedField": "size"
+              "edges": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "type": {
+                  "id": "type",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "type"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "weight": {
+                  "id": "weight",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "weight"
+                },
+                "id": {
+                  "id": "id",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "id"
+                },
+                "source": {
+                  "id": "source",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "source"
+                },
+                "target": {
+                  "id": "target",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "target"
+                }
               }
             },
-            "edges": {
-              "label": {
-                "id": "label",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "label"
+            "flattenedDataMap": {
+              "nodes": {
+                "label": "label",
+                "size": "size",
+                "category": "occurrences"
               },
-              "type": {
-                "id": "type",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "type"
-              },
-              "category": {
-                "id": "category",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              },
-              "description": {
-                "id": "description",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ]
-              },
-              "weight": {
-                "id": "weight",
-                "acceptedValueTypes": [
-                  "number"
-                ],
-                "mappedField": "weight"
-              },
-              "id": {
+              "edges": {
+                "label": "label",
+                "type": "type",
+                "weight": "weight",
                 "id": "id",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "id"
-              },
-              "source": {
-                "id": "source",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "source"
-              },
-              "target": {
-                "id": "target",
-                "acceptedValueTypes": [
-                  "string",
-                  "number"
-                ],
-                "mappedField": "target"
+                "source": "source",
+                "target": "target"
               }
+            },
+            "shownCategories": {
+              "default": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "nodes": [
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "11",
+                "12",
+                "13",
+                "14",
+                "15",
+                "16",
+                "17",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "25",
+                "26",
+                "27",
+                "28",
+                "30",
+                "31",
+                "35",
+                "38",
+                "40",
+                "41",
+                "44",
+                "45",
+                "47",
+                "51",
+                "53",
+                "62",
+                "73",
+                "78",
+                "88",
+                "104",
+                "118",
+                "143",
+                "170",
+                "209",
+                "default",
+                "NaN"
+              ],
+              "edges": [
+                "default"
+              ]
             }
           }
         }
       },
-      "title": "Slide 4",
-      "markdown": "/* eslint react/prefer-stateless-function:0 */\n",
-      "id": "38321331-a4bb-4745-b4a8-2b2fe54a1be8"
+      "title": "Title 4",
+      "markdown": "Ils ont donc tout d’abord appris à réaliser un questionnaire pour mener des entretiens pertinents, qui permettent d’établir et de recouper des informations. Dans une seconde partie, l’accent a été mis sur les techniques de réalisation concrète d’un entretien. Les élèves du Microlycée ont pour cela conduit un entretien avec un professionnel qui fait face à des controverses quotidiennement dans le cadre de son activité.\n\n",
+      "id": "3257c7e1-4a3b-4a9f-b986-515bba3c05aa"
+    },
+    "e34401bc-337b-4e1f-8274-5495317d8d28": {
+      "views": {
+        "736e6287-205d-473e-ad95-26702310a025": {
+          "viewParameters": {
+            "cameraX": 27.891921515023093,
+            "cameraY": -39.63898736159039,
+            "cameraRatio": 0.3251335650552035,
+            "cameraAngle": 0,
+            "labelThreshold": 7,
+            "minNodeSize": 1,
+            "sideMargin": 0,
+            "colorsMap": {
+              "default": "#d8d8d8",
+              "nodes": {
+                "default": "#000000",
+                "rgb(255,51,51)": "#ff3333",
+                "rgb(0,204,204)": "#00cccc",
+                "rgb(255,255,51)": "#ffff33",
+                "rgb(204,204,255)": "#ccccff",
+                "rgb(153,0,0)": "#990000",
+                "rgb(102,102,0)": "#666600",
+                "rgb(255,204,102)": "#ffcc66",
+                "rgb(153,255,0)": "#99ff00",
+                "rgb(102,0,102)": "#660066",
+                "rgb(153,255,255)": "#99ffff",
+                "rgb(102,255,102)": "#66ff66",
+                "rgb(0,153,0)": "#009900",
+                "rgb(255,153,153)": "#ff9999",
+                "rgb(255,255,0)": "#ffff00",
+                "rgb(204,0,0)": "#cc0000",
+                "rgb(0,204,51)": "#00cc33",
+                "rgb(51,153,255)": "#3399ff",
+                "rgb(255,204,51)": "#ffcc33"
+              },
+              "edges": {
+                "default": "#d8d8d8"
+              }
+            },
+            "dataMap": {
+              "nodes": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "color"
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string"
+                  ]
+                },
+                "size": {
+                  "id": "size",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "size"
+                }
+              },
+              "edges": {
+                "label": {
+                  "id": "label",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "label"
+                },
+                "type": {
+                  "id": "type",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "type"
+                },
+                "category": {
+                  "id": "category",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "description": {
+                  "id": "description",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ]
+                },
+                "weight": {
+                  "id": "weight",
+                  "acceptedValueTypes": [
+                    "number"
+                  ],
+                  "mappedField": "weight"
+                },
+                "id": {
+                  "id": "id",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "id"
+                },
+                "source": {
+                  "id": "source",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "source"
+                },
+                "target": {
+                  "id": "target",
+                  "acceptedValueTypes": [
+                    "string",
+                    "number"
+                  ],
+                  "mappedField": "target"
+                }
+              }
+            },
+            "flattenedDataMap": {
+              "nodes": {
+                "label": "label",
+                "size": "size",
+                "category": "color"
+              },
+              "edges": {
+                "label": "label",
+                "type": "type",
+                "weight": "weight",
+                "id": "id",
+                "source": "source",
+                "target": "target"
+              }
+            },
+            "shownCategories": {
+              "default": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "nodes": [
+                "default",
+                "rgb(255,51,51)",
+                "rgb(0,204,204)",
+                "rgb(255,255,51)",
+                "rgb(204,204,255)",
+                "rgb(153,0,0)",
+                "rgb(102,102,0)",
+                "rgb(255,204,102)",
+                "rgb(153,255,0)",
+                "rgb(102,0,102)",
+                "rgb(153,255,255)",
+                "rgb(102,255,102)",
+                "rgb(0,153,0)",
+                "rgb(255,153,153)",
+                "rgb(255,255,0)",
+                "rgb(204,0,0)",
+                "rgb(0,204,51)",
+                "rgb(51,153,255)",
+                "rgb(255,204,51)"
+              ],
+              "edges": [
+                "default"
+              ]
+            }
+          }
+        }
+      },
+      "title": "Title 5",
+      "markdown": "Cette année, c’est Grégoire Koenig, Directeur de cabinet du Président du directoire de la [Société du Grand Paris (SGP)](https://www.societedugrandparis.fr/) qui s’est prêté au jeu des questions-réponses pendant une demi-journée. La SGP est l’établissement public chargé de construire deux cents kilomètres de lignes nouvelles de métro en rocade autour de Paris, afin de faciliter le trajet de banlieue à banlieue, désengorger le réseau actuel et ainsi permettre un développement de l’aire métropolitaine parisienne. Ce chantier colossal, connu sous le nom de Grand Paris Express, est d’ores et déjà engagé et doit se poursuivre pendant plusieurs décennies. On imagine aisément les discussions, les négociations, les interrogations par lesquelles il a pu passer et qu’il ne manquera pas de susciter tout au long de sa construction !\n\n",
+      "id": "e34401bc-337b-4e1f-8274-5495317d8d28"
     }
   },
   "order": [
-    "5e0ce480-f055-450a-b76c-9394bf94bd67",
-    "38321331-a4bb-4745-b4a8-2b2fe54a1be8",
-    "d5e86897-e056-4dde-b826-b6428f87ecde",
-    "b3f9c313-16ad-403e-a9b0-7a047e75200e"
+    "427fe23d-e67c-4425-8724-073c7259d540",
+    "f3f58bfe-ae1b-489d-935e-bc10ce01f812",
+    "aa5269fd-d567-49a1-bec8-b8d6e6c947a6",
+    "3257c7e1-4a3b-4a9f-b986-515bba3c05aa",
+    "e34401bc-337b-4e1f-8274-5495317d8d28"
   ],
-  "id": "b70993f2-1ad3-457d-bec3-5ced737b8ec6"
+  "id": "0d541b70-c288-4c31-83a3-cbcfa2dba1e2"
 }
