@@ -32,10 +32,13 @@ app.use(cors());
 module.exports = app;
 
 require('./routes/presentations');
+require('./routes/stories');
 require('./routes/render-presentation');
+require('./routes/render-story');
 require('./routes/oauth-proxy');
 require('./routes/dashboard');
 require('./routes/gist-presentation');
+require('./routes/gist-story');
 
 app.listen(config.port, function(){
   console.log('app listening on %s', config.port);
