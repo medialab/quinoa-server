@@ -130,7 +130,7 @@ const renderPresentationItem = (presentation, baseUrl) =>
       <button class="embed-btn">Copy embed code</button>
       <button class="dangerous-btn">Delete presentation</button>
     </div>
-    <div class="embed-placeholder">${buildEmbedCode(presentation, baseUrl, 'presentation')}</div>
+    <div class="embed-placeholder">${buildEmbedCode(presentation, baseUrl, 'presentations')}</div>
   </li>
 `;
 
@@ -154,7 +154,7 @@ const renderStoryItem = (story, baseUrl) =>
       <button class="embed-btn">Copy embed code</button>
       <button class="dangerous-btn">Delete story</button>
     </div>
-    <div class="embed-placeholder">${buildEmbedCode(story, baseUrl, 'story')}</div>
+    <div class="embed-placeholder">${buildEmbedCode(story, baseUrl, 'stories')}</div>
   </li>
 `;
 
