@@ -9,10 +9,15 @@ const buildPath = path.resolve(__dirname + '/../../builds/story/build.js');
 const draft = require('draft-js');
 const stateToHTML = require('draft-js-export-html').stateToHTML;
 
-const buildSEOHTML = (story = {metadata: {}, contents: {}}) => {
+const buildSEOHTML = (story = {metadata: {}}) => {
   const title = story.metadata.title || 'Quinoa story';
   const description = story.metadata.description || '';
-  const contents = stateToHTML(draft.convertFromRaw(story.content));
+  const contents = '';
+  // const contents = story.sectionsOrder.map(sectionId => {
+  //   return stateToHTML(story.sections[sectionId].contents);
+  //   // todo : parse notes
+  // }
+  // ).join('\n \n');
   return `
 <h1>${title}</h1>
 <p>

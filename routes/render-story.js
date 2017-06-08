@@ -13,6 +13,7 @@ app.post('/render-story', (req, res) => {
       res.status(400);
     }
   } catch (error) {
+    console.log('error: ', error);
     res.status(500).send(error);
   }
 });
