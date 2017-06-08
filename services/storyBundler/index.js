@@ -43,7 +43,6 @@ const buildMeta = (story = {metadata: {}}) => {
     <meta name="og:description" content="${story.metadata.description}" />
     <meta name="twitter:description" content="${story.metadata.description}" />
   ` :  '';
-  console.log('authors', authors);
   const authors = story.metadata.authors && story.metadata.authors.length
                   ? 
                   story.metadata.authors.map(author => `
