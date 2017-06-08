@@ -69,6 +69,7 @@ module.exports = function bundleStory (story = {}, options = {}) {
   const seoHTML = buildSEOHTML(story);
   const meta = buildMeta(story);
   const jsBuild = fs.readFileSync(buildPath, 'utf8');
+  console.log('bundle story meta: ', meta, seoHTML);
   return `
 <!DOCTYPE html>
 <html lang="en">
