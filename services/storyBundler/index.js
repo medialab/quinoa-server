@@ -24,7 +24,8 @@ ${contents}
 `;
 };
 
-const buildMeta = (story) => {
+const buildMeta = (story = {metadata: {}}) => {
+  console.log('story metadata', story.metadata);
   const title = story.metadata.title ? `
     <title>${story.metadata.title}</title>
     <meta name="DC.Title" content="${story.metadata.title}"/>
@@ -37,7 +38,8 @@ const buildMeta = (story) => {
     <meta name="og:description" content="${story.metadata.description}" />
     <meta name="twitter:description" content="${story.metadata.description}" />
   ` :  '';
-  const authors = story.metadata.authors && story.metadata.authors
+  console.log('authors', authors);
+  const authors = story.metadata.authors && story.metadata.authors.length
                   ? 
                   story.metadata.authors.map(author => `
                     <meta name="DC.Creator" content="${author}" />
