@@ -65,7 +65,9 @@ const buildMeta = (story) => {
  * @return {string} html - the resulting html 
  */
 module.exports = function bundleStory (story = {}, options = {}) {
+  console.log('will stringify the pres');
   const presJSON = JSON.stringify(story, null, 2);
+  console.log('will build seo');
   const seoHTML = buildSEOHTML(story);
   const meta = buildMeta(story);
   console.log('bundling', meta, seoHTML);
