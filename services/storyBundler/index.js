@@ -74,7 +74,7 @@ module.exports = function bundleStory (story = {}, options = {}) {
   console.log('will stringify the pres');
   const presJSON = JSON.stringify(story, null, 2);
   console.log('will build seo');
-  const seoHTML = buildSEOHTML(story);
+  const seoHTML = '';// buildSEOHTML(story);
   const meta = buildMeta(story);
   console.log('bundling', meta, seoHTML);
   const jsBuild = fs.readFileSync(buildPath, 'utf8');
