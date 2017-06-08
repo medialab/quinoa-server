@@ -8,7 +8,7 @@ function buildStoryApplication () {
     entry: './services/storyAppBuilder/application.js',
     config: webpackConfig,
     progress: true,
-    minify: true,
+    // minify: true,
     output: path.resolve('./builds/story/build.js')
   });
 }
