@@ -39,6 +39,8 @@ require('./routes/oauth-proxy');
 require('./routes/dashboard');
 require('./routes/gist-presentation');
 require('./routes/gist-story');
+require('./routes/citation-locales');
+require('./routes/citation-styles');
 
 app.listen(config.port, function(){
   console.log('app listening on %s', config.port);

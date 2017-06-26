@@ -1,0 +1,6 @@
+[submodule "resources/citationStyles"]
+	path = resources/citationStyles
+	url = https://github.com/citation-style-language/styles
+[submodule "resources/citationLocales"]
+	path = resources/citationLocales
+	url = https://github.com/citation-style-language/locales
