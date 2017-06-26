@@ -8,16 +8,30 @@ const path = require('path');
 const buildPath = path.resolve(__dirname + '/../../builds/story/build.js');
 const draft = require('draft-js');
 const stateToHTML = require('draft-js-export-html').stateToHTML;
+const convertFromRaw = draft.convertFromRaw;
 
+/**
+ * Builds simple html code aimed at being parsed by indexing robots (to prevent the "black box" effect of js-related-only content)
+ * @param {object} story - the story to parse
+ * @return {string} html - the resulting html 
+ */
 const buildSEOHTML = (story = {metadata: {}}) => {
   const title = story.metadata.title || 'Quinoa story';
   const description = story.metadata.description || '';
-  const contents = '';
-  // const contents = story.sectionsOrder.map(sectionId => {
-  //   return stateToHTML(story.sections[sectionId].contents);
-  //   // todo : parse notes
-  // }
-  // ).join('\n \n');
+  const contents = story.sectionsOrder.map(sectionId => {
+    const section = story.sections[sectionId];
+    // htmlify notes
+    const notes = Object.keys(section.notes)
+      .map(noteId => {
+        const note = section.notes[noteId];
+        return stateToHTML(convertFromRaw(note.editorState));
+      });
+    // htmlify main content
+    const theseContents = section.contents;
+    const contentState = convertFromRaw(theseContents);
+    // return everything
+    return stateToHTML(contentState).concat(notes);
+  }).join('\n \n');
   return `
 <h1>${title}</h1>
 <p>
@@ -29,8 +43,12 @@ ${contents}
 `;
 };
 
+/**
+ * Builds metadata for the head of the html output
+ * @param {object} story - the story to parse
+ * @return {string} html - the resulting html 
+ */
 const buildMeta = (story = {metadata: {}}) => {
-  console.log('story metadata', story.metadata);
   const title = story.metadata.title ? `
     <title>${story.metadata.title}</title>
     <meta name="DC.Title" content="${story.metadata.title}"/>
@@ -56,7 +74,7 @@ const buildMeta = (story = {metadata: {}}) => {
           content = "data story">
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@medialab_ScPo" />
-  <meta property="og:url" content="http://www.bulgur.surge.sh" />
+  <meta property="og:url" content="http://www.fonio.surge.sh" />
   <meta name="og:type" content="website" />
   ${title}
   ${authors}
@@ -71,13 +89,14 @@ const buildMeta = (story = {metadata: {}}) => {
  * @return {string} html - the resulting html 
  */
 module.exports = function bundleStory (story = {}, options = {}) {
-  console.log('will stringify the pres');
   const presJSON = JSON.stringify(story, null, 2);
-  console.log('will build seo');
-  const seoHTML = '';// buildSEOHTML(story);
+  // build html for indexing purpose
+  const seoHTML = buildSEOHTML(story);
+  // build metadata html for the head
   const meta = buildMeta(story);
-  console.log('bundling', meta, seoHTML);
+  // retrieve the story-player application js code
   const jsBuild = fs.readFileSync(buildPath, 'utf8');
+  // render html
   return `
 <!DOCTYPE html>
 <html lang="en">

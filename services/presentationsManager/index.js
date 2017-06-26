@@ -28,7 +28,6 @@ function getPresentations (filterFunction, callback) {
         .filter(fileName => fileName.indexOf('.json') === fileName.length - 5)
       , (fileName, fileCb) => {
         const addr = presentationsPath + '/' + fileName;
-        console.log(fileName);
         fs.readFile(addr, 'utf-8', (fileErr, content) => {
           if (fileErr) {
             return fileCb(fileErr);
