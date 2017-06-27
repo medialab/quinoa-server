@@ -125,11 +125,8 @@ function createStory (story, callback) {
  * @param {function} callback - callbacks an error
  */
 function updateStory (id, story, callback) {
-  console.log('update story', id);
   const addr = storiesPath + '/' + id + '.json';
-  console.log('story path', addr);
   const contents = typeof story === 'string' ? story : JSON.stringify(story);
-  console.log('contents', contents);
   fs.writeFile(addr, contents, callback); 
 }
 
