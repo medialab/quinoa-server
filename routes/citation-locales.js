@@ -27,7 +27,7 @@ fs.readdir(localesPath, (err, files) => {
               id,
               names,
               fileName: cslFile,
-              string: cslStr,
+              data: cslStr,
               xmlJs: xml,
             });
           }

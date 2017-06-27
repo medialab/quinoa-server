@@ -28,7 +28,7 @@ fs.readdir(stylesPath, (err, files) => {
               idUrl,
               id,
               fileName: cslFile,
-              string: cslStr,
+              data: cslStr,
               xmlJs: xml
             });
           }
