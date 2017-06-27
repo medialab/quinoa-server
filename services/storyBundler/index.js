@@ -95,8 +95,7 @@ module.exports = function bundleStory (story = {}, options = {}) {
   // build metadata html for the head
   const meta = buildMeta(story);
   // retrieve the story-player application js code
-  const jsBuild = fs.readFileSync(buildPath, 'utf8');
-  console.log(jsBuild);
+  const jsBuild = fs.readFileSync(buildPath, 'utf8').replace(/(^\/\/.*$)/gm, '');
   // render html
   return `
 <!DOCTYPE html>
