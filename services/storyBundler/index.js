@@ -96,6 +96,7 @@ module.exports = function bundleStory (story = {}, options = {}) {
   const meta = buildMeta(story);
   // retrieve the story-player application js code
   const jsBuild = fs.readFileSync(buildPath, 'utf8');
+  console.log(jsBuild);
   // render html
   return `
 <!DOCTYPE html>
@@ -167,7 +168,7 @@ module.exports = function bundleStory (story = {}, options = {}) {
   <div id="mount"></div>
   <script>
     window.__story = ${presJSON}
-
+    ${jsBuild}
   </script>
 </body>
 </html>
