@@ -5,16 +5,16 @@ const bundleStory = require('../services/storyBundler');
 
 app.get('/stories/:id?', (req, res) => {
   if (req.params.id) {
-    manager.getStory(req.params.id, (err, presentation) => {
+    manager.getStory(req.params.id, (err, story) => {
       if (err) {
         return res.status(500).send(err);
       } else {
         if (req.query && req.query.format && req.query.format === 'html') {
-          const bundle = bundleStory(presentation);
+          const bundle = bundleStory(story);
           res.setHeader('Content-Type', 'text/html');
           res.send(bundle);
         } else {
-          res.send(presentation);
+          res.send(story);
         }
       }
     });
@@ -29,18 +29,18 @@ app.get('/stories/:id?', (req, res) => {
 });
 
 app.patch('/stories/:id', (req, res) => {
-  manager.updateStory(req.params.id, req.body, (err, presentation) => {
+  manager.updateStory(req.params.id, req.body, (err, story) => {
     if (err) {
       return res.status(500).send(err);
-    } else res.send(presentation);
+    } else res.send(story);
   });
 });
 
 app.put('/stories/:id', (req, res) => {
-  manager.createStory(req.body, (err, presentation) => {
+  manager.createStory(req.body, (err, story) => {
     if (err) {
       return res.status(500).send(err);
-    } else res.send(presentation);
+    } else res.send(story);
   });
 });
 
