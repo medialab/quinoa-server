@@ -32,7 +32,7 @@ app.patch('/stories/:id', (req, res) => {
   console.log('will update a story');
   manager.updateStory(req.params.id, req.body, (err, story) => {
     if (err) {
-      console.log('error', error);
+      console.log('error', err);
       return res.status(500).send(err);
     } else res.send(story);
   });
