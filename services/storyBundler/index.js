@@ -167,7 +167,7 @@ module.exports = function bundleStory (story = {}, options = {}) {
   <div id="mount"></div>
   <script>
     window.__story = ${presJSON}
-    ${jsBuild}
+
   </script>
 </body>
 </html>
