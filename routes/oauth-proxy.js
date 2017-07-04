@@ -10,7 +10,6 @@ app.post('/oauth-proxy/:appName', cors(), (req, res) => {
   res.setHeader('Accept', 'application/json');
   const data = '';
   const appName = req.params.appName;
-  console.log('oauth proxy with app name', appName);
 
   if (req.method !== 'POST') {
       res.writeHead(405);

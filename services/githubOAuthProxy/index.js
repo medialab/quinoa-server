@@ -61,11 +61,13 @@ function getToken(appName, code, res) {
 
     var data;
     if (appName === 'bulgur') {
+        console.log('will make data with config', config);
         data = {
             client_id: config.github_bulgur_client_id || process.env.GITHUB_BULGUR_CLIENT_ID,
             client_secret: config.github_bulgur_client_secret || process.env.GITHUB_BULGUR_CLIENT_SECRET,
             code: code
         };
+        console.log('has made data', data);
     } else if (appName === 'fonio') {
         data = {
             client_id: config.github_fonio_client_id || process.env.GITHUB_FONIO_CLIENT_ID,
