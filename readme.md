@@ -90,8 +90,10 @@ Displays as an html static application the content of a gist-stored quinoa prese
 
 You have to set the following values as environment variables in production mode :
 
-* ``GITHUB_CLIENT_SECRET`` : the github client secret to use for the oauth resolution process
-* ``GITHUB_CLIENT_ID`` : the github client id to use for the oauth resolution process
+* ``GITHUB_BULGUR_CLIENT_SECRET`` : the github client secret to use for the bulgur oauth resolution process
+* ``GITHUB_BULGUR_CLIENT_ID`` : the github client id to use for the bulgur oauth resolution process
+* ``GITHUB_FONIO_CLIENT_SECRET`` : the github client secret to use for the fonio oauth resolution process
+* ``GITHUB_FONIO_CLIENT_ID`` : the github client id to use for the fonio oauth resolution process
 * ``ADMIN_USERNAME`` : the user name to use to access to the locally stored documents' dashboard
 * ``ADMIN_PASSWORD`` : the password to use to access to the locally stored documents' dashboard
 * ``PORT`` (optional) : the port to serve the application to
@@ -99,8 +101,10 @@ You have to set the following values as environment variables in production mode
 Example for a heroku deployment (in the terminal, after having setup the heroku distant repo) :
 
 ```
-heroku config:set GITHUB_CLIENT_SECRET=xxxxxxxxxxxxxxx
-heroku config:set GITHUB_CLIENT_ID=xxxxxxxxxx
+heroku config:set GITHUB_BULGUR_CLIENT_SECRET=xxxxxxxxxxxxxxx
+heroku config:set GITHUB_BULGUR_CLIENT_ID=xxxxxxxxxx
+heroku config:set GITHUB_FONIO_CLIENT_SECRET=xxxxxxxxxxxxxxx
+heroku config:set GITHUB_FONIO_CLIENT_ID=xxxxxxxxxx
 heroku config:set ADMIN_USERNAME=xxxxxxxxxx
 heroku config:set ADMIN_PASSWORD=xxxxxxxxxx
 ```

@@ -4,11 +4,12 @@ const app = require('../server');
 
 const getToken = require('../services/githubOAuthProxy');
 
-app.post('/oauth-proxy', cors(), (req, res) => {
+app.post('/oauth-proxy/:appName', cors(), (req, res) => {
 
   res.setHeader('Allow', 'POST');
   res.setHeader('Accept', 'application/json');
   const data = '';
+  const appName = req.params.appName;
 
   if (req.method !== 'POST') {
       res.writeHead(405);
@@ -31,5 +32,5 @@ app.post('/oauth-proxy', cors(), (req, res) => {
     res.end();
     return;
   }
-  getToken(req.body.code, res);
+  getToken(appName, req.body.code, res);
 });

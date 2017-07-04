@@ -11,8 +11,10 @@ var config;
 
 if (process.env.NODE_ENV === 'production') {
   config = {
-    github_client_id: process.env.GITHUB_CLIENT_ID,
-    github_client_secret: process.env.GITHUB_CLIENT_SECRET,
+    github_bulgur_client_id: process.env.GITHUB_BULGUR_CLIENT_ID,
+    github_bulgur_client_secret: process.env.GITHUB_BULGUR_CLIENT_SECRET,
+    github_fonio_client_id: process.env.GITHUB_FONIO_CLIENT_ID,
+    github_fonio_client_secret: process.env.GITHUB_FONIO_CLIENT_SECRET,
     port: process.env.PORT || 3000
   };
 }
@@ -20,7 +22,7 @@ else {
   config = require('../../config');
 }
 
-function getToken(code, res) {
+function getToken(appName, code, res) {
     if (typeof code != 'string') {
         res.writeHead(400, 'Must supply code');
         res.end();
@@ -57,11 +59,20 @@ function getToken(code, res) {
         });
     });
 
-    var data = {
-        client_id: config.client_id || process.env.GITHUB_CLIENT_ID,
-        client_secret: config.client_secret || process.env.GITHUB_CLIENT_SECRET,
-        code: code
-    };
+    var data;
+    if (appName === 'bulgur') {
+        data = {
+            client_id: config.github_bulgur_client_id || process.env.GITHUB_BULGUR_CLIENT_ID,
+            client_secret: config.github_bulgur_client_secret || process.env.GITHUB_BULGUR_CLIENT_SECRET,
+            code: code
+        };
+    } else if (appName === 'fonio') {
+        data = {
+            client_id: config.github_fonio_client_id || process.env.GITHUB_FONIO_CLIENT_ID,
+            client_secret: config.github_fonio_client_secret || process.env.GITHUB_FONIO_CLIENT_SECRET,
+            code: code
+        };
+    }
     ghreq.write(JSON.stringify(data));
     ghreq.end();
 }
