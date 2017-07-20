@@ -1,4 +1,3 @@
-const http = require('http');
 const https = require('https');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -18,9 +17,6 @@ else {
 }
 
 const app = express();
-
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json({limit: '20mb'}));
