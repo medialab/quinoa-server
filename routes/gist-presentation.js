@@ -5,7 +5,7 @@
 const https = require('https');
 
 const renderGistPresentation = (req, res) => {
-  var ghreq = https.request({
+  const ghreq = https.request({
         hostname: 'api.github.com',
         path: '/gists/' + req.params.id,
         method: 'GET',

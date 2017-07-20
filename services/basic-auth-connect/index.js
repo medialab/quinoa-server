@@ -1,4 +1,4 @@
-var http = require('http');
+const https = require('https');
 
 /*!
  * Connect - basicAuth
@@ -122,7 +122,7 @@ function unauthorized(res, realm) {
  */
 
 function error(code, msg){
-  var err = new Error(msg || http.STATUS_CODES[code]);
+  var err = new Error(msg || https.STATUS_CODES[code]);
   err.status = code;
   return err;
 };

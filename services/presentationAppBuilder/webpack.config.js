@@ -1,5 +1,5 @@
-var webpack = require('webpack');
-var UglifyEsPlugin = require('uglify-es-webpack-plugin');
+const webpack = require('webpack');
+const UglifyEsPlugin = require('uglify-es-webpack-plugin');
 
 module.exports = {
   plugins: [

@@ -5,7 +5,7 @@
 const https = require('https');
 
 const renderGistStory = (req, res) => {
-  var ghreq = https.request({
+  const ghreq = https.request({
         hostname: 'api.github.com',
         path: '/gists/' + req.params.id,
         method: 'GET',
@@ -15,7 +15,7 @@ const renderGistStory = (req, res) => {
             "User-Agent": "medialab"
         }
     }, function(ghres) {
-        var data = '';
+        let data = '';
 
         if (ghres.statusCode === 404) {
             res.writeHead(500);
@@ -28,7 +28,7 @@ const renderGistStory = (req, res) => {
             const htmlUrl = body.files && body.files['index.html'] && body.files['index.html'].raw_url;
             if (htmlUrl) {
               return https.get(htmlUrl, indexRes => {
-                var data = '';
+                data = '';
                 indexRes.on('data', d => {
                   data += d;
                 });

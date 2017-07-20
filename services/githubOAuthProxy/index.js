@@ -7,7 +7,7 @@ const https = require('https');
 
 // integrates code from https://github.com/robindemourat/github-oauth-proxy/blob/master/server.js
 
-var config;
+let config;
 
 if (process.env.NODE_ENV === 'production') {
   config = {
@@ -29,7 +29,7 @@ function getToken(appName, code, res) {
         return;
     }
 
-    var ghreq = https.request({
+    const ghreq = https.request({
         hostname: 'github.com',
         path: '/login/oauth/access_token',
         method: 'POST',
@@ -38,7 +38,7 @@ function getToken(appName, code, res) {
             "Accept": "application/json"
         }
     }, function(ghres) {
-        var data = '';
+        let data = '';
 
         if (ghres.statusCode === 404) {
             res.writeHead(500);
@@ -59,7 +59,7 @@ function getToken(appName, code, res) {
         });
     });
 
-    var data;
+    let data;
     if (appName === 'bulgur') {
         data = {
             client_id: config.github_bulgur_client_id || process.env.GITHUB_BULGUR_CLIENT_ID,
