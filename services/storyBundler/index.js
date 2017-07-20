@@ -89,7 +89,7 @@ const buildMeta = (story = {metadata: {}}) => {
  * @return {string} html - the resulting html 
  */
 module.exports = function bundleStory (story = {}, options = {}) {
-  const presJSON = JSON.stringify(story, null, 2);
+  const presJSON = JSON.stringify(story);
   // build html for indexing purpose
   const seoHTML = buildSEOHTML(story);
   // build metadata html for the head

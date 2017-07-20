@@ -25,8 +25,8 @@ function getPresentations (filterFunction, callback) {
     (filesList, parsedCallback) =>
       asyncMap(
         filesList
-        .filter(fileName => fileName.indexOf('.json') === fileName.length - 5)
-      , (fileName, fileCb) => {
+        .filter(fileName => fileName.indexOf('.json') === fileName.length - 5),
+       (fileName, fileCb) => {
         const addr = presentationsPath + '/' + fileName;
         fs.readFile(addr, 'utf-8', (fileErr, content) => {
           if (fileErr) {

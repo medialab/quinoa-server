@@ -67,7 +67,7 @@ const buildMeta = (presentation) => {
  * @return {string} html - the resulting html 
  */
 module.exports = function bundlePresentation (presentation = {}, options = {}) {
-  const presJSON = JSON.stringify(presentation, null, 2);
+  const presJSON = JSON.stringify(presentation);
   const seoHTML = buildSEOHTML(presentation);
   const meta = buildMeta(presentation);
   const jsBuild = fs.readFileSync(buildPath, 'utf8');
