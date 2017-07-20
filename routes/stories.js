@@ -1,9 +1,7 @@
-const app = require('../server');
-
 const manager = require('../services/storiesManager');
 const bundleStory = require('../services/storyBundler');
 
-app.get('/stories/:id?', (req, res) => {
+const getStories = (req, res) => {
   if (req.params.id) {
     manager.getStory(req.params.id, (err, story) => {
       if (err) {
@@ -26,25 +24,24 @@ app.get('/stories/:id?', (req, res) => {
       } else res.send(stories);
     });
   }
-});
+};
 
-app.patch('/stories/:id', (req, res) => {
+const updateStory = (req, res) => {
   manager.updateStory(req.params.id, req.body, (err, story) => {
     if (err) {
       return res.status(500).send(err);
     } else res.send(story);
   });
-});
-
-app.put('/stories/:id', (req, res) => {
+};
+const createStory = (req, res) => {
   manager.createStory(req.body, (err, story) => {
     if (err) {
       return res.status(500).send(err);
     } else res.send(story);
   });
-});
+};
 
-app.delete('/stories/:id', (req, res) => {
+const deleteStory = (req, res) => {
   manager.deleteStory(req.params.id, (err) => {
     if (err) {
       return res.status(500).send(err);
@@ -52,4 +49,11 @@ app.delete('/stories/:id', (req, res) => {
       status: 'deleted'
     });
   });
-});
+};
+
+module.exports = {
+  getStories: getStories,
+  updateStory: updateStory,
+  createStory: createStory,
+  deleteStory: deleteStory,
+};

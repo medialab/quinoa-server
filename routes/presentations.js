@@ -1,9 +1,7 @@
-const app = require('../server');
-
 const manager = require('../services/presentationsManager');
 const bundlePresentation = require('../services/presentationBundler');
 
-app.get('/presentations/:id?', (req, res) => {
+const getPresentations = (req, res) => {
   if (req.params.id) {
     manager.getPresentation(req.params.id, (err, presentation) => {
       if (err) {
@@ -26,25 +24,24 @@ app.get('/presentations/:id?', (req, res) => {
       } else res.send(presentations);
     });
   }
-});
+};
 
-app.patch('/presentations/:id', (req, res) => {
+const updatePresentation = (req, res) => {
   manager.updatePresentation(req.params.id, req.body, (err, presentation) => {
     if (err) {
       return res.status(500).send(err);
     } else res.send(presentation);
   });
-});
-
-app.put('/presentations/:id', (req, res) => {
+};
+const createPresentation = (req, res) => {
   manager.createPresentation(req.body, (err, presentation) => {
     if (err) {
       return res.status(500).send(err);
     } else res.send(presentation);
   });
-});
+};
 
-app.delete('/presentations/:id', (req, res) => {
+const deletePresentation = (req, res) => {
   manager.deletePresentation(req.params.id, (err) => {
     if (err) {
       return res.status(500).send(err);
@@ -52,4 +49,11 @@ app.delete('/presentations/:id', (req, res) => {
       status: 'deleted'
     });
   });
-});
+};
+
+module.exports = {
+  getPresentations: getPresentations,
+  updatePresentation: updatePresentation,
+  createPresentation: createPresentation,
+  deletePresentation: deletePresentation,
+};

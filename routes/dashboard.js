@@ -2,28 +2,10 @@
  * This module serves a dashboard interface to locally stored documents
  * @module routes/dashboard
  */
-const basicAuth = require('../services/basic-auth-connect');
-
-var config;
-
-if (process.env.NODE_ENV === 'production') {
-  config = {
-    adminUserName: process.env.ADMIN_USERNAME,
-    adminPassword: process.env.ADMIN_PASSWORD,
-    port: process.env.PORT || 3000
-  };
-}
-else { 
-  config = require('../config');
-}
-
-
-const app = require('../server');
 
 const presentationsManager = require('../services/presentationsManager');
 const storiesManager = require('../services/storiesManager');
 
-const auth = basicAuth(config.adminUserName, config.adminPassword);
 
 const style = `
 body{
@@ -317,6 +299,6 @@ const renderDashboard = (req, res) => {
   });
 };
 
-app.get('/dashboard', auth, renderDashboard);
+module.exports = renderDashboard;
 
 

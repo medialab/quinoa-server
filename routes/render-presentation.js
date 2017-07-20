@@ -1,8 +1,6 @@
 const renderPresentation = require('../services/presentationBundler');
-const app = require('../server');
 
-
-app.post('/render-presentation', (req, res) => {
+module.exports = (req, res) => {
   try {
     const presentation = req.body;
     // todo put a presentation format validation hook here
@@ -15,4 +13,4 @@ app.post('/render-presentation', (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
-});
+};

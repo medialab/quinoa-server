@@ -1,4 +1,3 @@
-const app = require('../server');
 const fs = require('fs');
 const path = require('path');
 const asyncMap = require('async').map;
@@ -44,7 +43,7 @@ fs.readdir(localesPath, (err, files) => {
   });
 });
 
-app.get('/citation-locales/:id?', (req, res) => {
+module.exports = (req, res) => {
   // get one locale
   if (req.params.id) {
     const locale = locales.find(locale => locale.id === req.params.id);
@@ -67,4 +66,4 @@ app.get('/citation-locales/:id?', (req, res) => {
     });
     res.send(output);
   }
-});
+};

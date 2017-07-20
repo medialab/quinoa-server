@@ -1,8 +1,6 @@
 const renderStory = require('../services/storyBundler');
-const app = require('../server');
 
-
-app.post('/render-story', (req, res) => {
+module.exports = (req, res) => {
   try {
     const story = req.body;
     // todo put a story format validation hook here
@@ -16,4 +14,4 @@ app.post('/render-story', (req, res) => {
     console.log('error: ', error);
     res.status(500).send(error);
   }
-});
+};

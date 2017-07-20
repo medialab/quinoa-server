@@ -1,11 +1,7 @@
-const cors = require('cors');
-
-const app = require('../server');
 
 const getToken = require('../services/githubOAuthProxy');
 
-app.post('/oauth-proxy/:appName', cors(), (req, res) => {
-
+module.exports = (req, res) => {
   res.setHeader('Allow', 'POST');
   res.setHeader('Accept', 'application/json');
   const data = '';
@@ -33,4 +29,4 @@ app.post('/oauth-proxy/:appName', cors(), (req, res) => {
     return;
   }
   getToken(appName, req.body.code, res);
-});
+};

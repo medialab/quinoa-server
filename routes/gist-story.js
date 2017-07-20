@@ -2,7 +2,6 @@
  * This module proxies the index.html content of a given gist repository
  * @module routes/gist-story
  */
-const app = require('../server');
 const https = require('https');
 
 const renderGistStory = (req, res) => {
@@ -54,5 +53,5 @@ const renderGistStory = (req, res) => {
     ghreq.end();
 }
 
-app.get('/gist-story/:id', renderGistStory);
+module.exports = renderGistStory;
 

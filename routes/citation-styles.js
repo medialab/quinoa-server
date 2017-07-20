@@ -1,4 +1,3 @@
-const app = require('../server');
 const fs = require('fs');
 const path = require('path');
 const asyncMap = require('async').map;
@@ -45,7 +44,7 @@ fs.readdir(stylesPath, (err, files) => {
   });
 });
 
-app.get('/citation-styles/:id?', (req, res) => {
+module.exports = (req, res) => {
   // get one style
   if (req.params.id) {
     const style = styles.find(style => style.id === req.params.id);
@@ -67,4 +66,4 @@ app.get('/citation-styles/:id?', (req, res) => {
     });
     res.send(output);
   }
-});
+};
