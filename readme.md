@@ -1,6 +1,6 @@
-# WIP - quinoa server
+# Quinoa server
 
-``quinoa-server`` is a node application providing diverse back-end services for quinoa apps.
+``quinoa-server`` is a node application providing diverse back-end services for quinoa client applications.
 
 It is supposed to provide the following services :
 
@@ -15,6 +15,8 @@ To see with which front-end applications this application works and how they pla
 * [fonio - stories making application](https://github.com/medialab/fonio)
 
 # Routes
+
+Each service of the server is accessible through a specific route. Here is a list:
 
 ## Github OAuth proxy
 
@@ -86,7 +88,85 @@ GET /gist-presentation/:id
 
 Displays as an html static application the content of a gist-stored quinoa presentation.
 
+## Citation CSL styles
+
+```
+GET /citation-styles/
+```
+
+Provides a list of all available csl style models in the form `{id, names, title}`.
+
+## Citation CSL style
+
+```
+GET /citation-styles/:id
+```
+
+Provides a specific citation style in the form:
+
+```
+{
+  id,// id of the style
+  names,// names of the style
+  fileName,// name of the file used to represent the style
+  data, // representation of the style in xml/csl
+  xmlJs,// representation of the style as json
+}
+```
+
+## Citation CSL locales
+
+```
+GET /citation-locales/
+```
+
+Provides a list of all available styling locales/languages in the form `{id, names, title}`.
+
+## Citation CSL locale
+
+```
+GET /citation-locales/:id
+```
+
+Provides a specific citation locale in the form:
+
+```
+{
+  id,// id of the locale
+  names,// names of the locale
+  fileName,// name of the file used to represent the locale
+  data, // representation of the locale in xml
+  xmlJs,// representation of the locale as json
+}
+```
+
+# Requirements for development
+
+* [git](https://git-scm.com/)
+* [node](https://nodejs.org/en/)
+
+# npm scripts
+
+```
+npm run test # run mocha testing on each *.spec.js files in ./src dir
+npm run start # initializes the server app
+npm run build-apps # builds quinoa-presentation-player & quinoa-story-player applications minified bundles
+```
+
+# Installing for development
+
+```
+git clone https://github.com/medialab/quinoa-server
+cd quinoa-server
+npm install
+cp config.sample.json config.json
+# edit config.json with the proper config settings
+```
+
+
 # Deployment
+
+Code can be deployed as is (no babel).
 
 You have to set the following values as environment variables in production mode :
 
