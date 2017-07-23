@@ -49,12 +49,12 @@ const renderDashboard = require('./routes/dashboard');
 
 // routes binding
 app.get('/presentations/:id?', presentationsRoutes.getPresentations);
-app.patch('/presentations/:id', presentationsRoutes.updatePresentation);
+app.post('/presentations/:id', presentationsRoutes.updatePresentation);
 app.put('/presentations/:id', presentationsRoutes.createPresentation);
 app.delete('/presentations/:id', presentationsRoutes.deletePresentation);
 
 app.get('/stories/:id?', storiesRoutes.getStories);
-app.patch('/stories/:id', storiesRoutes.updateStory);
+app.post('/stories/:id', storiesRoutes.updateStory);
 app.put('/stories/:id', storiesRoutes.createStory);
 app.delete('/stories/:id', storiesRoutes.deleteStory);
 
