@@ -1,3 +1,9 @@
+/**
+ * This module provides an interface to resolve an express request
+ * asking to serve locally-stored csl citation data
+ * =========
+ * @module quinoa-server/routes/citation-data
+ */
 const fs = require('fs');
 const path = require('path');
 const asyncMap = require('async').map;
@@ -6,7 +12,10 @@ const parseXMLString = require('xml2js').parseString;
 const stylesPath = path.resolve(__dirname + '/../resources/citationStyles');
 
 let styles;
-
+// we store all the data in application memory
+// during application's initialization
+// (todo: there might be cleaner ways to do that, but as the data is small
+// and not dynamic it works for now)
 fs.readdir(stylesPath, (err, files) => {
   const cslFiles = files.filter(file => file.split('.').pop() === 'csl');
   asyncMap(cslFiles, (cslFile, cslCb) => {
@@ -44,6 +53,13 @@ fs.readdir(stylesPath, (err, files) => {
   });
 });
 
+/**
+ * The module exports a single request handler function
+ * that behave differently wether 
+ * an id is given in the request's params or not
+ * @param {obj} req - the request object
+ * @param {obj} res - the resource object
+ */
 module.exports = (req, res) => {
   // get one style
   if (req.params.id) {

@@ -1,3 +1,7 @@
+/**
+ * Webpack config for building quinoa-presentation-player
+ */
+
 const webpack = require('webpack');
 const UglifyEsPlugin = require('uglify-es-webpack-plugin');
 

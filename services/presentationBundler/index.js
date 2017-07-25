@@ -1,12 +1,18 @@
 /**
  * This module consumes the representation of a quinoa presentation
  * to bundle the content of an all-in-one html file
- * @module services/presentationBundler
+ * ========
+ * @module quinoa-server/services/presentationBundler
  */
 const fs = require('fs');
 const path = require('path');
 const buildPath = path.resolve(__dirname + '/../../builds/presentation/build.js');
 
+/**
+ * Builds simple html code aimed at being parsed by indexing robots (to prevent the "black box" effect of js-related-only content)
+ * @param {object} presentation - the presentation to parse
+ * @return {string} html - the resulting html 
+ */
 const buildSEOHTML = (presentation = {metadata: {}, order: [], slides: {}}) => {
   const title = presentation.metadata.title || 'Quinoa presentation';
   const description = presentation.metadata.description || '';
@@ -26,6 +32,11 @@ ${contents}
 `;
 };
 
+/**
+ * Builds metadata for the head of the html output
+ * @param {object} story - the story to parse
+ * @return {string} html - the resulting html 
+ */
 const buildMeta = (presentation) => {
   const title = presentation.metadata.title ? `
     <title>${presentation.metadata.title}</title>

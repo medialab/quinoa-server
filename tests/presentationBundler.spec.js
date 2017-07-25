@@ -1,3 +1,7 @@
+/**
+ * Unit tests for the presentationBundler service
+ */
+
 const chai = require('chai');
 const expect = chai.expect;
 

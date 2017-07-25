@@ -1,3 +1,6 @@
+/**
+ * Unit tests for the bundleStory service
+ */
 const chai = require('chai');
 const expect = chai.expect;
 

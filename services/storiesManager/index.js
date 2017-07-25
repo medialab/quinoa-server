@@ -1,7 +1,8 @@
 /**
  * This module handle Create-Read-Update-Delete operations
  * on locally stored stories
- * @module services/storiesManager
+ * ===========
+ * @module quinoa-server/services/storiesManager
  */
 const fs = require('fs');
 const path = require('path'); 
@@ -138,7 +139,9 @@ function deleteStory (id, callback) {
   const addr = storiesPath + '/' + id + '.json';
   return fs.unlink(addr, callback);
 }
-
+/**
+ * The module exports a map of crud functions
+ */
 module.exports = {
   getStories: getStories,
   getStory: getStory,

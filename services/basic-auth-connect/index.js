@@ -1,3 +1,10 @@
+/**
+ * This module replicates code for very simply
+ * protecting a route with a login and password
+ * ==========
+ * @module quinoa-server/services/basic-auth-connect
+ */
+
 const https = require('https');
 
 /*!
@@ -104,7 +111,6 @@ module.exports = function basicAuth(callback, realm) {
  * @param {String} realm
  * @api private
  */
-
 function unauthorized(res, realm) {
   res.statusCode = 401;
   res.setHeader('WWW-Authenticate', 'Basic realm="' + realm + '"');
@@ -120,7 +126,6 @@ function unauthorized(res, realm) {
  * @return {Error}
  * @api private
  */
-
 function error(code, msg){
   var err = new Error(msg || https.STATUS_CODES[code]);
   err.status = code;

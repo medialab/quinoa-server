@@ -1,14 +1,18 @@
 /**
  * This module retrieves an oauth code from github api oAuth process
- * @module services/githubOAuthProxy
+ * For more information about the oauth process for github see:
+ * https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-authorization-options-for-oauth-apps/
+ * ==========
+ * @module quinoa-server/routes/oauth-proxy
  */
 
 const https = require('https');
 
-// integrates code from https://github.com/robindemourat/github-oauth-proxy/blob/master/server.js
+// replicates from code from https://github.com/robindemourat/github-oauth-proxy/blob/master/server.js
 
+// we retrieve config data
+// (todo: would that be better given as arguments, in a "purer" fashion)
 let config;
-
 if (process.env.NODE_ENV === 'production') {
   config = {
     github_bulgur_client_id: process.env.GITHUB_BULGUR_CLIENT_ID,
@@ -22,6 +26,13 @@ else {
   config = require('../../config');
 }
 
+/**
+ * Handles the process of retrieving an oauth token
+ * from github api
+ * @param {string} appName - the app to retrieve github secrets from
+ * @param {string} code - the code provided by github for temporarily enabling token retrieval
+ * @param {object} res - the res object to use to proxy the response
+ */
 function getToken(appName, code, res) {
     if (typeof code != 'string') {
         res.writeHead(400, 'Must supply code');
@@ -60,6 +71,7 @@ function getToken(appName, code, res) {
     });
 
     let data;
+    // todo : this is dirty I know
     if (appName === 'bulgur') {
         data = {
             client_id: config.github_bulgur_client_id || process.env.GITHUB_BULGUR_CLIENT_ID,

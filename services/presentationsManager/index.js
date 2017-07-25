@@ -1,6 +1,7 @@
 /**
  * This module handle Create-Read-Update-Delete operations
  * on locally stored presentations
+ * ========
  * @module services/presentationsManager
  */
  const fs = require('fs');
@@ -138,6 +139,9 @@ function deletePresentation (id, callback) {
   return fs.unlink(addr, callback);
 }
 
+/**
+ * The module exports a map of crud functions
+ */
 module.exports = {
   getPresentations: getPresentations,
   getPresentation: getPresentation,

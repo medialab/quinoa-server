@@ -1,7 +1,8 @@
 /**
  * This module consumes the restory of a quinoa story
  * to bundle the content of an all-in-one html file
- * @module services/storyBundler
+ * ========
+ * @module quinoa-server/services/storyBundler
  */
 const fs = require('fs');
 const path = require('path');
