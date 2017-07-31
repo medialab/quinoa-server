@@ -12,18 +12,22 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 
-// internal dependencies
+/**
+ * Internal dependencies
+ */
+// this service allows to simply protect a route with login+password
 const basicAuth = require('./services/basic-auth-connect');
-const citationLocales = require('./routes/citation-locales');
-const citationStyles = require('./routes/citation-styles');
-const oAuthProxy = require('./routes/oauth-proxy');
-const gistStory = require('./routes/gist-story');
-const gistPresentation = require('./routes/gist-presentation');
-const renderPresentation = require('./routes/render-presentation');
-const renderStory = require('./routes/render-story');
-const presentationsRoutes = require('./routes/presentations');
-const storiesRoutes = require('./routes/stories');
-const renderDashboard = require('./routes/dashboard');
+// route handlers (see below)
+const citationLocales = require('./routeHandlers/citation-locales');
+const citationStyles = require('./routeHandlers/citation-styles');
+const oAuthProxy = require('./routeHandlers/oauth-proxy');
+const gistStory = require('./routeHandlers/gist-story');
+const gistPresentation = require('./routeHandlers/gist-presentation');
+const renderPresentation = require('./routeHandlers/render-presentation');
+const renderStory = require('./routeHandlers/render-story');
+const presentationsRoutes = require('./routeHandlers/presentations');
+const storiesRoutes = require('./routeHandlers/stories');
+const renderDashboard = require('./routeHandlers/dashboard');
 
 let config;
 // in production mode config variables must be set as environment variables
@@ -52,7 +56,13 @@ app.use(cors());
 
 module.exports = app;
 
-// routes binding
+/**
+ * Routes binding
+ * ==========
+ * Each express request is handled by a specific route handlers
+ * Routes definitions and routes handlers are separated
+ * to facilitate further changes in the server's api
+ */
 app.get('/presentations/:id?', presentationsRoutes.getPresentations);
 app.post('/presentations/:id', presentationsRoutes.updatePresentation);
 app.put('/presentations/:id', presentationsRoutes.createPresentation);
@@ -68,13 +78,16 @@ app.post('/render-story', renderStory);
 
 // we use a simple auth middleware for the admin view access
 const auth = basicAuth(config.adminUserName, config.adminPassword);
+// dashboard for the admin dedicated
+// to the management of the locally stored documents
+// (the route is protected by a basic auth)
 app.get('/dashboard', auth, renderDashboard);
 // proxy used in the github oauth authentication process
 app.post('/oauth-proxy/:appName', cors(),  oAuthProxy);
-
+// routes enabling to display gist-hosted documents
 app.get('/gist-story/:id', gistStory);
 app.get('/gist-presentation/:id', gistPresentation);
-
+// citation data servers
 app.get('/citation-locales/:id?', citationLocales);
 app.get('/citation-styles/:id?', citationStyles);
 
