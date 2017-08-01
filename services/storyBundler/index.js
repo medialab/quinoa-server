@@ -68,6 +68,7 @@ const buildMeta = (story = {metadata: {}}) => {
                     <meta name="DC.Creator" content="${author}" />
                     <meta name="author" content="${author}" />`)
                   : '';
+  // todo: use cover image and convert it to the right base64 dimensions for the social networks
   return `
   <meta name    = "DC.Format"
           content = "text/html">
