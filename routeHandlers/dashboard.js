@@ -64,7 +64,7 @@ li.presentation-item h3{
   border: none;
 }
 .links-container a:not(:last-of-type) ,
-.operations-container button:not(:last-of-type) 
+.operations-container button:not(:last-of-type)
 {
   margin-right: .5rem;
 }
@@ -98,8 +98,8 @@ li.presentation-item h3{
  * @param {string} type - type of document ("presentation", "story", ...)
  * @return {string} markup
  */
-const buildEmbedCode = (document, baseUrl, type) => 
-  `<iframe 
+const buildEmbedCode = (document, baseUrl, type) =>
+  `<iframe
   allowfullscreen
   src="${baseUrl}/${type}/${document.id}?format=html"
   width="1000"
@@ -113,7 +113,7 @@ const buildEmbedCode = (document, baseUrl, type) =>
  * @param {string} baseUrl - the prefix to add to view's url (server url base)
  * @return {string} markup
  */
-const renderPresentationItem = (presentation, baseUrl) => 
+const renderPresentationItem = (presentation, baseUrl) =>
   `
   <li class="presentation-item" id="presentation-${presentation.id}">
     <div class="informations">
@@ -130,8 +130,8 @@ const renderPresentationItem = (presentation, baseUrl) =>
       <a href="/presentations/${presentation.id}?format=html" target="blank">Open presentation as a html page</a>
     </div>
     <div class="operations-container">
-      <button class="embed-btn">Copy embed code</button>
-      <button class="dangerous-btn">Delete presentation</button>
+      <button class="embed-btn" onClick=getEmbedCode("presentation-${presentation.id}")>Copy embed code</button>
+      <button class="dangerous-btn" onClick=deletePresentation("${presentation.id}")>Delete presentation</button>
     </div>
     <div class="embed-placeholder">${buildEmbedCode(presentation, baseUrl, 'presentations')}</div>
   </li>
@@ -142,7 +142,7 @@ const renderPresentationItem = (presentation, baseUrl) =>
  * @param {string} baseUrl - the prefix to add to view's url (server url base)
  * @return {string} markup
  */
-const renderStoryItem = (story, baseUrl) => 
+const renderStoryItem = (story, baseUrl) =>
   `
   <li class="story-item" id="story-${story.id}">
     <div class="informations">
@@ -159,8 +159,8 @@ const renderStoryItem = (story, baseUrl) =>
       <a href="/stories/${story.id}?format=html" target="blank">Open story as a html page</a>
     </div>
     <div class="operations-container">
-      <button class="embed-btn">Copy embed code</button>
-      <button class="dangerous-btn">Delete story</button>
+      <button class="embed-btn" onClick=getEmbedCode("story-${story.id}")>Copy embed code</button>
+      <button class="dangerous-btn" onClick=deleteStory("${story.id}")>Delete story</button>
     </div>
     <div class="embed-placeholder">${buildEmbedCode(story, baseUrl, 'stories')}</div>
   </li>
@@ -284,38 +284,37 @@ const renderDashboardView = (baseUrl, presentations, stories) => {
 
         document.body.removeChild(textArea);
       }
-
-    var presentationCartels= document.querySelectorAll('.presentation-item');
-    for (i = 0; i < presentationCartels.length ; i ++) {
-      var item = presentationCartels[i];
-      var id = item.getAttribute('id');
-      var embedBtn = document.querySelector('#' + id + ' .embed-btn');
-      var deleteBtn = document.querySelector('#' + id + ' .dangerous-btn');
+    function getEmbedCode(id) {
       var html = document.querySelector('#' + id + ' .embed-placeholder').innerHTML;
-      embedBtn.addEventListener('click', function(event) {
-        copyTextToClipboard(html);
-        alert('★★★★★ The html code of your presentation embed kit has been copied to your clipboard ! Paste it inside any html code you want to embed your presentation into. ★★★★★');
-      });
-      deleteBtn.addEventListener('click', function(event) {
-        var finalId = id.split('presentation-')[1];
-        console.log('launch delete request for ', finalId);
-        var http = new XMLHttpRequest();
-        var url = "/presentations/" + finalId;
-        http.open("DELETE", url);
-        http.onreadystatechange = function() {//Call a function when the state changes.
-          if(http.readyState == 4 && http.status == 200) {
-            // console.log('response', http.responseText);
-            item.remove();
-          }
+      copyTextToClipboard(html);
+      alert('★★★★★ The html code of your story embed kit has been copied to your clipboard ! Paste it inside any html code you want to embed your story into. ★★★★★');
+    }
+    function deleteStory(id) {
+      var http = new XMLHttpRequest();
+      var url = "/stories/" + id;
+      http.open("DELETE", url);
+      http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+          document.querySelector('#story-' + id).remove();
         }
-        http.send();
-      });
-
+      }
+      http.send();
+    }
+    function deletePresentation(id) {
+      var url = "/presentations/" + id;
+      var http = new XMLHttpRequest();
+      http.open("DELETE", url);
+      http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+          document.querySelector('#presentation-' + id).remove();
+        }
+      }
+      http.send();
     }
   </script>
 </body>
 </html>
-`; 
+`;
 }
 /**
  * Resolves a dashboard request
@@ -323,7 +322,7 @@ const renderDashboardView = (baseUrl, presentations, stories) => {
  * @param {obj} res- the resource object
  */
 const renderDashboard = (req, res) => {
-  const baseUrl = /*req.protocol +*/ 'https://' + req.get('host');
+  const baseUrl = /*req.protocol +*/ 'http://' + req.get('host');
   return presentationsManager.getPresentations(null, (err1, presentations) => {
     if (err1) {
       return res.status(500).send(err1);
@@ -333,7 +332,7 @@ const renderDashboard = (req, res) => {
           return res.status(500).send(err2);
         }
         const html = renderDashboardView(baseUrl, presentations, stories);
-        console.log(html);
+        // console.log(html);
         return res.send(html);
       });
     }
