@@ -11,6 +11,7 @@ const https = require('https');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const morgan = require('morgan');
 
 /**
  * Internal dependencies
@@ -41,18 +42,23 @@ if (process.env.NODE_ENV === 'production') {
   };
 }
 // in development mode config variables are retrieved from a json file
-else { 
+else {
   config = require('./config');
 }
 
 const app = express();
-
+const db = require('./db');
+app.use(morgan('dev'));
 // parse application/json
 app.use(bodyParser.json({limit: '20mb'}));
 app.use(bodyParser.urlencoded({limit: '20mb', extended: true}));
 
 // allow cross-origin requests
 app.use(cors());
+
+const verifyToken = require('./auth/verifyToken');
+const authController = require('./auth/authController');
+app.use('/auth', authController);
 
 module.exports = app;
 
@@ -69,9 +75,9 @@ app.put('/presentations/:id', presentationsRoutes.createPresentation);
 app.delete('/presentations/:id', presentationsRoutes.deletePresentation);
 
 app.get('/stories/:id?', storiesRoutes.getStories);
-app.post('/stories/:id', storiesRoutes.updateStory);
+app.post('/stories/:id', verifyToken, storiesRoutes.updateStory);
 app.put('/stories/:id', storiesRoutes.createStory);
-app.delete('/stories/:id', storiesRoutes.deleteStory);
+app.delete('/stories/:id', verifyToken, storiesRoutes.deleteStory);
 
 app.post('/render-presentation', renderPresentation);
 app.post('/render-story', renderStory);

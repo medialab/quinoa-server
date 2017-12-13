@@ -14,7 +14,7 @@ const convertFromRaw = draft.convertFromRaw;
 /**
  * Builds simple html code aimed at being parsed by indexing robots (to prevent the "black box" effect of js-related-only content)
  * @param {object} story - the story to parse
- * @return {string} html - the resulting html 
+ * @return {string} html - the resulting html
  */
 const buildSEOHTML = (story = {metadata: {}}) => {
   const title = story.metadata.title || 'Quinoa story';
@@ -47,7 +47,7 @@ ${contents}
 /**
  * Builds metadata for the head of the html output
  * @param {object} story - the story to parse
- * @return {string} html - the resulting html 
+ * @return {string} html - the resulting html
  */
 const buildMeta = (story = {metadata: {}}) => {
   const title = story.metadata.title ? `
@@ -63,7 +63,7 @@ const buildMeta = (story = {metadata: {}}) => {
     <meta name="twitter:description" content="${story.metadata.description}" />
   ` :  '';
   const authors = story.metadata.authors && story.metadata.authors.length
-                  ? 
+                  ?
                   story.metadata.authors.map(author => `
                     <meta name="DC.Creator" content="${author}" />
                     <meta name="author" content="${author}" />`)
@@ -88,12 +88,12 @@ const buildMeta = (story = {metadata: {}}) => {
  * Builds the restory of a all-in-one html story out of a json story restory
  * @param {object} story - the story to bundle
  * @param {object} options - relative to the settings of the story interactions
- * @return {string} html - the resulting html 
+ * @return {string} html - the resulting html
  */
 module.exports = function bundleStory (story = {}, options = {}) {
   const presJSON = JSON.stringify(story);
   // build html for indexing purpose
-  const seoHTML = buildSEOHTML(story);
+  // const seoHTML = buildSEOHTML(story);
   // build metadata html for the head
   const meta = buildMeta(story);
   // retrieve the story-player application js code
@@ -134,18 +134,18 @@ module.exports = function bundleStory (story = {}, options = {}) {
       flex-flow: row nowrap;
       justify-content: center;
       align-items: center;
-    }  
+    }
     .loader-container
     {
       display: flex;
       flex-flow: column nowrap;
       justify-content: center;
       align-items: center;
-    } 
+    }
     a,a:visited,a:active,a:hover{
       color: inherit;
       text-decoration: none;
-    } 
+    }
     .loader-container h1
     {
       font-size: 6rem;
@@ -162,9 +162,6 @@ module.exports = function bundleStory (story = {}, options = {}) {
       <h1>${story.metadata.title || 'Quinoa story'}</h1>
       <p>Loading ...</p>
     </div>
-  </div>
-  <div class="shadow-content">
-    ${seoHTML}
   </div>
   <div id="mount"></div>
   <script>

@@ -5,7 +5,7 @@
  * @module quinoa-server/services/storiesManager
  */
 const fs = require('fs');
-const path = require('path'); 
+const path = require('path');
 const waterfall = require('async/waterfall');
 const asyncMap = require('async/mapSeries');
 const uuid = require('uuid/v4');
@@ -101,13 +101,19 @@ function getStory (id, callback) {
     (readCallback) =>
       fs.readFile(addr, 'utf-8', readCallback),
     (strContent, convertCallback) => {
-      try{
-        return convertCallback(null, JSON.parse(strContent.trim()));
-      } catch (error) {
-        return convertCallback(error);
+      console.log('str')
+      let content;
+      try {
+        content = JSON.parse(strContent.trim());
       }
+      catch (error) {
+        console.log(error)
+        return convertCallback(error)
+      }
+      console.log('str 2')
+      return convertCallback(null, content);
     }
-  ], callback); 
+  ], callback);
 }
 
 /**
@@ -118,7 +124,7 @@ function createStory (story, callback) {
   const id = story.id || uuid();
   const addr = storiesPath + '/' + id + '.json';
   const contents = typeof story === 'string' ? story : JSON.stringify(story);
-  fs.writeFile(addr, contents, callback); 
+  fs.writeFile(addr, contents, callback);
 }
 
 /**
@@ -128,7 +134,7 @@ function createStory (story, callback) {
 function updateStory (id, story, callback) {
   const addr = storiesPath + '/' + id + '.json';
   const contents = typeof story === 'string' ? story : JSON.stringify(story);
-  fs.writeFile(addr, contents, callback); 
+  fs.writeFile(addr, contents, callback);
 }
 
 /**
