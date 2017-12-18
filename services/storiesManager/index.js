@@ -9,6 +9,9 @@ const path = require('path');
 const waterfall = require('async/waterfall');
 const asyncMap = require('async/mapSeries');
 const uuid = require('uuid/v4');
+const low = require('lowdb')
+const FileAsync = require('lowdb/adapters/FileAsync')
+const adapter = new FileAsync('./data/db.json')
 
 const storiesPath = path.resolve(__dirname + '/../../data/stories/');
 
@@ -29,14 +32,17 @@ function getStories (filterFunction, callback) {
         .filter(fileName => fileName.indexOf('.json') === fileName.length - 5)
       , (fileName, fileCb) => {
         const addr = storiesPath + '/' + fileName;
-        console.log(fileName);
         fs.readFile(addr, 'utf-8', (fileErr, content) => {
           if (fileErr) {
             return fileCb(fileErr);
           } else {
+            const metaContent = {
+              id: JSON.parse(content).id,
+              metadata: JSON.parse(content).metadata
+            }
             const resp = {
               id: fileName.split('.')[0],
-              content: content.toString('utf8')
+              content: JSON.stringify(metaContent).toString('utf8')
             };
             return fileCb(null, resp);
           }
@@ -101,16 +107,13 @@ function getStory (id, callback) {
     (readCallback) =>
       fs.readFile(addr, 'utf-8', readCallback),
     (strContent, convertCallback) => {
-      console.log('str')
       let content;
       try {
         content = JSON.parse(strContent.trim());
       }
       catch (error) {
-        console.log(error)
         return convertCallback(error)
       }
-      console.log('str 2')
       return convertCallback(null, content);
     }
   ], callback);
@@ -143,7 +146,15 @@ function updateStory (id, story, callback) {
  */
 function deleteStory (id, callback) {
   const addr = storiesPath + '/' + id + '.json';
-  return fs.unlink(addr, callback);
+  low(adapter)
+  .then(db => {
+    db.get('credentials')
+      .remove({id: id})
+      .write()
+      .then(() => {
+        return fs.unlink(addr, callback);
+      })
+    })
 }
 /**
  * The module exports a map of crud functions

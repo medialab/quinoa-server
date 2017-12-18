@@ -19,11 +19,9 @@ const bundleStory = require('../services/storyBundler');
  * @param {obj} res- the resource object
  */
 const getStories = (req, res) => {
-  console.log('here', req.params)
   // if id in request param --> render 1 story
   if (req.params.id) {
     manager.getStory(req.params.id, (err, story) => {
-      console.log(err, story)
       if (err) {
         return res.status(500).send(err);
       } else {
@@ -34,7 +32,6 @@ const getStories = (req, res) => {
           res.send(bundle);
         // else render as json resource
         } else {
-          console.log(story)
           res.send(story);
         }
       }

@@ -20,6 +20,13 @@
     "url": "https://github.com/medialab/quinoa-server/issues"
   },
   "homepage": "https://github.com/medialab/quinoa-server#readme",
+  "nodemonConfig": {
+    "ignore": [
+      "data/*",
+      "builds/*"
+    ],
+    "delay": 2000
+  },
   "dependencies": {
     "async": "^2.1.4",
     "bcryptjs": "^2.4.3",
@@ -29,11 +36,12 @@
     "draft-js": "^0.10.0",
     "draft-js-export-html": "^0.6.0",
     "express": "^4.14.0",
+    "express-validator": "^4.3.0",
     "file-loader": "^0.11.1",
     "image-webpack-loader": "^3.1.0",
     "jsonwebtoken": "^8.1.0",
     "kotatsu": "^0.15.0",
-    "mongoose": "^4.13.5",
+    "lowdb": "^1.0.0",
     "morgan": "^1.9.0",
     "node-sass": "^4.3.0",
     "quinoa-presentation-player": "^0.2.4",

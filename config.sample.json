@@ -5,5 +5,6 @@
   "github_bulgur_client_secret":"[client secret]",
   "adminUserName": "my user name",
   "adminPassword": "my password",
-  "port": 3001
+  "port": 3001,
+  "secret": "mysecret"
 }

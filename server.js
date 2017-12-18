@@ -11,6 +11,7 @@ const https = require('https');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const expressValidator = require('express-validator');
 const morgan = require('morgan');
 
 /**
@@ -47,11 +48,19 @@ else {
 }
 
 const app = express();
-const db = require('./db');
+
+app.set('etag', false);
+
+app.use(function(req, res, next) {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  next();
+})
+
 app.use(morgan('dev'));
 // parse application/json
 app.use(bodyParser.json({limit: '20mb'}));
 app.use(bodyParser.urlencoded({limit: '20mb', extended: true}));
+app.use(expressValidator());
 
 // allow cross-origin requests
 app.use(cors());
