@@ -9,9 +9,6 @@ const path = require('path');
 const waterfall = require('async/waterfall');
 const asyncMap = require('async/mapSeries');
 const uuid = require('uuid/v4');
-const low = require('lowdb')
-const FileAsync = require('lowdb/adapters/FileAsync')
-const adapter = new FileAsync('./data/db.json')
 
 const storiesPath = path.resolve(__dirname + '/../../data/stories/');
 
@@ -38,15 +35,17 @@ function getStories (filterFunction, callback) {
           } else {
             const metaContent = {
               id: JSON.parse(content).id,
+              // slug: JSON.parse(content).slug,
               metadata: JSON.parse(content).metadata
-            }
+            };
             const resp = {
-              id: fileName.split('.')[0],
+              // id: fileName.split('.')[0],
+              id: metaContent.id,
               content: JSON.stringify(metaContent).toString('utf8')
             };
             return fileCb(null, resp);
           }
-        })
+        });
       }, (parseError, filesContents) => {
         if (parseError) {
           return parsedCallback(parseError);
@@ -112,7 +111,7 @@ function getStory (id, callback) {
         content = JSON.parse(strContent.trim());
       }
       catch (error) {
-        return convertCallback(error)
+        return convertCallback(error);
       }
       return convertCallback(null, content);
     }
@@ -125,6 +124,7 @@ function getStory (id, callback) {
  */
 function createStory (story, callback) {
   const id = story.id || uuid();
+  // const slug = story.slug;
   const addr = storiesPath + '/' + id + '.json';
   const contents = typeof story === 'string' ? story : JSON.stringify(story);
   fs.writeFile(addr, contents, callback);
@@ -146,15 +146,7 @@ function updateStory (id, story, callback) {
  */
 function deleteStory (id, callback) {
   const addr = storiesPath + '/' + id + '.json';
-  low(adapter)
-  .then(db => {
-    db.get('credentials')
-      .remove({id: id})
-      .write()
-      .then(() => {
-        return fs.unlink(addr, callback);
-      })
-    })
+  return fs.unlink(addr, callback);
 }
 /**
  * The module exports a map of crud functions
@@ -165,4 +157,4 @@ module.exports = {
   createStory: createStory,
   updateStory: updateStory,
   deleteStory: deleteStory
-}
+};

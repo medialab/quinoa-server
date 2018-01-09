@@ -53,10 +53,10 @@ const getStories = (req, res) => {
  * @param {obj} res- the resource object
  */
 const updateStory = (req, res) => {
-  manager.updateStory(req.params.id, req.body, (err, story) => {
+  manager.updateStory(req.params.id, req.body, (err) => {
     if (err) {
       return res.status(500).send(err);
-    } else res.send(story);
+    } else res.send({status: 'updated'});
   });
 };
 /**
@@ -83,9 +83,7 @@ const deleteStory = (req, res) => {
       return res.status(500).send(err);
     // todo: brainstorm about the proper response
     // to send
-    } else res.send({
-      status: 'deleted'
-    });
+    } else res.send({status: 'story deleted'});
   });
 };
 
