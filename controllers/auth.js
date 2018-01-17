@@ -32,6 +32,12 @@ router.put('/credential/:id', verifyToken, function(req, res) {
 });
 
 router.post('/login', function(req, res) {
+  req.checkBody('password', 'Password must have at least 6 characters').isLength({min: 6});
+
+  const errors = req.validationErrors();
+  if (errors) {
+    return res.status(422).send(errors);
+  }
   manager.login(req.body.id, req.body.password, res);
 });
 

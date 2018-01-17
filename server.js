@@ -66,9 +66,11 @@ app.use(expressValidator());
 app.use(cors());
 
 const authController = require('./controllers/auth'),
-      storiesController = require('./controllers/stories');
+      storiesController = require('./controllers/stories'),
+      resourcesController = require('./controllers/resources');
 app.use('/auth', authController);
 app.use('/stories', storiesController);
+app.use('/resources', resourcesController);
 module.exports = app;
 
 /**

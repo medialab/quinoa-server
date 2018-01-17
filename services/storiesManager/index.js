@@ -5,12 +5,15 @@
  * @module quinoa-server/services/storiesManager
  */
 const fs = require('fs');
+const fsExtra = require('fs-extra');
 const path = require('path');
 const waterfall = require('async/waterfall');
+const parallel = require('async/parallel');
 const asyncMap = require('async/mapSeries');
 const uuid = require('uuid/v4');
 
 const storiesPath = path.resolve(__dirname + '/../../data/stories/');
+const resourceManager = require('../resourcesManager');
 
 /**
  * Fetches and returns all stories stored locally
@@ -20,15 +23,16 @@ const storiesPath = path.resolve(__dirname + '/../../data/stories/');
 function getStories (filterFunction, callback) {
   waterfall([
     // list files
-    (listCallback) =>
-      fs.readdir(storiesPath, listCallback),
+    (listCallback) => {
+      fs.readdir(storiesPath, listCallback);
+    },
     // read all files contents
     (filesList, parsedCallback) =>
       asyncMap(
         filesList
-        .filter(fileName => fileName.indexOf('.json') === fileName.length - 5)
+        // .filter(fileName => fileName.indexOf('.json') === fileName.length - 5)
       , (fileName, fileCb) => {
-        const addr = storiesPath + '/' + fileName;
+        const addr = storiesPath + '/' + fileName + '/' + fileName + '.json';
         fs.readFile(addr, 'utf-8', (fileErr, content) => {
           if (fileErr) {
             return fileCb(fileErr);
@@ -62,7 +66,7 @@ function getStories (filterFunction, callback) {
           return {
             id: fileDesc.id,
             content: JSON.parse(fileDesc.content.trim())
-          }
+          };
         });
         return convertCallback(null, converted);
       } catch (convertError) {
@@ -101,7 +105,7 @@ function getStories (filterFunction, callback) {
  * @param {function} callback - callbacks an error and the resulting story json restory
  */
 function getStory (id, callback) {
-  const addr = storiesPath + '/' + id + '.json';
+  const addr = storiesPath + '/' + id + '/' + id + '.json';
   waterfall([
     (readCallback) =>
       fs.readFile(addr, 'utf-8', readCallback),
@@ -124,10 +128,37 @@ function getStory (id, callback) {
  */
 function createStory (story, callback) {
   const id = story.id || uuid();
-  // const slug = story.slug;
-  const addr = storiesPath + '/' + id + '.json';
-  const contents = typeof story === 'string' ? story : JSON.stringify(story);
-  fs.writeFile(addr, contents, callback);
+  const storyPath = storiesPath + '/' + id;
+  fsExtra.mkdirsSync(storyPath);
+
+  // create resource folder when initialize
+  const resourcesPath = storyPath + '/resources';
+  fsExtra.mkdirsSync(resourcesPath);
+
+  const resources = Object.keys(story.resources)
+    .map(key => story.resources[key])
+    .filter(resource => {
+      const type = resource.metadata.type;
+      return (type === 'image' || type === 'data-presentation' || type === 'table');
+    });
+
+  parallel([
+    (resourcesCb) => {
+      asyncMap(
+        resources,
+        (resource, resourceCb) => {
+          resourceManager.createResource(id, resource, (err, res) => {
+            if (err) resourceCb(err, null);
+            else resourceCb(null, res);
+          });
+        }, resourcesCb);
+    },
+    (storyCb) => {
+      const addr = storyPath + '/' + id + '.json';
+      const contents = typeof story === 'string' ? story : JSON.stringify(story);
+      fs.writeFile(addr, contents, storyCb);
+    }
+  ], callback);
 }
 
 /**
@@ -135,7 +166,7 @@ function createStory (story, callback) {
  * @param {function} callback - callbacks an error
  */
 function updateStory (id, story, callback) {
-  const addr = storiesPath + '/' + id + '.json';
+  const addr = storiesPath + '/' + id + '/' + id + '.json';
   const contents = typeof story === 'string' ? story : JSON.stringify(story);
   fs.writeFile(addr, contents, callback);
 }
@@ -145,8 +176,8 @@ function updateStory (id, story, callback) {
  * @param {function} callback - callbacks an error
  */
 function deleteStory (id, callback) {
-  const addr = storiesPath + '/' + id + '.json';
-  return fs.unlink(addr, callback);
+  const storyPath = storiesPath + '/' + id;
+  return fsExtra.remove(storyPath, callback);
 }
 /**
  * The module exports a map of crud functions
