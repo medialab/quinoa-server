@@ -13,7 +13,7 @@ const cors = require('cors');
 const express = require('express');
 const expressValidator = require('express-validator');
 const morgan = require('morgan');
-
+const path = require('path');
 /**
  * Internal dependencies
  */
@@ -65,6 +65,7 @@ app.use(expressValidator());
 // allow cross-origin requests
 app.use(cors());
 
+app.use('/static', express.static(path.join(__dirname, 'data/stories')))
 const authController = require('./controllers/auth'),
       storiesController = require('./controllers/stories'),
       resourcesController = require('./controllers/resources');

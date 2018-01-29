@@ -14,6 +14,7 @@ const uuid = require('uuid/v4');
 
 const storiesPath = path.resolve(__dirname + '/../../data/stories/');
 const resourceManager = require('../resourcesManager');
+const bundleStory = require('../storyBundler');
 
 /**
  * Fetches and returns all stories stored locally
@@ -123,6 +124,88 @@ function getStory (id, callback) {
 }
 
 /**
+ * Fetches and returns the published (all-in-one) story
+ * @param {function} callback - callbacks an error and the resulting story json restory
+ */
+function getStoryBundle (id, callback) {
+  const storyAddr = storiesPath + '/' + id + '/' + id + '.json';
+  const resourcesPath = storiesPath + '/' + id + '/resources';
+  waterfall([
+    // list files
+    (listCallback) => {
+      fs.readdir(resourcesPath, listCallback);
+    },
+    // read all files contents
+    (filesList, parsedCallback) =>
+      asyncMap(
+        filesList,
+        (fileName, readCallback) => {
+          const resourceAddr = resourcesPath + '/' + fileName;
+          const ext = fileName.split('.')[1];
+          const resourceId = fileName.split('.')[0];
+          if (ext === 'json')
+            fs.readFile(resourceAddr, 'utf-8', (err, content) => {
+              const resp = {
+                id: resourceId,
+                data: JSON.parse(content)
+              };
+              return readCallback(err, resp);
+            });
+          else
+            fs.readFile(resourceAddr, (err, content) => {
+              const encodeString = new Buffer(content, 'binary').toString('base64');
+              const resp = {
+                id: resourceId,
+                data: {
+                  base64: "data:image/" + ext + ";base64," + encodeString
+                }
+              };
+              readCallback(err, resp);
+            })
+        }, (parseError, filesContents) => {
+          if (parseError) {
+            return parsedCallback(parseError);
+          } else {
+            return parsedCallback(null, filesContents);
+          }
+        }),
+    (resources, readCallback) =>
+      fs.readFile(storyAddr, 'utf-8', (err, content) => {
+        const bundle = {
+          story: JSON.parse(content),
+          resources
+        }
+        return readCallback(err, bundle);
+      }),
+    (bundle, bundleCallback) => {
+      const reducedResources = bundle.resources.reduce((result, item) => ({
+        ...result,
+        [item.id]: item
+      }), {});
+      const newResources = {};
+      Object.keys(bundle.story.resources)
+        .map(key => bundle.story.resources[key])
+        .forEach(resource => {
+          if (reducedResources[resource.metadata.id]) {
+            newResources[resource.metadata.id] = {
+              ...resource,
+              data: reducedResources[resource.metadata.id].data
+            };
+          }
+        });
+      const newStory = {
+        ...bundle.story,
+        resources: {
+          ...bundle.story.resources,
+          ...newResources
+        }
+      }
+      return bundleCallback(null, newStory);
+    }
+  ], callback);
+}
+
+/**
  * Creates a new story
  * @param {function} callback - callbacks an error
  */
@@ -135,30 +218,42 @@ function createStory (story, callback) {
   const resourcesPath = storyPath + '/resources';
   fsExtra.mkdirsSync(resourcesPath);
 
-  const resources = Object.keys(story.resources)
-    .map(key => story.resources[key])
-    .filter(resource => {
-      const type = resource.metadata.type;
-      return (type === 'image' || type === 'data-presentation' || type === 'table');
-    });
-
-  parallel([
+  waterfall([
     (resourcesCb) => {
       asyncMap(
-        resources,
+        Object.keys(story.resources)
+          .map(key => story.resources[key])
+          .filter(resource => {
+            const type = resource.metadata.type;
+            return (type === 'image' || type === 'data-presentation' || type === 'table');
+          }),
         (resource, resourceCb) => {
           resourceManager.createResource(id, resource, (err, res) => {
             if (err) resourceCb(err, null);
-            else resourceCb(null, res);
+            else resourceCb(null, resource.metadata.id);
           });
         }, resourcesCb);
     },
-    (storyCb) => {
+    (resourceIds, storyCb) => {
+      const newResources = {};
+      resourceIds.forEach(id => {
+        newResources[id] === story.resources[id].metadata;
+      });
+      const newStory = {
+        ...story,
+        resources: {
+          ...story.resources,
+          ...newResources
+        }
+      }
       const addr = storyPath + '/' + id + '.json';
-      const contents = typeof story === 'string' ? story : JSON.stringify(story);
-      fs.writeFile(addr, contents, storyCb);
+      const contents = JSON.stringify(newStory);
+      fs.writeFile(addr, contents, (err) => {
+        if (err) storyCb(err, null);
+        else storyCb(null, newStory);
+      });
     }
-  ], callback);
+  ], callback)
 }
 
 /**
@@ -169,6 +264,25 @@ function updateStory (id, story, callback) {
   const addr = storiesPath + '/' + id + '/' + id + '.json';
   const contents = typeof story === 'string' ? story : JSON.stringify(story);
   fs.writeFile(addr, contents, callback);
+}
+
+/**
+ * publish full story on server
+ * @param {function} callback - callbacks an error
+ */
+function publishStory (id, story, callback) {
+  parallel([
+    (storyCb) => {
+      const jsonAddr = storiesPath + '/' + id + '/' + id + '_bundle.json';
+      const contents = typeof story === 'string' ? story : JSON.stringify(story);
+      fs.writeFile(jsonAddr, contents, storyCb);
+    },
+    (storyHtmlCb) => {
+      const htmlAddr = storiesPath + '/' + id + '/index.html';
+      const bundle = bundleStory(story);
+      fs.writeFile(htmlAddr, bundle, storyHtmlCb);
+    }
+  ], callback);
 }
 
 /**
@@ -185,7 +299,9 @@ function deleteStory (id, callback) {
 module.exports = {
   getStories: getStories,
   getStory: getStory,
+  getStoryBundle: getStoryBundle,
   createStory: createStory,
   updateStory: updateStory,
+  publishStory: publishStory,
   deleteStory: deleteStory
 };

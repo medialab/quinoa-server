@@ -106,12 +106,23 @@ function getResource (storyId, id, callback) {
  * @param {function} callback - callbacks an error
  */
 function createResource (storyId, resource, callback) {
-  const id = resource.id || uuid();
+  const id = resource.metadata.id || uuid();
   const resourcesPath = dirPath + '/' + storyId + '/resources';
   fsExtra.mkdirsSync(resourcesPath);
-  const addr = resourcesPath + '/' + id + '.json';
-  const contents = typeof resource === 'string' ? resource : JSON.stringify(resource);
-  fs.writeFile(addr, contents, callback);
+  let addr;
+  if (resource.metadata.type === 'image') {
+    const data = JSON.stringify(resource.data.base64).replace(/['"]+/g, '');
+    const ext = data.substring("data:image/".length, data.indexOf(";base64"));
+    const dataString = data.replace(/^data:image\/\w+;base64,/, "");
+    const buff = new Buffer(dataString, 'base64');
+    addr = resourcesPath + '/' + id + '.' + ext;
+    fs.writeFile(addr, buff, "binary", callback);
+  }
+  else {
+    addr = resourcesPath + '/' + id + '.json';
+    const contents = typeof resource.data === 'string' ? resource.data : JSON.stringify(resource.data);
+    fs.writeFile(addr, contents, callback);
+  }
 }
 
 /**
@@ -121,9 +132,20 @@ function createResource (storyId, resource, callback) {
 function updateResource (storyId, id, resource, callback) {
   const resourcesPath = dirPath + '/' + storyId + '/resources';
   fsExtra.mkdirsSync(resourcesPath);
-  const addr = resourcesPath + '/' + id + '.json';
-  const contents = typeof resource === 'string' ? resource : JSON.stringify(resource);
-  fs.writeFile(addr, contents, callback);
+  let addr;
+  if (resource.metadata.type === 'image') {
+    const data = JSON.stringify(resource.data.base64).replace(/['"]+/g, '');
+    const ext = data.substring("data:image/".length, data.indexOf(";base64"));
+    const dataString = data.replace(/^data:image\/\w+;base64,/, "");
+    const buff = new Buffer(dataString, 'base64');
+    addr = resourcesPath + '/' + id + '.' + ext;
+    fs.writeFile(addr, buff, "binary", callback);
+  }
+  else {
+    addr = resourcesPath + '/' + id + '.json';
+    const contents = typeof resource.data === 'string' ? resource.data : JSON.stringify(resource.data);
+    fs.writeFile(addr, contents, callback);
+  }
 }
 
 /**
@@ -132,7 +154,8 @@ function updateResource (storyId, id, resource, callback) {
  */
 function deleteResource (storyId, id, callback) {
   const resourcesPath = dirPath + '/' + storyId + '/resources';
-  const addr = resourcesPath + '/' + id + '.json';
+  // const addr = resourcesPath + '/' + id + '.json;
+  const addr =  resourcesPath + '/' + id;
   return fs.unlink(addr, callback);
 }
 

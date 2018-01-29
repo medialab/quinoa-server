@@ -21,21 +21,38 @@ const bundleStory = require('../services/storyBundler');
 const getStories = (req, res) => {
   // if id in request param --> render 1 story
   if (req.params.id) {
-    manager.getStory(req.params.id, (err, story) => {
-      if (err) {
-        return res.status(500).send(err);
-      } else {
-        // if format='html' in query render as all-in-one-html story
-        if (req.query && req.query.format && req.query.format === 'html') {
-          const bundle = bundleStory(story);
-          res.setHeader('Content-Type', 'text/html');
-          res.send(bundle);
-        // else render as json resource
+    // if format='html' in query render as all-in-one-html story
+    if (req.query && req.query.format) {
+      manager.getStoryBundle(req.params.id, (err, story) => {
+        if (err) {
+          return res.status(500).send(err);
         } else {
-          res.send(story);
+          if (req.query.format === 'json')
+            res.send(story)
+          if (req.query.format === 'html') {
+            const bundleHtml = bundleStory(story);
+            res.setHeader('Content-Type', 'text/html');
+            res.send(bundleHtml);
+          }
+          if (req.query.format === 'bundle') {
+            manager.publishStory(req.params.id, story, (err) => {
+              if (err) {
+                return res.status(500).send(err);
+              } else res.send({status: 'published'});
+           });
+          }
         }
-      }
-    });
+      });
+    }
+    else {
+      manager.getStory(req.params.id, (err, story) => {
+        if (err) {
+          return res.status(500).send(err);
+        } else {
+          res.send(story)
+        }
+      });
+    }
   }
   // else render all stories in json
   else {
