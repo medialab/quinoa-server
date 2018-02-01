@@ -156,7 +156,7 @@ npm run build-apps # builds quinoa-presentation-player & quinoa-story-player app
 # Installing for development
 
 ```
-git clone https://github.com/medialab/quinoa-server
+git clone https://github.com/medialab/quinoa-server --recursive
 cd quinoa-server
 npm install
 cp config.sample.json config.json
