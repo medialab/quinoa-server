@@ -9,11 +9,13 @@ const fsExtra = require('fs-extra');
 const path = require('path');
 const waterfall = require('async/waterfall');
 const parallel = require('async/parallel');
+const series = require('async/series');
 const asyncMap = require('async/mapSeries');
 const uuid = require('uuid/v4');
 
 const storiesPath = path.resolve(__dirname + '/../../data/stories/');
 const resourceManager = require('../resourcesManager');
+const authManager = require('../authManager');
 const bundleStory = require('../storyBundler');
 
 /**
@@ -38,15 +40,9 @@ function getStories (filterFunction, callback) {
           if (fileErr) {
             return fileCb(fileErr);
           } else {
-            const metaContent = {
-              id: JSON.parse(content).id,
-              // slug: JSON.parse(content).slug,
-              metadata: JSON.parse(content).metadata
-            };
             const resp = {
-              // id: fileName.split('.')[0],
-              id: metaContent.id,
-              content: JSON.stringify(metaContent).toString('utf8')
+              id: fileName.split('.')[0],
+              content: content.toString('utf8')
             };
             return fileCb(null, resp);
           }
@@ -162,13 +158,7 @@ function getStoryBundle (id, callback) {
               };
               readCallback(err, resp);
             })
-        }, (parseError, filesContents) => {
-          if (parseError) {
-            return parsedCallback(parseError);
-          } else {
-            return parsedCallback(null, filesContents);
-          }
-        }),
+        }, parsedCallback),
     (resources, readCallback) =>
       fs.readFile(storyAddr, 'utf-8', (err, content) => {
         const bundle = {
@@ -209,8 +199,9 @@ function getStoryBundle (id, callback) {
  * Creates a new story
  * @param {function} callback - callbacks an error
  */
-function createStory (story, callback) {
-  const id = story.id || uuid();
+function createStory (data, callback) {
+  const {story, password} = data;
+  const id = uuid();
   const storyPath = storiesPath + '/' + id;
   fsExtra.mkdirsSync(storyPath);
 
@@ -218,29 +209,32 @@ function createStory (story, callback) {
   const resourcesPath = storyPath + '/resources';
   fsExtra.mkdirsSync(resourcesPath);
 
-  waterfall([
+  const resourcesList = Object.keys(story.resources)
+                              .map(key => story.resources[key])
+                              .filter(resource => {
+                                const type = resource.metadata.type;
+                                return (type === 'image' || type === 'data-presentation' || type === 'table');
+                              })
+
+  series([
+    (credentialCb) => {
+      authManager.createCredential(id, password, credentialCb);
+    },
     (resourcesCb) => {
       asyncMap(
-        Object.keys(story.resources)
-          .map(key => story.resources[key])
-          .filter(resource => {
-            const type = resource.metadata.type;
-            return (type === 'image' || type === 'data-presentation' || type === 'table');
-          }),
+        resourcesList,
         (resource, resourceCb) => {
-          resourceManager.createResource(id, resource, (err, res) => {
-            if (err) resourceCb(err, null);
-            else resourceCb(null, resource.metadata.id);
-          });
+          resourceManager.createResource(id, resource, resourceCb);
         }, resourcesCb);
     },
-    (resourceIds, storyCb) => {
+    (storyCb) => {
       const newResources = {};
-      resourceIds.forEach(id => {
-        newResources[id] === story.resources[id].metadata;
+      resourcesList.forEach(resource => {
+        newResources[resource.metadata.id] = {metadata: story.resources[resource.metadata.id].metadata};
       });
       const newStory = {
         ...story,
+        id,
         resources: {
           ...story.resources,
           ...newResources
@@ -249,11 +243,17 @@ function createStory (story, callback) {
       const addr = storyPath + '/' + id + '.json';
       const contents = JSON.stringify(newStory);
       fs.writeFile(addr, contents, (err) => {
-        if (err) storyCb(err, null);
+        if (err) storyCb(err);
         else storyCb(null, newStory);
       });
     }
-  ], callback)
+  ], (err, result) => {
+    if (err) callback(err);
+    else callback(null, {
+      token: result[0],
+      story: result[2]
+    })
+  })
 }
 
 /**
@@ -290,18 +290,25 @@ function publishStory (id, story, callback) {
  * @param {function} callback - callbacks an error
  */
 function deleteStory (id, callback) {
-  const storyPath = storiesPath + '/' + id;
-  return fsExtra.remove(storyPath, callback);
+  series([
+    (credentialCb) => {
+      authManager.deleteCredential(id, credentialCb)
+    },
+    (storyCb) => {
+      const storyPath = storiesPath + '/' + id;
+      fsExtra.remove(storyPath, storyCb);
+    }
+  ], callback)
 }
 /**
  * The module exports a map of crud functions
  */
 module.exports = {
-  getStories: getStories,
-  getStory: getStory,
-  getStoryBundle: getStoryBundle,
-  createStory: createStory,
-  updateStory: updateStory,
-  publishStory: publishStory,
-  deleteStory: deleteStory
+  getStories,
+  getStory,
+  getStoryBundle,
+  createStory,
+  updateStory,
+  publishStory,
+  deleteStory
 };

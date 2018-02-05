@@ -1,6 +1,5 @@
 const router = require('express').Router();
 
-// const verifyToken = require('./verifyToken');
 const manager = require('../services/resourcesManager');
 const verifyToken = require('./verifyToken');
 
