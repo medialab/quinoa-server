@@ -1,5 +1,14 @@
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-const config = require('../config'); // get our config file
+// const config = require('../config'); // get our config file
+let config;
+if (process.env.NODE_ENV === 'production') {
+  config = {
+    secret: process.env.SECRET
+  };
+}
+else { 
+  config = require('../config');
+}
 
 function verifyToken(req, res, next) {
 
