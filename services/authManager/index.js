@@ -7,7 +7,17 @@ const adapter = new FileAsync('./data/db.json');
  */
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 const bcrypt = require('bcryptjs');
-const config = require('../../config'); // get config file
+
+// const config = require('../../config'); // get config file
+let config;
+if (process.env.NODE_ENV === 'production') {
+  config = {
+    secret: process.env.SECRET
+  };
+}
+else { 
+  config = require('../../config');
+}
 
 function createCredential(id, password, callback) {
   const hashedPassword = bcrypt.hashSync(password, 8);
