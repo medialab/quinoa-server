@@ -92,9 +92,9 @@ function login(id, password, res) {
                   .find({id})
                   .value();
 
-    if (!story) return res.status(404).send('Story id not found');
+    if (!story) return res.status(404).send({auth: false, token: null, error: 'story id not found'});
     const passwordIsValid = bcrypt.compareSync(password, story.password);
-    if (!passwordIsValid) return res.status(401).send({auth: false, token: null});
+    if (!passwordIsValid) return res.status(401).send({auth: false, token: null, error: 'password not valid'});
     const token = jwt.sign({id}, config.secret, {
       expiresIn: 86400 // expires in 24 hours
     });
