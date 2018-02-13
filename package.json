@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "async": "^2.1.4",
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.16.0",
     "cors": "^2.8.1",
     "css-loader": "^0.28.0",

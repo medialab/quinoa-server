@@ -3,10 +3,13 @@ const FileAsync = require('lowdb/adapters/FileAsync');
 const adapter = new FileAsync('./data/db.json');
 
 /**
- * Configure JWT
+ * Configure JWT and bcrypt
  */
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
+const salt = 8;
+const hash = (password) => bcrypt.hash(password, salt);
+const comparePassword = (password, hash) => bcrypt.compare(password, hash);
 
 // const config = require('../../config'); // get config file
 let config;
@@ -15,12 +18,11 @@ if (process.env.NODE_ENV === 'production') {
     secret: process.env.SECRET
   };
 }
-else { 
+else {
   config = require('../../config');
 }
 
 function createCredential(id, password, callback) {
-  const hashedPassword = bcrypt.hashSync(password, 8);
 
   low(adapter)
   .then(db => {
@@ -30,12 +32,15 @@ function createCredential(id, password, callback) {
                   .find({id})
                   .value();
     if (story) {
-      callback({error: 'story is exist'}, null);
+      callback('story is exist');
     }
     else {
-      db.get('credentials')
-      .push({id, password: hashedPassword})
-      .write()
+      hash(password)
+      .then(hashedPassword => {
+        db.get('credentials')
+        .push({id, password: hashedPassword})
+        .write()
+      })
       .then(() => {
         // create a token
         const token = jwt.sign({id}, config.secret, {
@@ -44,7 +49,7 @@ function createCredential(id, password, callback) {
         callback(null, token);
       })
       .catch((err) => {
-        callback(err, null);
+        callback(err);
       });
     }
   });
@@ -52,21 +57,21 @@ function createCredential(id, password, callback) {
 function updateCredential (id, password, callback) {
   low(adapter)
   .then(db => {
-    const hashedPassword = bcrypt.hashSync(password, 8);
     // db.get is sync
-
     const story = db.defaults({credentials: []})
                   .get('credentials')
                   .find({id})
                   .value();
     if (!story) {
-      callback({error: 'story credential not found'}, null);
+      callback('story credential not found');
     }
     else {
-      db.get('credentials')
-      .find({id})
-      .assign({password: hashedPassword})
-      .write()
+      hash(password)
+      .then(hashedPassword => {
+        db.get('credentials')
+        .push({id, password: hashedPassword})
+        .write()
+      })
       .then(() => {
         // create a token
         const token = jwt.sign({id}, config.secret, {
@@ -75,7 +80,7 @@ function updateCredential (id, password, callback) {
         callback(null, token);
       })
       .catch((err) => {
-        callback(err, null);
+        callback(err);
       });
     }
   });
@@ -89,11 +94,12 @@ function deleteCredential(id, callback) {
       .write()
       .then(() => {
         callback(null, id);
-      });
+      })
+      .catch(err => callback(err));
   });
 }
 
-function login(id, password, res) {
+function login(id, password, callback) {
   low(adapter)
   .then(db => {
     // db.get is sync
@@ -102,13 +108,23 @@ function login(id, password, res) {
                   .find({id})
                   .value();
 
-    if (!story) return res.status(404).send({auth: false, token: null, error: 'story id not found'});
-    const passwordIsValid = bcrypt.compareSync(password, story.password);
-    if (!passwordIsValid) return res.status(401).send({auth: false, token: null, error: 'password not valid'});
-    const token = jwt.sign({id}, config.secret, {
-      expiresIn: 86400 // expires in 24 hours
-    });
-    return res.status(200).send({auth: true, token});
+    if (!story) callback('story id not found');
+    else {
+      comparePassword(password, story.password)
+      .then(match => {
+        if (match) {
+          const token = jwt.sign({id}, config.secret, {
+            expiresIn: 86400 // expires in 24 hours
+          });
+          callback(null, token);
+        } else {
+          callback('wrong password, authentication failed');
+        }
+      })
+      .catch(err=> {
+        callback(err);
+      });
+    }
   });
 }
 
