@@ -11,7 +11,9 @@ const https = require('https');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
-
+const expressValidator = require('express-validator');
+const morgan = require('morgan');
+const path = require('path');
 /**
  * Internal dependencies
  */
@@ -26,7 +28,7 @@ const gistPresentation = require('./routeHandlers/gist-presentation');
 const renderPresentation = require('./routeHandlers/render-presentation');
 const renderStory = require('./routeHandlers/render-story');
 const presentationsRoutes = require('./routeHandlers/presentations');
-const storiesRoutes = require('./routeHandlers/stories');
+// const storiesRoutes = require('./routeHandlers/stories');
 const renderDashboard = require('./routeHandlers/dashboard');
 
 let config;
@@ -35,25 +37,41 @@ if (process.env.NODE_ENV === 'production') {
   config = {
     github_client_id: process.env.GITHUB_CLIENT_ID,
     github_client_secret: process.env.GITHUB_CLIENT_SECRET,
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 3000,
     adminUserName: process.env.ADMIN_USERNAME,
     adminPassword: process.env.ADMIN_PASSWORD
   };
 }
 // in development mode config variables are retrieved from a json file
-else { 
+else {
   config = require('./config');
 }
 
 const app = express();
 
+app.set('etag', false);
+
+app.use(function(req, res, next) {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  next();
+});
+
+app.use(morgan('dev'));
 // parse application/json
 app.use(bodyParser.json({limit: '20mb'}));
 app.use(bodyParser.urlencoded({limit: '20mb', extended: true}));
+app.use(expressValidator());
 
 // allow cross-origin requests
 app.use(cors());
 
+app.use('/static', express.static(path.join(__dirname, 'data/stories')))
+const authController = require('./controllers/auth'),
+      storiesController = require('./controllers/stories'),
+      resourcesController = require('./controllers/resources');
+app.use('/auth', authController);
+app.use('/stories', storiesController);
+app.use('/resources', resourcesController);
 module.exports = app;
 
 /**
@@ -68,11 +86,6 @@ app.post('/presentations/:id', presentationsRoutes.updatePresentation);
 app.put('/presentations/:id', presentationsRoutes.createPresentation);
 app.delete('/presentations/:id', presentationsRoutes.deletePresentation);
 
-app.get('/stories/:id?', storiesRoutes.getStories);
-app.post('/stories/:id', storiesRoutes.updateStory);
-app.put('/stories/:id', storiesRoutes.createStory);
-app.delete('/stories/:id', storiesRoutes.deleteStory);
-
 app.post('/render-presentation', renderPresentation);
 app.post('/render-story', renderStory);
 
@@ -83,7 +96,7 @@ const auth = basicAuth(config.adminUserName, config.adminPassword);
 // (the route is protected by a basic auth)
 app.get('/dashboard', auth, renderDashboard);
 // proxy used in the github oauth authentication process
-app.post('/oauth-proxy/:appName', cors(),  oAuthProxy);
+app.post('/oauth-proxy/:appName', cors(), oAuthProxy);
 // routes enabling to display gist-hosted documents
 app.get('/gist-story/:id', gistStory);
 app.get('/gist-presentation/:id', gistPresentation);
@@ -94,6 +107,6 @@ app.get('/citation-styles/:id?', citationStyles);
 /**
  * listening to requests (defaults to 3000)
  */
-app.listen(config.port, function(){
+app.listen(config.port, function() {
   console.log('app listening on %s', config.port);
 });

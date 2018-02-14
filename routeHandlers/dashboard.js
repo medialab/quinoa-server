@@ -162,7 +162,6 @@ const renderStoryItem = (story, baseUrl) =>
       <button class="embed-btn" onClick=getEmbedCode("story-${story.id}")>Copy embed code</button>
       <button class="dangerous-btn" onClick=deleteStory("${story.id}")>Delete story</button>
     </div>
-    <div class="embed-placeholder">${buildEmbedCode(story, baseUrl, 'stories')}</div>
   </li>
 `;
 /**

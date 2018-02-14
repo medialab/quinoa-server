@@ -2,5 +2,8 @@ node_modules
 .DS_Store
 config.json
 npm-debug.log
-builds/presentation/*
+builds/
+data/stories/*
+data/presentations/*
+data/db.json
 prod.sh
