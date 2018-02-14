@@ -3,5 +3,7 @@ node_modules
 config.json
 npm-debug.log
 builds/
-data/
+data/stories/*
+data/presentations/*
+data/db.json
 prod.sh
