@@ -120,7 +120,7 @@ function createResource (storyId, resource, callback) {
   }
   else {
     addr = resourcesPath + '/' + id + '.json';
-    const contents = typeof resource.data === 'string' ? resource.data : JSON.stringify(resource.data);
+    const contents = typeof resource.data.json === 'string' ? resource.data : JSON.stringify(resource.data.json);
     fs.writeFile(addr, contents, callback);
   }
 }
@@ -143,7 +143,7 @@ function updateResource (storyId, id, resource, callback) {
   }
   else {
     addr = resourcesPath + '/' + id + '.json';
-    const contents = typeof resource.data === 'string' ? resource.data : JSON.stringify(resource.data);
+    const contents = typeof resource.data.json === 'string' ? resource.data : JSON.stringify(resource.data.json);
     fs.writeFile(addr, contents, callback);
   }
 }

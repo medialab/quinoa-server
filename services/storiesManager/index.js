@@ -143,7 +143,9 @@ function getStoryBundle (id, callback) {
             fs.readFile(resourceAddr, 'utf-8', (err, content) => {
               const resp = {
                 id: resourceId,
-                data: JSON.parse(content)
+                data: {
+                  json: JSON.parse(content)
+                }
               };
               return readCallback(err, resp);
             });
