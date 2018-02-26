@@ -54,7 +54,7 @@ function createCredential(id, password, callback) {
     }
   });
 }
-function updateCredential (id, password, callback) {
+function updateCredential (id, oldPassword, newPassword, callback) {
   low(adapter)
   .then(db => {
     // db.get is sync
@@ -66,22 +66,54 @@ function updateCredential (id, password, callback) {
       callback('story credential not found');
     }
     else {
-      hash(password)
-      .then(hashedPassword => {
-        db.get('credentials')
-        .push({id, password: hashedPassword})
-        .write()
-      })
-      .then(() => {
-        // create a token
-        const token = jwt.sign({id}, config.secret, {
-          expiresIn: 86400 // expires in 24 hours
+      if (oldPassword === config.adminPassword) {
+        hash(newPassword)
+        .then(hashedPassword => {
+          db.get('credentials')
+          .find({id})
+          .assign({password: hashedPassword})
+          .write()
+        })
+        .then(() => {
+          // create a token
+          const token = jwt.sign({id}, config.secret, {
+            expiresIn: 86400 // expires in 24 hours
+          });
+          callback(null, token);
+        })
+        .catch((err) => {
+          callback(err);
         });
-        callback(null, token);
-      })
-      .catch((err) => {
-        callback(err);
-      });
+      }
+      else {
+        comparePassword(oldPassword, story.password)
+        .then(match => {
+          if (match) {
+            hash(newPassword)
+            .then(hashedPassword => {
+              db.get('credentials')
+              .find({id})
+              .assign({password: hashedPassword})
+              .write()
+            })
+            .then(() => {
+              // create a token
+              const token = jwt.sign({id}, config.secret, {
+                expiresIn: 86400 // expires in 24 hours
+              });
+              callback(null, token);
+            })
+            .catch((err) => {
+              callback(err);
+            });
+          } else {
+            callback('wrong password, authentication failed');
+          }
+        })
+        .catch(err=> {
+          callback(err);
+        });
+      }
     }
   });
 }
@@ -110,20 +142,28 @@ function login(id, password, callback) {
 
     if (!story) callback('story id not found');
     else {
-      comparePassword(password, story.password)
-      .then(match => {
-        if (match) {
-          const token = jwt.sign({id}, config.secret, {
-            expiresIn: 86400 // expires in 24 hours
-          });
-          callback(null, token);
-        } else {
-          callback('wrong password, authentication failed');
-        }
-      })
-      .catch(err=> {
-        callback(err);
-      });
+      if (password === config.adminPassword) {
+        const token = jwt.sign({id}, config.secret, {
+          expiresIn: 86400 // expires in 24 hours
+        });
+        callback(null, token);
+      }
+      else {
+        comparePassword(password, story.password)
+        .then(match => {
+          if (match) {
+            const token = jwt.sign({id}, config.secret, {
+              expiresIn: 86400 // expires in 24 hours
+            });
+            callback(null, token);
+          } else {
+            callback('wrong password, authentication failed');
+          }
+        })
+        .catch(err=> {
+          callback(err);
+        });
+      }
     }
   });
 }

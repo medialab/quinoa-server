@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === 'production') {
     secret: process.env.SECRET
   };
 }
-else { 
+else {
   config = require('../config');
 }
 
