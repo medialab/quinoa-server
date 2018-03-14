@@ -72,6 +72,11 @@ const authController = require('./controllers/auth'),
 app.use('/auth', authController);
 app.use('/stories', storiesController);
 app.use('/resources', resourcesController);
+
+const clientPath = path.join(__dirname, '/client/');
+app.use(express.static(clientPath));
+app.use('/', express.static(clientPath));
+
 module.exports = app;
 
 /**
