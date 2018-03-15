@@ -65,17 +65,13 @@ app.use(expressValidator());
 // allow cross-origin requests
 app.use(cors());
 
-app.use('/static', express.static(path.join(__dirname, 'data/stories')))
+app.use('/api/static', express.static(path.join(__dirname, 'data/stories')))
 const authController = require('./controllers/auth'),
       storiesController = require('./controllers/stories'),
       resourcesController = require('./controllers/resources');
-app.use('/auth', authController);
-app.use('/stories', storiesController);
-app.use('/resources', resourcesController);
-
-const clientPath = path.join(__dirname, '/client/');
-app.use(express.static(clientPath));
-app.use('/', express.static(clientPath));
+app.use('/api/auth', authController);
+app.use('/api/stories', storiesController);
+app.use('/api/resources', resourcesController);
 
 module.exports = app;
 
@@ -86,10 +82,10 @@ module.exports = app;
  * Routes definitions and routes handlers are separated
  * to facilitate further changes in the server's api
  */
-app.get('/presentations/:id?', presentationsRoutes.getPresentations);
-app.post('/presentations/:id', presentationsRoutes.updatePresentation);
-app.put('/presentations/:id', presentationsRoutes.createPresentation);
-app.delete('/presentations/:id', presentationsRoutes.deletePresentation);
+app.get('/api/presentations/:id?', presentationsRoutes.getPresentations);
+app.post('/api/presentations/:id', presentationsRoutes.updatePresentation);
+app.put('/api/presentations/:id', presentationsRoutes.createPresentation);
+app.delete('/api/presentations/:id', presentationsRoutes.deletePresentation);
 
 app.post('/render-presentation', renderPresentation);
 app.post('/render-story', renderStory);
@@ -106,8 +102,15 @@ app.post('/oauth-proxy/:appName', cors(), oAuthProxy);
 app.get('/gist-story/:id', gistStory);
 app.get('/gist-presentation/:id', gistPresentation);
 // citation data servers
-app.get('/citation-locales/:id?', citationLocales);
-app.get('/citation-styles/:id?', citationStyles);
+app.get('/api/citation-locales/:id?', citationLocales);
+app.get('/api/citation-styles/:id?', citationStyles);
+
+// server react client files
+const clientPath = path.join(__dirname, '/client/');
+const clientIndex = path.join(__dirname, '/client/index.html');
+
+app.use(express.static(clientPath));
+app.use((req, res) => res.sendFile(clientIndex));
 
 /**
  * listening to requests (defaults to 3000)
