@@ -8,7 +8,7 @@
     "start": "node server",
     "dev": "nodemon server",
     "build-apps": "rm -rf builds; mkdir builds;node services/presentationAppBuilder/;node services/storyAppBuilder/",
-    "postinstall": "npm run build-apps; mkdir data; mkdir data/stories; mkdir data/presentations; cd client; npm run build; cd ..;"
+    "postinstall": "npm run build-apps; mkdir data; mkdir data/stories; mkdir data/presentations; cd client; npm install; npm run build; cd ..;"
   },
   "repository": {
     "type": "git",
