@@ -6,4 +6,4 @@
 	url = https://github.com/citation-style-language/locales
 [submodule "client"]
 	path = client
-	url = git://github.com/medialab/fonio.git
+	url = https://github.com/medialab/fonio
