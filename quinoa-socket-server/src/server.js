@@ -28,6 +28,7 @@ io.on('connection', (socket) => {
   numberConnections ++;
   io.emit('action', {type:'UPDATE_CONNECTIONS_NUMBER', number: numberConnections});
   socket.emit('action', {type:'SET_SOCKET_ID', payload: socket.id});
+  socket.emit('action', {type:'INIT_STATE', payload: store.getState()})
   socket.on('action', (action) => {
     if (action.meta && action.meta.request) {
       store.dispatch(actionManager[action.type]({...action, socket}));

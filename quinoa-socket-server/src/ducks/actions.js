@@ -1,11 +1,12 @@
 import {register, login, verifyToken} from '../controllers/auth';
-
+import {updateStoryList} from '../controllers/stories';
 const createStory = (action) => ({
   ...action,
   promise: () => {
     return new Promise ((resolve, reject) => {
       const {payload, password} = action;
-      return register(payload.id, password)
+      return updateStoryList(payload.id)
+             .then(() => register(payload.id, password))
              .then(res => resolve(res))
              .catch(err => reject(err))
     })

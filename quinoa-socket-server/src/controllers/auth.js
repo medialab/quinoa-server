@@ -1,4 +1,3 @@
-import {resolve as resolvePath} from 'path';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
