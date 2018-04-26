@@ -1,0 +1,174 @@
+{
+    "id": "resource",
+    "title": "Resource",
+    "description": "Resources used in quinoa",
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "type": "object",
+    "properties":
+    {
+        "type":
+        {
+            "type": "string",
+            "enum": ["resource"],
+            "default": "resource",
+            "editable": false
+        },
+        "metadata":
+        {
+            "description": "metadata of the resource",
+            "type": "object",
+            "properties":
+            {
+                "type":
+                {
+                    "type": "string",
+                    "enum": ["images", "table", "bib", "video", "webpage"],
+                    "default": "bib"
+                },
+                "title":
+                {
+                    "type": "string",
+                    "description": "Name of the resource",
+                    "default": ""
+                },
+                "creators":
+                {
+                    "type": "array",
+                    "description": "creators of the resource",
+                    "default": [],
+                    "items":
+                    {
+                        "type": "object",
+                        "properties":
+                        {
+                            "given":
+                            {
+                                "type": "string",
+                                "default": ""
+                            },
+                            "family":
+                            {
+                                "type": "string",
+                                "default": ""
+                            },
+                            "role":
+                            {
+                                "type": "string",
+                                "default": ""
+                            }
+                        },
+                        "required": ["given", "family"]
+                    }
+                },
+                "description":
+                {
+                    "type": "string",
+                    "description": "description of the resource",
+                    "longString": true,
+                    "default": ""
+                },
+                "source":
+                {
+                    "type": "string",
+                    "description": "source of the resource",
+                    "longString": true,
+                    "default": ""
+                }
+            }
+        },
+        "data":
+        {
+            "default":
+            {},
+            "description": "data of the resource (depends on resource type)",
+            "anyOfFrom": "metadata.resource_type",
+            "anyOf": [
+            {
+                "$ref": "#/definitions/images"
+            },
+            {
+                "$ref": "#/definitions/table"
+            },
+            {
+                "$ref": "#/definitions/bib"
+            },
+            {
+                "$ref": "#/definitions/video"
+            },
+            {
+                "$ref": "#/definitions/webpage"
+            }]
+        }
+    },
+    "required": ["type", "metadata", "data"],
+
+    "definitions":
+    {
+        "images":
+        {
+            "type": "array",
+            "default": [],
+            "items":
+            {
+                "type": "object",
+                "properties":
+                {
+                    "image_asset_id":
+                    {
+                        "type": "string",
+                        "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+                        "description": "rgb/rvb image asset uuid of the resource",
+                        "accept_mimetypes": ["image/png","image/svg+xml", "image/jpeg", "image/jpg", "image/gif"]
+                    },
+                    "image_credits": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "table":
+        {
+          "type": "object",
+          "properties": {
+            "data_asset_id":
+            {
+              "type": "string",
+              "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+              "description": "data asset uuid of the resource",
+              "accept_mimetypes": ["text/csv", "text/tsv"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "video":
+        {
+          "type": "object",
+          "properties": {
+            "media_url": {
+              "type": "string",
+              "description": "vimeo or youtube url of the video"
+            }
+          },
+          "additionalProperties": false
+        },
+        "bib":
+        {
+          "type": "object",
+          "properties": {
+          }
+        },
+        "webpage":
+        {
+          "type": "object",
+          "properties": {
+            "url":
+            {
+              "type": "string",
+              "description": "url of the webpage view"
+            }
+          },
+          "additionalProperties": false
+        }
+    }
+}
