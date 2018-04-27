@@ -29,7 +29,7 @@ const buildToken = (id, secret, expiresIn = 86400) => {
   return token;
 };
 
-export const register = (id, password) =>
+const register = (id, password) =>
   new Promise((resolve, reject) => {
     low(adapter)
     .then(db => {
@@ -58,7 +58,7 @@ export const register = (id, password) =>
     });
   });
 
-export const login = (id, password) =>
+const login = (id, password) =>
   new Promise((resolve, reject) => {
     low(adapter)
     .then(db => {
@@ -84,7 +84,7 @@ export const login = (id, password) =>
               reject(new Error('wrong password, authentication failed'));
             }
           })
-          .catch(err=> {
+          .catch(err => {
             reject(new Error('login failed'));
           });
         }
@@ -92,13 +92,63 @@ export const login = (id, password) =>
     });
   });
 
-export const verifyToken = (token) =>
+const resetPassword = (id, oldPassword, newPassword) =>
   new Promise((resolve, reject) => {
-    if (!token) reject(new Error("token is not valid"));
-    else {
-      jwt.verify(token, config.secret, (err) => {
-        if (err) reject(new Error("token is not valid"));
-        else resolve();
-      });
-    }
-  });
+    low(adapter)
+    .then(db => {
+      // db.get is sync
+      const story = db.defaults({credentials: []})
+                    .get('credentials')
+                    .find({id})
+                    .value();
+      if (!story) reject(new Error('story not found'));
+      else {
+        if (oldPassword === config.adminPassword) {
+          hash(newPassword)
+          .then(hashedPassword => {
+            db.get('credentials')
+            .find({id})
+            .assign({password: hashedPassword})
+            .write()
+          })
+          .then(() => {
+            // create a token
+            const token = buildToken(id, config.secret);
+            resolve(token);
+          })
+          .catch((err) => reject(err));
+        }
+        else {
+          comparePassword(oldPassword, story.password)
+          .then(match => {
+            if (match) {
+              hash(newPassword)
+              .then(hashedPassword => {
+                db.get('credentials')
+                .find({id})
+                .assign({password: hashedPassword})
+                .write()
+              })
+              .then(() => {
+                // create a token
+                const token = buildToken(id, config.secret);
+                resolve(token);
+              })
+              .catch((err) => {
+                reject(err);
+              });
+            } else {
+              reject(new Error('wrong password, authentication failed'));
+            }
+          })
+          .catch(err => reject(err));
+        }
+      }
+    });
+  })
+
+module.exports = {
+  register,
+  login,
+  resetPassword
+}

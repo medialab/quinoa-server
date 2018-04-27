@@ -39,28 +39,7 @@ export const socketMiddleware = (io) => store => next => action => {
   return next(action);
 }
 
-export const promiseMiddleware = () => ({dispatch, getState}) => next => action => {
-  if (typeof action === 'function') {
-    return action(dispatch, getState);
-  }
-  const {promise, type, ...rest} = action;
-  // If there is no promise in the action, ignore it
-  if (!promise) {
-    // pass the action to the next middleware
-    return next(action);
-  }
-  // build constants that will be used to dispatch actions
-  const REQUEST = type;
-  const SUCCESS = type + '_SUCCESS';
-  const FAIL = type + '_FAIL';
-  // Trigger the action once to dispatch
-  // the fact promise is starting resolving (for loading indication for instance)
-  next({...rest, type: REQUEST});
-  // resolve promise
-  return promise(dispatch, getState).then(
-    (result) => {
-      return next({...rest, meta: {...rest.meta, broadcast: true}, result, type: SUCCESS});
-    }).catch((error) => {
-      return next({...rest, meta: {broadcast: false}, error, type: FAIL})
-    });
+export const logMiddleware = () => ({dispatch, getState}) => next => action => {
+  console.log(getState());
+  return next(action);
 }
