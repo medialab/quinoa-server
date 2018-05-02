@@ -23,16 +23,19 @@ export const getStories = (req, res) => {
 
 export const getStory = (req, res) => {
   if(req.query.edit === 'true') {
-    manager.getActiveStory(req.params.id)
-    .then((result) => {
-      const socketId = req.query.userId;
-      const socket = req.io.sockets.sockets[socketId]
-      socket.join(req.params.id);
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(403).json({message: err.message})
-    });
+    const socket = req.io.sockets.sockets[req.query.userId];
+    if(socket) {
+      manager.getActiveStory(req.params.id,req.query.userId,socket)
+      .then((result) => {
+        res.status(200).json(result);
+      })
+      .catch((err) => {
+        res.status(403).json({message: err.message})
+      });
+    }
+    else {
+      res.status(403).json({message: "invalid socket"});
+    }
   }
   else {
     manager.getStory(req.params.id)

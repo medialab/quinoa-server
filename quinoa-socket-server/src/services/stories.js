@@ -62,17 +62,43 @@ const getStory = (id) =>
           .catch((err) => reject(err))
   })
 
-const getActiveStory = (id) =>
+const getActiveStory = (id, userId, socket) =>
   new Promise ((resolve, reject) => {
     const {stories} = store.getState();
-    if (stories[id] && stories[id].data) resolve(stories[id]);
+    if (stories[id]) {
+      store.dispatch({
+        type: 'ENTER_STORY',
+        payload: {
+          storyId: id,
+          userId
+        }
+      });
+      socket.join(id);
+      socket.to(id).emit({type: 'ENTER_STORY_BROADCAST', payload});
+      return resolve(stories[id]);
+    }
     else {
       const addr = storiesPath + '/' + id + '/' + id + '.json';
       return readJson(addr)
             .then((res) => {
               store.dispatch({
-                type: 'UPDATE_STORY',
+                type: 'ACTIVATE_STORY',
                 payload: res
+              });
+              store.dispatch({
+                type: 'ENTER_STORY',
+                payload: {
+                  storyId: id,
+                  userId
+                }
+              });
+              socket.join(id);
+              socket.to(id).emit('action', {
+                type: 'ENTER_STORY_BROADCAST',
+                payload: {
+                  storyId: id,
+                  userId
+                }
               });
               return resolve(res);
             })

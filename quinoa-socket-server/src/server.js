@@ -47,9 +47,19 @@ io.on('connection', (socket) => {
   socket.emit('action', {type:'INIT_STATE', payload: store.getState()})
   store.dispatch({type: 'test_dispatch'});
   socket.on('action', (action) => {
-    // store.dispatch({...action, socket});
+    store.dispatch(action);
+    if (action.meta.broadcast) {
+      if (action.meta.room) {
+        socket.to(action.meta.room).emit('action', {type: `${action.type}_BROADCAST`, payload: action.payload});
+      }
+      else {
+        socket.broadcast.emit('action', {type: `${action.type}_BROADCAST`, payload: action.payload})
+      }
+    }
   });
   socket.on('disconnect', () => {
+    store.dispatch({type: 'DISCONNECT', payload: {userId: socket.id}});
+    io.emit('action', {type: 'DISCONNECT', payload: {userId: socket.id}});
     numberConnections --;
     io.emit('action', {type:'UPDATE_CONNECTIONS_NUMBER', number: numberConnections});
   });
