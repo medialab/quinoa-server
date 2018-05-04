@@ -33,7 +33,7 @@ server.listen(PORT, '0.0.0.0', () => console.log(`Listening on ${ PORT }`));
 let numberConnections = 0;
 
 const io = socketIO(server);
-const store = configureStore();
+export const store = configureStore();
 
 app.use(function(req, res, next) {
   req.io = io;
@@ -57,9 +57,12 @@ io.on('connection', (socket) => {
       }
     }
   });
+  socket.on('disconnecting', () => {
+    const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
+    store.dispatch({type: 'DISCONNECT', payload: {userId: socket.id, rooms}});
+    io.emit('action', {type: 'DISCONNECT', payload: {userId: socket.id, rooms}});
+  });
   socket.on('disconnect', () => {
-    store.dispatch({type: 'DISCONNECT', payload: {userId: socket.id}});
-    io.emit('action', {type: 'DISCONNECT', payload: {userId: socket.id}});
     numberConnections --;
     io.emit('action', {type:'UPDATE_CONNECTIONS_NUMBER', number: numberConnections});
   });

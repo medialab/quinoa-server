@@ -3,6 +3,10 @@ const initialStoriesState = {};
 export const ACTIVATE_STORY = 'ACTIVATE_STORY';
 export const DELETE_STORY = 'DELETE_STORY';
 
+export const CREATE_SECTION = 'CREATE_SECTION';
+export const UPDATE_SECTION = 'UPDATE_SECTION';
+export const DELETE_SECTION = 'DELETE_SECTION';
+
 export default function stories(state = initialStoriesState, action) {
   const {payload, socket} = action;
   switch (action.type) {
@@ -10,7 +14,34 @@ export default function stories(state = initialStoriesState, action) {
       return {
         ...state,
         [payload.id]: payload
-      }
+      };
+    case DELETE_STORY:
+      const newState = {...state};
+      delete newState[payload.id];
+      return newState;
+    case CREATE_SECTION:
+    case UPDATE_SECTION:
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          sections: {
+            ...state[payload.storyId].sections,
+            [payload.sectionId]: payload.section,
+          },
+        }
+      };
+    case DELETE_SECTION:
+    case `${DELETE_SECTION}_BROADCAST`:
+      const newSections = { ...state[payload.storyId].sections };
+      delete newSections[payload.sectionId];
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          sections: newSections,
+        }
+      };
     default:
       return state;
   }

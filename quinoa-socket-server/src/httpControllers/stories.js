@@ -52,7 +52,7 @@ export const deleteStory = (req, res) => {
   manager.deleteStory(req.params.id)
   .then((result) => {
     res.status(200).json(result);
-    req.io.emit('action', {type: 'DELETE_STORY_BROADCAST', id: req.params.id});
+    req.io.emit('action', {type: 'DELETE_STORY_BROADCAST', payload: {id: req.params.id}});
   })
   .catch((err) => {
     res.status(403).json({message: err.message})

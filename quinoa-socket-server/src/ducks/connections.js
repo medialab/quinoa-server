@@ -31,6 +31,12 @@ export default function connections(state = initialConnectionsState, action) {
           users,
         },
       };
+    case DISCONNECT:
+      const newState = {...state};
+      payload.rooms.forEach((room) => {
+        delete newState[room].users[payload.userId];
+      });
+      return newState;
     default:
       return state;
   }
