@@ -8,6 +8,7 @@ export const DISCONNECT = 'DISCONNECT';
 
 const ENTER_SECTION = 'ENTER_SECTION';
 const LEAVE_SECTION = 'LEAVE_SECTION';
+const RELEASE_SECTION = 'RELEASE_SECTION';
 
 export default function connections(state = initialConnectionsState, action) {
   const {payload} = action;
@@ -58,6 +59,19 @@ export default function connections(state = initialConnectionsState, action) {
           users: {
             ...users,
             [payload.userId]: 'summary',
+          },
+        },
+      };
+    case RELEASE_SECTION:
+      users = (state[payload.storyId] && state[payload.storyId].users) || {};
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          users: {
+            ...users,
+            [payload.userId]: 'summary',
+            [payload.requesterId]: [payload.sectionId],
           },
         },
       };

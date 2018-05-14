@@ -56,6 +56,9 @@ io.on('connection', (socket) => {
         socket.broadcast.emit('action', {type: `${action.type}_BROADCAST`, payload: action.payload})
       }
     }
+    if (action.meta.socketId) {
+      socket.to(action.meta.socketId).emit('action', {type: `${action.type}_MESSAGE`, payload: action.payload});
+    }
   });
   socket.on('disconnecting', () => {
     const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
