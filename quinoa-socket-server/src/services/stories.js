@@ -79,7 +79,6 @@ const getStory = (id) =>
 const getActiveStory = (id, userId, socket) =>
   new Promise ((resolve, reject) => {
     const {stories} = store.getState();
-    console.log(stories);
     if (stories[id]) {
       store.dispatch({
         type: 'ENTER_STORY',
@@ -89,7 +88,7 @@ const getActiveStory = (id, userId, socket) =>
         }
       });
       socket.join(id);
-      socket.to(id).emit({
+      socket.to(id).emit('action', {
         type: 'ENTER_STORY_BROADCAST',
         payload: {
           storyId: id,

@@ -1,9 +1,13 @@
 const initialConnectionsState = {};
 
+import {CREATE_SECTION, DELETE_SECTION} from './stories';
+
 export const ENTER_STORY = 'ENTER_STORY';
 export const LEAVE_STORY = 'LEAVE_STORY';
 export const DISCONNECT = 'DISCONNECT';
 
+const ENTER_SECTION = 'ENTER_SECTION';
+const LEAVE_SECTION = 'LEAVE_SECTION';
 
 export default function connections(state = initialConnectionsState, action) {
   const {payload} = action;
@@ -17,7 +21,7 @@ export default function connections(state = initialConnectionsState, action) {
           ...state[payload.storyId],
           users: {
             ...users,
-            [payload.userId]: {loc: 'summary'}
+            [payload.userId]: 'summary'
           }
         }
       }
@@ -29,6 +33,32 @@ export default function connections(state = initialConnectionsState, action) {
         [payload.storyId]: {
           ...state[payload.storyId],
           users,
+        },
+      };
+    case CREATE_SECTION:
+    case ENTER_SECTION:
+      users = (state[payload.storyId] && state[payload.storyId].users) || {};
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          users: {
+            ...users,
+            [payload.userId]: payload.sectionId
+          }
+        }
+      }
+    case LEAVE_SECTION:
+    case DELETE_SECTION:
+      users = (state[payload.storyId] && state[payload.storyId].users) || {};
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          users: {
+            ...users,
+            [payload.userId]: 'summary',
+          },
         },
       };
     case DISCONNECT:
