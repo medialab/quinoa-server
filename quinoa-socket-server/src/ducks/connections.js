@@ -1,6 +1,6 @@
 const initialConnectionsState = {};
 
-import {CREATE_SECTION, DELETE_SECTION} from './stories';
+import {CREATE_SECTION, DELETE_SECTION, INACTIVATE_STORY} from './stories';
 
 export const ENTER_STORY = 'ENTER_STORY';
 export const LEAVE_STORY = 'LEAVE_STORY';
@@ -13,6 +13,7 @@ const RELEASE_SECTION = 'RELEASE_SECTION';
 export default function connections(state = initialConnectionsState, action) {
   const {payload} = action;
   let users;
+  let newState;
   switch (action.type) {
     case ENTER_STORY:
       users = (state[payload.storyId] && state[payload.storyId].users) || {};
@@ -26,6 +27,10 @@ export default function connections(state = initialConnectionsState, action) {
           }
         }
       }
+    case INACTIVATE_STORY:
+      newState = {...state};
+      delete newState[payload.id];
+      return newState;
     case LEAVE_STORY:
       users = (state[payload.storyId] && state[payload.storyId].users) || {};
       delete users[payload.userId];
@@ -76,7 +81,7 @@ export default function connections(state = initialConnectionsState, action) {
         },
       };
     case DISCONNECT:
-      const newState = {...state};
+      newState = {...state};
       payload.rooms.forEach((room) => {
         delete newState[room].users[payload.userId];
       });

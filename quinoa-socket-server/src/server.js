@@ -59,6 +59,7 @@ io.on('connection', (socket) => {
   socket.emit('action', {type:'INIT_STATE', payload: store.getState()})
   store.dispatch({type: 'test_dispatch'});
   socket.on('action', (action) => {
+    // console.log(action.type);
     store.dispatch(action);
     if (action.meta.broadcast) {
       if (action.meta.room) {
@@ -71,11 +72,24 @@ io.on('connection', (socket) => {
     if (action.meta.socketId) {
       socket.to(action.meta.socketId).emit('action', {type: `${action.type}_MESSAGE`, payload: action.payload});
     }
+    if (action.type === 'LEAVE_STORY') {
+      const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
+      rooms.forEach((id) => {
+        if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id]) {
+          store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
+        }
+      });
+    }
   });
 
   socket.on('disconnecting', () => {
     const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
     store.dispatch({type: 'DISCONNECT', payload: {userId: socket.id, rooms}});
+    rooms.forEach((id) => {
+      if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id]) {
+        store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
+      }
+    });
     io.emit('action', {type: 'DISCONNECT', payload: {userId: socket.id, rooms}});
   });
   socket.on('disconnect', () => {

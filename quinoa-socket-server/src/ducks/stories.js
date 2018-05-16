@@ -3,6 +3,8 @@ import {writeStories} from '../services/stories';
 const initialStoriesState = {};
 
 export const ACTIVATE_STORY = 'ACTIVATE_STORY';
+export const INACTIVATE_STORY = 'INACTIVATE_STORY';
+
 export const DELETE_STORY = 'DELETE_STORY';
 export const SAVE_ALL_STORIES = 'SAVE_ALL_STORIES';
 
@@ -24,6 +26,7 @@ export default function stories(state = initialStoriesState, action) {
         [payload.id]: payload
       };
     case DELETE_STORY:
+    case INACTIVATE_STORY:
       const newState = {...state};
       delete newState[payload.id];
       return newState;
