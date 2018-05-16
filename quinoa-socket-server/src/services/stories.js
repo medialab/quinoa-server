@@ -66,7 +66,7 @@ const getStories = () =>
             outputJson(storyListPath, {})
           })
           .catch((err) => reject(err));
-  })
+  });
 
 const getStory = (id) =>
   new Promise ((resolve, reject) => {
@@ -74,7 +74,7 @@ const getStory = (id) =>
     return readJson(addr)
           .then((res) => resolve(res))
           .catch((err) => reject(err))
-  })
+  });
 
 const getActiveStory = (id, userId, socket) =>
   new Promise ((resolve, reject) => {
@@ -126,6 +126,25 @@ const getActiveStory = (id, userId, socket) =>
     }
   })
 
+const writeStory = (id) =>
+  new Promise ((resolve, reject) => {
+    const addr = storiesPath + '/' + id + '/' + id + '.json';
+    const {stories} = store.getState();
+    const story = stories[id];
+    return outputJson(addr, story)
+          .then((res) => resolve({id, success: true}))
+          .catch((err) => reject({id, success: false}))
+  });
+
+const writeStories = () =>
+  new Promise((resolve, reject) => {
+    const {stories} = store.getState();
+    const storiesPromise = Object.keys(stories).map(id => writeStory(id));
+    Promise.all(storiesPromise.map(p => p.catch(e => e)))
+    .then((res) => resolve(res.filter(result => !result.success)))
+    .catch((err) => reject(err));
+  });
+
 const deleteStory = (id) =>
   new Promise ((resolve, reject) => {
     const storyPath = storiesPath + '/' + id;
@@ -138,10 +157,13 @@ const deleteStory = (id) =>
            .catch(err => reject(err))
   });
 
+
 module.exports = {
   createStory,
   getStories,
   getStory,
   getActiveStory,
+  writeStory,
+  writeStories,
   deleteStory,
 }

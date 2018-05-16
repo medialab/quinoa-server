@@ -9,6 +9,7 @@ import configureStore from './store/configureStore';
 
 import auth from './routes/auth';
 import stories from './routes/stories';
+import {writeStories} from './services/stories';
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -31,6 +32,7 @@ server.listen(PORT, '0.0.0.0', () => console.log(`Listening on ${ PORT }`));
 // const server = app.listen(PORT, '0.0.0.0', () => console.log(`Listening on ${ PORT }`));
 
 let numberConnections = 0;
+let autoSaveInterval;
 
 const io = socketIO(server);
 export const store = configureStore();
@@ -42,6 +44,16 @@ app.use(function(req, res, next) {
 
 io.on('connection', (socket) => {
   numberConnections ++;
+  if(numberConnections > 0) {
+      autoSaveInterval = setInterval(() => {
+        writeStories()
+        .then((res) => {
+          if(res.length>0) {
+            socket.broadcast.emit('action', {type: `SAVE_STORIES_FAIL`, payload: res})
+          }
+        })
+      }, 2000);
+  }
   io.emit('action', {type:'UPDATE_CONNECTIONS_NUMBER', number: numberConnections});
   socket.emit('action', {type:'SET_SOCKET_ID', payload: socket.id});
   socket.emit('action', {type:'INIT_STATE', payload: store.getState()})
@@ -60,6 +72,7 @@ io.on('connection', (socket) => {
       socket.to(action.meta.socketId).emit('action', {type: `${action.type}_MESSAGE`, payload: action.payload});
     }
   });
+
   socket.on('disconnecting', () => {
     const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
     store.dispatch({type: 'DISCONNECT', payload: {userId: socket.id, rooms}});
@@ -68,13 +81,15 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     numberConnections --;
     io.emit('action', {type:'UPDATE_CONNECTIONS_NUMBER', number: numberConnections});
+    if(numberConnections === 0) {
+      clearInterval(autoSaveInterval);
+    }
   });
 });
 
 // routers
 const storiesFolder = resolve(`${__dirname}/../data/stories`);
 app.use('/api/static', express.static(storiesFolder));
-
 const apiRoutes = express.Router();
 app.use('/api', apiRoutes);
 

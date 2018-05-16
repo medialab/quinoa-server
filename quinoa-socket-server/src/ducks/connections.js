@@ -71,7 +71,7 @@ export default function connections(state = initialConnectionsState, action) {
           users: {
             ...users,
             [payload.userId]: 'summary',
-            [payload.requesterId]: [payload.sectionId],
+            [payload.requesterId]: payload.sectionId,
           },
         },
       };

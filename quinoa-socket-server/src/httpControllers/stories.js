@@ -48,6 +48,16 @@ export const getStory = (req, res) => {
   }
 }
 
+export const updateStory = (req, res) => {
+  manager.writeStory(req.params.id)
+  .then((result) => {
+    res.status(200).json(result);
+  })
+  .catch((err) => {
+    res.status(403).json({message: err.message});
+  });
+}
+
 export const deleteStory = (req, res) => {
   manager.deleteStory(req.params.id)
   .then((result) => {
