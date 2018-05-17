@@ -6,8 +6,8 @@ export const ENTER_STORY = 'ENTER_STORY';
 export const LEAVE_STORY = 'LEAVE_STORY';
 export const DISCONNECT = 'DISCONNECT';
 
-const ENTER_SECTION = 'ENTER_SECTION';
-const LEAVE_SECTION = 'LEAVE_SECTION';
+const ENTER_BLOCK = 'ENTER_BLOCK';
+const LEAVE_BLOCK = 'LEAVE_BLOCK';
 
 export default function connections(state = initialConnectionsState, action) {
   const {payload} = action;
@@ -41,7 +41,7 @@ export default function connections(state = initialConnectionsState, action) {
         },
       };
     case CREATE_SECTION:
-    case ENTER_SECTION:
+    case ENTER_BLOCK:
       users = (state[payload.storyId] && state[payload.storyId].users) || {};
       return {
         ...state,
@@ -53,7 +53,19 @@ export default function connections(state = initialConnectionsState, action) {
           }
         }
       }
-    case LEAVE_SECTION:
+    case ENTER_BLOCK:
+      users = (state[payload.storyId] && state[payload.storyId].users) || {};
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          users: {
+            ...users,
+            [payload.userId]: payload.blockId
+          }
+        }
+      }
+    case LEAVE_BLOCK:
     case DELETE_SECTION:
       users = (state[payload.storyId] && state[payload.storyId].users) || {};
       return {
