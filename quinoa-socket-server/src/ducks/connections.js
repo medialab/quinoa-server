@@ -13,6 +13,9 @@ export default function connections(state = initialConnectionsState, action) {
   const {payload} = action;
   let users;
   let newState;
+  const DEFAULT_LOCKING = {
+    location: 'summary',
+  };
   switch (action.type) {
     case ENTER_STORY:
       users = (state[payload.storyId] && state[payload.storyId].users) || {};
@@ -22,7 +25,7 @@ export default function connections(state = initialConnectionsState, action) {
           ...state[payload.storyId],
           users: {
             ...users,
-            [payload.userId]: 'summary'
+            [payload.userId]: DEFAULT_LOCKING
           }
         }
       }
@@ -41,7 +44,6 @@ export default function connections(state = initialConnectionsState, action) {
         },
       };
     case CREATE_SECTION:
-    case ENTER_BLOCK:
       users = (state[payload.storyId] && state[payload.storyId].users) || {};
       return {
         ...state,
@@ -49,7 +51,11 @@ export default function connections(state = initialConnectionsState, action) {
           ...state[payload.storyId],
           users: {
             ...users,
-            [payload.userId]: payload.sectionId
+            [payload.userId]: {
+              blockId: payload.sectionId,
+              status: 'active',
+              location: 'section',
+            }
           }
         }
       }
@@ -61,7 +67,10 @@ export default function connections(state = initialConnectionsState, action) {
           ...state[payload.storyId],
           users: {
             ...users,
-            [payload.userId]: payload.blockId
+            [payload.userId]: {
+              ...payload,
+              status: 'active',
+            }
           }
         }
       }
@@ -74,7 +83,7 @@ export default function connections(state = initialConnectionsState, action) {
           ...state[payload.storyId],
           users: {
             ...users,
-            [payload.userId]: 'summary',
+            [payload.userId]: DEFAULT_LOCKING,
           },
         },
       };
