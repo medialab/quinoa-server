@@ -9,7 +9,7 @@ export default (io, store) => {
         autoSaveInterval = setInterval(() => {
           writeStories()
           .then((res) => {
-            // TODO add lastModified timestamp for story
+            // check if lastUpdateAt timestamp changed
             if(res.length > 0) {
               res.forEach((id) => {
                 io.in(id).emit('action', {type: `SAVE_STORIES_FAIL`, payload: {id}})
@@ -24,15 +24,15 @@ export default (io, store) => {
 
     socket.on('action', (action) => {
       const {payload} = action;
-
       if (action.type === 'ENTER_BLOCK') {
         const {locking} = store.getState().connections;
         const {locks} = locking[payload.storyId] || {};
         const blockList = Object.keys(locks)
-                        .map((id) => locks[id])
-                        .filter((lock) => lock.status === 'active')
-                        .map((lock)=> lock.blockId);
-
+                          .map((id) => locks[id])
+                          .filter((lock) => {
+                            return lock.status === 'active' && lock.location === payload.location;
+                          })
+                          .map((lock)=> lock.blockId);
         if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
           store.dispatch(action);
           // socket.to(action.meta.room).emit('action', {type: `${action.type}_BROADCAST`, payload});

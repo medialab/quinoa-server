@@ -92,7 +92,7 @@ const getActiveStory = (id, userId, socket) =>
         type: 'ENTER_STORY_INIT',
         payload: {
           storyId: id,
-          locks: locking[id].locks || {},
+          locks: (locking[id] && locking[id].locks) || {},
         }
       });
       socket.join(id);
@@ -124,7 +124,7 @@ const getActiveStory = (id, userId, socket) =>
                 type: 'ENTER_STORY_INIT',
                 payload: {
                   storyId: id,
-                  locks: locking[id].locks || {},
+                  locks: (locking[id] && locking[id].locks) || {},
                 }
               });
               socket.join(id);

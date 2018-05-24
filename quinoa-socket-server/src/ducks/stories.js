@@ -40,6 +40,7 @@ export default function stories(state = initialStoriesState, action) {
             ...state[payload.storyId].sections,
             [payload.sectionId]: payload.section,
           },
+          lastUpdateAt: payload.lastUpdateAt,
         }
       };
     case DELETE_SECTION:
@@ -51,6 +52,7 @@ export default function stories(state = initialStoriesState, action) {
         [payload.storyId]: {
           ...state[payload.storyId],
           sections: newSections,
+          lastUpdateAt: payload.lastUpdateAt,
         }
       };
     default:
