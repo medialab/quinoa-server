@@ -12,6 +12,10 @@ export const CREATE_SECTION = 'CREATE_SECTION';
 export const UPDATE_SECTION = 'UPDATE_SECTION';
 export const DELETE_SECTION = 'DELETE_SECTION';
 
+export const CREATE_RESOURCE = 'CREATE_RESOURCE';
+export const UPDATE_RESOURCE = 'UPDATE_RESOURCE';
+export const DELETE_RESOURCE = 'DELETE_RESOURCE';
+
 export const saveAllStories = () => ({
   type: SAVE_ALL_STORIES,
   promise: () => writeStories()
@@ -54,6 +58,30 @@ export default function stories(state = initialStoriesState, action) {
           sections: newSections,
           lastUpdateAt: payload.lastUpdateAt,
         }
+      };
+    case CREATE_RESOURCE:
+    case UPDATE_RESOURCE:
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          resources: {
+            ...state.resources,
+            [payload.resourceId]: payload.resource,
+          },
+          lastUpdateAt: payload.lastUpdateAt,
+        }
+      };
+    case DELETE_RESOURCE:
+      const newResources = { ...state.resources };
+      delete newSections[payload.resourceId];
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          resources: newResources,
+          lastUpdateAt: payload.lastUpdateAt,
+        },
       };
     default:
       return state;
