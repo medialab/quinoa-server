@@ -2,7 +2,7 @@ import {v4 as uuid} from 'uuid';
 import {outputFile, outputJson, readJson, remove, ensureFile} from 'fs-extra';
 import {resolve} from 'path';
 import authManager from './auth';
-import {store} from '../server';
+import store from '../store/configureStore';
 import config from 'config';
 
 const dataPath = config.get('dataFolder');

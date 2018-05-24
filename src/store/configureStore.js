@@ -9,10 +9,13 @@ const composeEnhancers = composeWithDevTools(
   {realtime: true, suppressConnectErrors: false}
 );
 
-export default function configureStore(initialState={}) {
+function configureStore(initialState={}) {
   const store = createStore(rootReducer, initialState, composeEnhancers(
     // applyMiddleware()
   ));
   // const store = createStore(rootReducer, initialState, devToolsEnhancer({realtime: true}));
   return store;
 }
+
+const store = configureStore();
+export default store;

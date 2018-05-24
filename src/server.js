@@ -7,7 +7,7 @@ import path from 'path';
 import config from 'config';
 
 import socketIO from 'socket.io';
-import configureStore from './store/configureStore';
+import store from './store/configureStore';
 
 import socketEventHandler from './socketEventHandler';
 
@@ -35,7 +35,6 @@ const server = require('http').createServer(app);
 server.listen(PORT, '0.0.0.0', () => console.log(`Listening on ${ PORT }`));
 
 const io = socketIO(server);
-export const store = configureStore();
 
 app.use(function(req, res, next) {
   req.io = io;
