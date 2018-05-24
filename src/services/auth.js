@@ -1,23 +1,21 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import config from 'config';
+import {resolve} from 'path';
 
 const salt = 8;
 const low = require('lowdb');
+
+const dataPath = config.get('dataFolder');
+const filePath = resolve(`${dataPath}/db.json`);
+
 const FileAsync = require('lowdb/adapters/FileAsync');
-const adapter = new FileAsync('./data/db.json');
+const adapter = new FileAsync(filePath);
 
 const hash = (password) => bcrypt.hash(password, salt);
 const comparePassword = (password, hash) => bcrypt.compare(password, hash);
 
-let config;
-if (process.env.NODE_ENV === 'production') {
-  config = {
-    secret: process.env.SECRET
-  };
-}
-else {
-  config = require('../../config');
-}
+const authConfig = config.get("auth");
 
 const buildToken = (id, secret, expiresIn = 86400) => {
   const payload = {
@@ -48,7 +46,7 @@ const register = (id, password) =>
         })
         .then(() => {
           // create a token
-          const token = buildToken(id, config.secret);
+          const token = buildToken(id, authConfig.secret);
           resolve(token);
         })
         .catch(err => {
@@ -70,15 +68,15 @@ const login = (id, password) =>
 
       if (!story) reject(new Error('story not found'));
       else {
-        if (password === config.adminPassword) {
-          const token = buildToken(id, config.secret);
+        if (password === authConfig.adminPassword) {
+          const token = buildToken(id, authConfig.secret);
           resolve(token);
         }
         else {
           comparePassword(password, story.password)
           .then(match => {
             if (match) {
-              const token = buildToken(id, config.secret);
+              const token = buildToken(id, authConfig.secret);
               resolve(token)
             } else {
               reject(new Error('wrong password, authentication failed'));
@@ -103,7 +101,7 @@ const resetPassword = (id, oldPassword, newPassword) =>
                     .value();
       if (!story) reject(new Error('story not found'));
       else {
-        if (oldPassword === config.adminPassword) {
+        if (oldPassword === authConfig.adminPassword) {
           hash(newPassword)
           .then(hashedPassword => {
             db.get('credentials')
@@ -113,7 +111,7 @@ const resetPassword = (id, oldPassword, newPassword) =>
           })
           .then(() => {
             // create a token
-            const token = buildToken(id, config.secret);
+            const token = buildToken(id, authConfig.secret);
             resolve(token);
           })
           .catch((err) => reject(err));
@@ -131,7 +129,7 @@ const resetPassword = (id, oldPassword, newPassword) =>
               })
               .then(() => {
                 // create a token
-                const token = buildToken(id, config.secret);
+                const token = buildToken(id, authConfig.secret);
                 resolve(token);
               })
               .catch((err) => {

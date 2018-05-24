@@ -1,16 +1,9 @@
 import jwt from 'jsonwebtoken';
+import config from 'config';
+
 import manager from '../services/auth';
 
-let config;
-if (process.env.NODE_ENV === 'production') {
-  config = {
-    secret: process.env.SECRET
-  };
-}
-else {
-  config = require('../../config');
-}
-
+const authConfig = config.get("auth");
 
 export const register = (req, res) => {
   manger.register(req.body.id, req.body.password)
@@ -52,7 +45,7 @@ export const verifyToken = (req, res, next) => {
     return res.status(403).send({auth: false, message:'No token provided'});
 
   // verifies secret and checks exp
-  jwt.verify(token, config.secret, (err) => {
+  jwt.verify(token, authConfig.secret, (err) => {
     if (err)
       return res.status(403).send({auth: false, message:'Invalid token'});
     next();

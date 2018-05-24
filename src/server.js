@@ -4,6 +4,7 @@ import {resolve} from 'path';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import path from 'path';
+import config from 'config';
 
 import socketIO from 'socket.io';
 import configureStore from './store/configureStore';
@@ -13,7 +14,7 @@ import socketEventHandler from './socketEventHandler';
 import auth from './routes/auth';
 import stories from './routes/stories';
 
-const PORT = process.env.PORT || 3001;
+const PORT = config.get("port");
 
 const app = express();
 app.use(cors());

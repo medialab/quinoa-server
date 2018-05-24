@@ -3,13 +3,10 @@ import {outputFile, outputJson, readJson, remove, ensureFile} from 'fs-extra';
 import {resolve} from 'path';
 import authManager from './auth';
 import {store} from '../server';
+import config from 'config';
 
-const low = require('lowdb');
-const FileAsync = require('lowdb/adapters/FileAsync');
-const adapter = new FileAsync('./data/storyList.json');
-
-const storiesPath = resolve(`${__dirname}/../../data/stories`);
-const dataPath = resolve(`${__dirname}/../../data`);
+const dataPath = config.get('dataFolder');
+const storiesPath = resolve(`${dataPath}/stories`);
 
 const updateStoryList = (story) =>
   new Promise((resolve, reject) => {
