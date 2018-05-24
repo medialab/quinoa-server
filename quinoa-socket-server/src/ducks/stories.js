@@ -18,7 +18,7 @@ export const saveAllStories = () => ({
 })
 
 export default function stories(state = initialStoriesState, action) {
-  const {payload, socket} = action;
+  const {payload} = action;
   switch (action.type) {
     case ACTIVATE_STORY:
       return {

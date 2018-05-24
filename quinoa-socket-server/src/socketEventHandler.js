@@ -1,11 +1,11 @@
 import {writeStories} from './services/stories';
 
-let numberConnections = 0;
 let autoSaveInterval;
 
 export default (io, store) => {
   io.on('connection', (socket) => {
-    if(numberConnections === 0) {
+    const {count} = store.getState().connections.users;
+    if(count === 0) {
         autoSaveInterval = setInterval(() => {
           writeStories()
           .then((res) => {
@@ -18,21 +18,20 @@ export default (io, store) => {
           })
         }, 2000);
     }
-    numberConnections ++;
-    io.emit('action', {type:'UPDATE_CONNECTIONS_NUMBER', number: numberConnections});
+    store.dispatch({type:'USER_CONNECTED'});
+    io.emit('action', {type:'USER_CONNECTED', payload: store.getState()});
     socket.emit('action', {type:'SET_SOCKET_ID', payload: socket.id});
-    socket.emit('action', {type:'INIT_STATE', payload: store.getState()});
 
     socket.on('action', (action) => {
       const {payload} = action;
 
       if (action.type === 'ENTER_BLOCK') {
-        const {connections} = store.getState();
-        const {users} = connections[payload.storyId] || {};
-        const blockList = Object.keys(users)
-                        .map((id) => users[id])
-                        .filter((user) => user.status === 'active')
-                        .map((user)=> user.blockId);
+        const {locking} = store.getState().connections;
+        const {locks} = locking[payload.storyId] || {};
+        const blockList = Object.keys(locks)
+                        .map((id) => locks[id])
+                        .filter((lock) => lock.status === 'active')
+                        .map((lock)=> lock.blockId);
 
         if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
           store.dispatch(action);
@@ -65,18 +64,19 @@ export default (io, store) => {
 
     socket.on('disconnecting', () => {
       const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
-      store.dispatch({type: 'DISCONNECT', payload: {userId: socket.id, rooms}});
+      store.dispatch({type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});
       rooms.forEach((id) => {
         if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id]) {
           store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
         }
       });
-      io.emit('action', {type: 'DISCONNECT', payload: {userId: socket.id, rooms}});
+      io.emit('action', {type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});
     });
     socket.on('disconnect', () => {
-      numberConnections --;
-      io.emit('action', {type:'UPDATE_CONNECTIONS_NUMBER', number: numberConnections});
-      if(numberConnections === 0) {
+      store.dispatch({type:'USER_DISCONNECTED'});
+      io.emit('action', {type:'USER_DISCONNECTED', payload: store.getState()});
+      const {count} = store.getState().connections.users;
+      if(count === 0) {
         clearInterval(autoSaveInterval);
       }
     });

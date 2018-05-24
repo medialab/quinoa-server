@@ -78,13 +78,21 @@ const getStory = (id) =>
 
 const getActiveStory = (id, userId, socket) =>
   new Promise ((resolve, reject) => {
-    const {stories} = store.getState();
+    const {stories, connections} = store.getState();
+    const {locking} = connections;
     if (stories[id]) {
       store.dispatch({
         type: 'ENTER_STORY',
         payload: {
           storyId: id,
           userId
+        }
+      });
+      socket.emit('action', {
+        type: 'ENTER_STORY_INIT',
+        payload: {
+          storyId: id,
+          locks: locking[id].locks || {},
         }
       });
       socket.join(id);
@@ -110,6 +118,13 @@ const getActiveStory = (id, userId, socket) =>
                 payload: {
                   storyId: id,
                   userId
+                }
+              });
+              socket.emit('action', {
+                type: 'ENTER_STORY_INIT',
+                payload: {
+                  storyId: id,
+                  locks: locking[id].locks || {},
                 }
               });
               socket.join(id);

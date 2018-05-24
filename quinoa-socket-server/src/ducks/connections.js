@@ -1,31 +1,60 @@
-const initialConnectionsState = {};
+import { combineReducers } from 'redux';
+
 
 import {CREATE_SECTION, DELETE_SECTION, INACTIVATE_STORY} from './stories';
 
 export const ENTER_STORY = 'ENTER_STORY';
 export const LEAVE_STORY = 'LEAVE_STORY';
-export const DISCONNECT = 'DISCONNECT';
 
 const ENTER_BLOCK = 'ENTER_BLOCK';
 const LEAVE_BLOCK = 'LEAVE_BLOCK';
 
-export default function connections(state = initialConnectionsState, action) {
+const USER_CONNECTED = 'USER_CONNECTED';
+const USER_DISCONNECTING = 'USER_DISCONNECTING';
+const USER_DISCONNECTED = 'USER_DISCONNECTED';
+
+const USERS_DEFAULT_STATE = {
+  count: 0,
+};
+
+function users(state = USERS_DEFAULT_STATE, action) {
+  let newCount;
+  switch (action.type) {
+    case USER_CONNECTED:
+      newCount = state.count + 1;
+      return {
+        ...state,
+        count: newCount,
+      };
+    case USER_DISCONNECTED:
+      newCount = state.count - 1;
+      return {
+        ...state,
+        count: newCount,
+      };
+    default:
+      return state;
+  }
+}
+
+const LOCKING_DEFAULT_STATE = {};
+function locking(state = LOCKING_DEFAULT_STATE, action) {
   const {payload} = action;
-  let users;
+  let locks;
   let newState;
-  const DEFAULT_LOCKING = {
+  const DEFAULT_LOCK = {
     location: 'summary',
   };
   switch (action.type) {
     case ENTER_STORY:
-      users = (state[payload.storyId] && state[payload.storyId].users) || {};
+      locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
       return {
         ...state,
         [payload.storyId]: {
           ...state[payload.storyId],
-          users: {
-            ...users,
-            [payload.userId]: DEFAULT_LOCKING
+          locks: {
+            ...locks,
+            [payload.userId]: DEFAULT_LOCK
           }
         }
       }
@@ -34,23 +63,23 @@ export default function connections(state = initialConnectionsState, action) {
       delete newState[payload.id];
       return newState;
     case LEAVE_STORY:
-      users = (state[payload.storyId] && state[payload.storyId].users) || {};
-      delete users[payload.userId];
+      locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
+      delete locks[payload.userId];
       return {
         ...state,
         [payload.storyId]: {
           ...state[payload.storyId],
-          users,
+          locks,
         },
       };
     case CREATE_SECTION:
-      users = (state[payload.storyId] && state[payload.storyId].users) || {};
+      locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
       return {
         ...state,
         [payload.storyId]: {
           ...state[payload.storyId],
-          users: {
-            ...users,
+          locks: {
+            ...locks,
             [payload.userId]: {
               blockId: payload.sectionId,
               status: 'active',
@@ -60,13 +89,13 @@ export default function connections(state = initialConnectionsState, action) {
         }
       }
     case ENTER_BLOCK:
-      users = (state[payload.storyId] && state[payload.storyId].users) || {};
+      locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
       return {
         ...state,
         [payload.storyId]: {
           ...state[payload.storyId],
-          users: {
-            ...users,
+          locks: {
+            ...locks,
             [payload.userId]: {
               ...payload,
               status: 'active',
@@ -76,24 +105,31 @@ export default function connections(state = initialConnectionsState, action) {
       }
     case LEAVE_BLOCK:
     case DELETE_SECTION:
-      users = (state[payload.storyId] && state[payload.storyId].users) || {};
+      locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
       return {
         ...state,
         [payload.storyId]: {
           ...state[payload.storyId],
-          users: {
-            ...users,
-            [payload.userId]: DEFAULT_LOCKING,
+          locks: {
+            ...locks,
+            [payload.userId]: DEFAULT_LOCK,
           },
         },
       };
-    case DISCONNECT:
+    case USER_DISCONNECTING:
       newState = {...state};
       payload.rooms.forEach((room) => {
-        delete newState[room].users[payload.userId];
+        if (newState[room])
+          delete newState[room].locks[payload.userId];
       });
       return newState;
     default:
       return state;
   }
 }
+
+
+export default combineReducers({
+  locking,
+  users,
+});
