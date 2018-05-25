@@ -1,3 +1,6 @@
+import config from 'config';
+import {resolve} from 'path';
+
 import manager from '../services/stories';
 import store from '../store/configureStore';
 

@@ -13,6 +13,8 @@ import socketEventHandler from './socketEventHandler';
 
 import auth from './routes/auth';
 import stories from './routes/stories';
+import resources from './routes/resources';
+
 
 const PORT = config.get("port");
 const dataFolder = config.get('dataFolder');
@@ -52,6 +54,7 @@ app.use('/api', apiRoutes);
 
 apiRoutes.use('/auth', auth);
 apiRoutes.use('/stories', stories);
+apiRoutes.use('/resources', resources);
 
 // for collab testing use
 // const INDEX = path.join(__dirname, '/quinoa-socket-client/index.html');

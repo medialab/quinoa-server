@@ -1,6 +1,6 @@
 import express from 'express';
 import {createResource, getResource, updateResource, deleteResource} from '../httpControllers/resources';
-import {verifyToken} from '../controllers/auth';
+import {verifyToken} from '../httpControllers/auth';
 
 const router = new express.Router();
 
