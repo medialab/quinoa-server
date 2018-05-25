@@ -73,71 +73,6 @@ const getStory = (id) =>
           .catch((err) => reject(err))
   });
 
-const getActiveStory = (id, userId, socket) =>
-  new Promise ((resolve, reject) => {
-    const {stories, connections} = store.getState();
-    const {locking} = connections;
-    if (stories[id]) {
-      store.dispatch({
-        type: 'ENTER_STORY',
-        payload: {
-          storyId: id,
-          userId
-        }
-      });
-      socket.emit('action', {
-        type: 'ENTER_STORY_INIT',
-        payload: {
-          storyId: id,
-          locks: (locking[id] && locking[id].locks) || {},
-        }
-      });
-      socket.join(id);
-      socket.to(id).emit('action', {
-        type: 'ENTER_STORY_BROADCAST',
-        payload: {
-          storyId: id,
-          userId
-        }
-      });
-      return resolve(stories[id]);
-    }
-    else {
-      const addr = storiesPath + '/' + id + '/' + id + '.json';
-      return readJson(addr)
-            .then((res) => {
-              store.dispatch({
-                type: 'ACTIVATE_STORY',
-                payload: res
-              });
-              store.dispatch({
-                type: 'ENTER_STORY',
-                payload: {
-                  storyId: id,
-                  userId
-                }
-              });
-              socket.emit('action', {
-                type: 'ENTER_STORY_INIT',
-                payload: {
-                  storyId: id,
-                  locks: (locking[id] && locking[id].locks) || {},
-                }
-              });
-              socket.join(id);
-              socket.to(id).emit('action', {
-                type: 'ENTER_STORY_BROADCAST',
-                payload: {
-                  storyId: id,
-                  userId
-                }
-              });
-              return resolve(res);
-            })
-            .catch((err) => reject(err))
-    }
-  })
-
 const writeStory = (id) =>
   new Promise ((resolve, reject) => {
     const addr = storiesPath + '/' + id + '/' + id + '.json';
@@ -174,7 +109,6 @@ module.exports = {
   createStory,
   getStories,
   getStory,
-  getActiveStory,
   writeStory,
   writeStories,
   deleteStory,

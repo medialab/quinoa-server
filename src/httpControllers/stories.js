@@ -1,4 +1,5 @@
 import manager from '../services/stories';
+import store from '../store/configureStore';
 
 export const createStory = (req, res) => {
   manager.createStory(req.body.payload, req.body.password)
@@ -22,30 +23,50 @@ export const getStories = (req, res) => {
 }
 
 export const getStory = (req, res) => {
-  if(req.query.edit === 'true') {
+  manager.getStory(req.params.id)
+  .then((result) => {
+    let story = result;
     const socket = req.io.sockets.sockets[req.query.userId];
-    if(socket) {
-      manager.getActiveStory(req.params.id,req.query.userId,socket)
-      .then((result) => {
-        res.status(200).json(result);
-      })
-      .catch((err) => {
-        res.status(403).json({message: err.message})
+    if(req.query.edit === 'true' && socket) {
+      const {stories, connections} = store.getState();
+      const {locking} = connections;
+      if (stories[req.params.id]) {
+        story = stories[req.params.id]
+      }
+      else {
+        store.dispatch({
+          type: 'ACTIVATE_STORY',
+          payload: story
+        });
+      }
+      store.dispatch({
+        type: 'ENTER_STORY',
+        payload: {
+          storyId: story.id,
+          userId: req.query.userId
+        }
+      });
+      socket.emit('action', {
+        type: 'ENTER_STORY_INIT',
+        payload: {
+          storyId: story.id,
+          locks: (locking[story.id] && locking[story.id].locks) || {},
+        }
+      });
+      socket.join(story.id);
+      socket.to(story.id).emit('action', {
+        type: 'ENTER_STORY_BROADCAST',
+        payload: {
+          storyId: story.id,
+          userId: req.query.userId
+        }
       });
     }
-    else {
-      res.status(403).json({message: "invalid socket"});
-    }
-  }
-  else {
-    manager.getStory(req.params.id)
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((err) => {
-      res.status(403).json({message: err.message})
-    });
-  }
+    res.status(200).json(story);
+  })
+  .catch((err) => {
+    res.status(403).json({message: err.message})
+  });
 }
 
 export const updateStory = (req, res) => {
