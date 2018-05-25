@@ -66,15 +66,15 @@ export default function stories(state = initialStoriesState, action) {
         [payload.storyId]: {
           ...state[payload.storyId],
           resources: {
-            ...state.resources,
+            ...state[payload.storyId].resources,
             [payload.resourceId]: payload.resource,
           },
           lastUpdateAt: payload.lastUpdateAt,
         }
       };
     case DELETE_RESOURCE:
-      const newResources = { ...state.resources };
-      delete newSections[payload.resourceId];
+      const newResources = { ...state[payload.storyId].resources };
+      delete newResources[payload.resourceId];
       return {
         ...state,
         [payload.storyId]: {

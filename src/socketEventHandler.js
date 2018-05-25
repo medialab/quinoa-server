@@ -35,6 +35,7 @@ export default (io, store) => {
                           .map((lock)=> lock.blockId);
         if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
           store.dispatch(action);
+          socket.emit('action', {type: `${action.type}_SUCCESS`, payload});
           socket.to(action.meta.room).emit('action', {type: `${action.type}_BROADCAST`, payload});
         }
         else socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
