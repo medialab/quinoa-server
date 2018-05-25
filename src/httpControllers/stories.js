@@ -4,8 +4,8 @@ import store from '../store/configureStore';
 export const createStory = (req, res) => {
   manager.createStory(req.body.payload, req.body.password)
   .then((result) => {
-    res.status(200).json(result);
     req.io.emit('action', {type: 'CREATE_STORY_BROADCAST', payload: result.story});
+    res.status(200).json(result);
   })
   .catch((err) => {
     res.status(403).json({message: err.message})
@@ -82,8 +82,9 @@ export const updateStory = (req, res) => {
 export const deleteStory = (req, res) => {
   manager.deleteStory(req.params.id)
   .then((result) => {
-    res.status(200).json(result);
+    store.dispatch({type: 'DELETE_STORY', payload: {id: req.params.id}});
     req.io.emit('action', {type: 'DELETE_STORY_BROADCAST', payload: {id: req.params.id}});
+    res.status(200).json(result);
   })
   .catch((err) => {
     res.status(403).json({message: err.message})

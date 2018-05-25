@@ -97,10 +97,7 @@ const deleteStory = (id) =>
     const storyPath = storiesPath + '/' + id;
     return remove(storyPath)
            .then(deleteStoryList(id))
-           .then(() => {
-              store.dispatch({type: 'DELETE_STORY', payload: {id}});
-              return resolve()
-            })
+           .then(() => resolve())
            .catch(err => reject(err))
   });
 

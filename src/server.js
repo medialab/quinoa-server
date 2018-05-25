@@ -15,6 +15,7 @@ import auth from './routes/auth';
 import stories from './routes/stories';
 
 const PORT = config.get("port");
+const dataFolder = config.get('dataFolder');
 
 const app = express();
 app.use(cors());
@@ -44,7 +45,7 @@ app.use(function(req, res, next) {
 socketEventHandler(io, store);
 
 // routers
-const storiesFolder = resolve(`${__dirname}/../data/stories`);
+const storiesFolder = resolve(`${dataFolder}/stories`);
 app.use('/api/static', express.static(storiesFolder));
 const apiRoutes = express.Router();
 app.use('/api', apiRoutes);
