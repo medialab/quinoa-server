@@ -1,7 +1,7 @@
 import config from 'config';
 import {resolve} from 'path';
 
-import manager from '../services/stories';
+import manager from '../services/resources';
 import store from '../store/configureStore';
 import {validateResource} from '../lib/schemaValidator';
 
@@ -23,7 +23,7 @@ export const createResource = (req, res) => {
       type: 'CREATE_RESOURCE',
       payload: {
         storyId,
-        resoruceId: id,
+        resourceId: id,
         resource: result
       }
     });
@@ -32,7 +32,7 @@ export const createResource = (req, res) => {
       payload: {
         payload: {
           storyId,
-          resoruceId: id,
+          resourceId: id,
           resource: result
         }
       }

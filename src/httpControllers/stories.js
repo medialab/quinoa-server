@@ -1,6 +1,6 @@
 import manager from '../services/stories';
 import store from '../store/configureStore';
-import {validateStory} from '../lib/validator';
+// import {validateStory} from '../lib/schemaValidator';
 
 export const createStory = (req, res) => {
   //TODO: handle module level validation - storySchema
