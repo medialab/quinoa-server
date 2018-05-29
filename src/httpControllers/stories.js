@@ -1,7 +1,13 @@
 import manager from '../services/stories';
 import store from '../store/configureStore';
+import {validateStory} from '../lib/validator';
 
 export const createStory = (req, res) => {
+  //TODO: handle module level validation - storySchema
+  // const validation = validateStory(req.body.payload);
+  // if (validation.errors) {
+  //   res.status(400).json({err: validation.errors})
+  // }
   manager.createStory(req.body.payload, req.body.password)
   .then((result) => {
     req.io.emit('action', {type: 'CREATE_STORY_BROADCAST', payload: result.story});

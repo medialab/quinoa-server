@@ -23,8 +23,7 @@ const createResource = (storyId, id, resource) =>
       addr = `${storiesPath}/${storyId}/resources/${id}/${id}.${ext}`;
       newResource = {
         ...resource,
-        metadata: {
-          ...metadata,
+        data: {
           url: `${staticUrl}/${storyId}/resources/${id}/${id}.${ext}`
         }
       }
@@ -35,8 +34,7 @@ const createResource = (storyId, id, resource) =>
     else {
       newResource = {
         ...resource,
-        metadata: {
-          ...metadata,
+        data: {
           url: `${staticUrl}/${storyId}/resources/${id}/${id}.json`
         }
       }
