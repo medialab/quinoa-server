@@ -73,20 +73,22 @@ const getStory = (id) =>
           .catch((err) => reject(err))
   });
 
-const writeStory = (id) =>
+const writeStory = (story) =>
   new Promise ((resolve, reject) => {
+    const {id} = story.id;
     const addr = storiesPath + '/' + id + '/' + id + '.json';
-    const {stories} = store.getState();
-    const story = stories[id];
     return outputJson(addr, story)
           .then((res) => resolve({id, success: true}))
           .catch((err) => reject({id, success: false}))
   });
 
-const writeStories = () =>
+const writeStories = (timeAfter) =>
   new Promise((resolve, reject) => {
     const {stories} = store.getState();
-    const storiesPromise = Object.keys(stories).map(id => writeStory(id));
+    const storiesUpdated = Object.keys(stories)
+                                 .map(id => stories[id])
+                                 .filter(story => story.lastUpdateAt >= timeAfter)
+    const storiesPromise = storiesUpdated.map(story => writeStory(story));
     Promise.all(storiesPromise.map(p => p.catch(e => e)))
     .then((res) => resolve(res.filter(result => !result.success)))
     .catch((err) => reject(err));

@@ -16,9 +16,11 @@ export const CREATE_RESOURCE = 'CREATE_RESOURCE';
 export const UPDATE_RESOURCE = 'UPDATE_RESOURCE';
 export const DELETE_RESOURCE = 'DELETE_RESOURCE';
 
-export const saveAllStories = () => ({
+export const saveAllStories = (timeAfter) => ({
   type: SAVE_ALL_STORIES,
-  promise: () => writeStories()
+  promise: () => {
+    return writeStories(timeAfter);
+  }
 })
 
 export default function stories(state = initialStoriesState, action) {

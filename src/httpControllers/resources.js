@@ -28,7 +28,7 @@ export const createResource = (req, res) => {
         resource: result
       }
     });
-    socket.to(req.params.storyId).emit('action', {
+    socket.to(storyId).emit('action', {
       type: 'CREATE_RESOURCE_BROADCAST',
       payload: {
         storyId,
@@ -61,7 +61,7 @@ export const updateResource = (req, res) => {
         resource: result
       }
     });
-    req.io.in(req.params.storyId).emit('action', {
+    socket.to(storyId).emit('action', {
       type: 'UPDATE_RESOURCE_BROADCAST',
       payload: {
         storyId,
@@ -84,10 +84,11 @@ export const getResource = (req, res) => {
 
 export const deleteResource = (req, res) => {
   const {id, storyId} = req.params;
+  const socket = req.io.sockets.sockets[req.query.userId];
   manager.deleteResource(storyId, id)
   .then((result) => {
     store.dispatch({type: 'DELETE_RESOURCE', payload: {storyId, resourceId: id}});
-    req.io.in(storyId).emit('action', {type: 'DELETE_RESOURCE_BROADCAST', payload: {storyId, resourceId: id}});
+    socket.to(storyId).emit('action', {type: 'DELETE_RESOURCE_BROADCAST', payload: {storyId, resourceId: id}});
     res.status(200).json(result);
   })
   .catch((err) => {

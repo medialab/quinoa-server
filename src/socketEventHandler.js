@@ -1,3 +1,4 @@
+// import {saveAllStories} from './ducks/stories';
 import {writeStories} from './services/stories';
 
 let autoSaveInterval;
@@ -7,7 +8,8 @@ export default (io, store) => {
     const {count} = store.getState().connections.users;
     if(count === 0) {
         autoSaveInterval = setInterval(() => {
-          writeStories()
+          const timeAfter = new Date().getTime() - 2000;
+          writeStories(timeAfter)
           .then((res) => {
             // check if lastUpdateAt timestamp changed
             if(res.length > 0) {
@@ -16,6 +18,7 @@ export default (io, store) => {
               });
             }
           })
+          // store.dispatch(saveAllStories(timeAfter))
         }, 2000);
     }
     store.dispatch({type:'USER_CONNECTED'});
