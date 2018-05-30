@@ -17,6 +17,7 @@ export const createResource = (req, res) => {
   // if (validation.errors) {
   //   res.status(400).json({err: validation.errors})
   // }
+  const socket = req.io.sockets.sockets[req.query.userId];
   manager.createResource(storyId, id, req.body)
   .then((result) => {
     store.dispatch({
@@ -27,14 +28,12 @@ export const createResource = (req, res) => {
         resource: result
       }
     });
-    req.io.in(req.params.storyId).emit('action', {
+    socket.to(req.params.storyId).emit('action', {
       type: 'CREATE_RESOURCE_BROADCAST',
       payload: {
-        payload: {
-          storyId,
-          resourceId: id,
-          resource: result
-        }
+        storyId,
+        resourceId: id,
+        resource: result
       }
     });
     res.status(200).json(result);
@@ -51,24 +50,23 @@ export const updateResource = (req, res) => {
   // if (validation.errors) {
   //   res.status(400).json({err: validation.errors})
   // }
+  const socket = req.io.sockets.sockets[req.query.userId];
   manager.createResource(storyId, id, req.body)
   .then((result) => {
     store.dispatch({
       type: 'UPDATE_RESOURCE',
       payload: {
         storyId,
-        resoruceId: id,
+        resourceId: id,
         resource: result
       }
     });
     req.io.in(req.params.storyId).emit('action', {
       type: 'UPDATE_RESOURCE_BROADCAST',
       payload: {
-        payload: {
-          storyId,
-          resoruceId: id,
-          resource: result
-        }
+        storyId,
+        resourceId: id,
+        resource: result
       }
     });
     res.status(200).json(result);
@@ -88,7 +86,7 @@ export const deleteResource = (req, res) => {
   const {id, storyId} = req.params;
   manager.deleteResource(storyId, id)
   .then((result) => {
-    store.dispatch({type: 'DELETE_RESOURCE', payload: {storyId, resoruceId: id}});
+    store.dispatch({type: 'DELETE_RESOURCE', payload: {storyId, resourceId: id}});
     req.io.in(storyId).emit('action', {type: 'DELETE_RESOURCE_BROADCAST', payload: {storyId, resourceId: id}});
     res.status(200).json(result);
   })
