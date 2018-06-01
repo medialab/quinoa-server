@@ -75,7 +75,7 @@ const getStory = (id) =>
 
 const writeStory = (story) =>
   new Promise ((resolve, reject) => {
-    const {id} = story.id;
+    const {id} = story;
     const addr = storiesPath + '/' + id + '/' + id + '.json';
     return outputJson(addr, story)
           .then((res) => resolve({id, success: true}))
@@ -87,11 +87,24 @@ const writeStories = (timeAfter) =>
     const {stories} = store.getState();
     const storiesUpdated = Object.keys(stories)
                                  .map(id => stories[id])
-                                 .filter(story => story.lastUpdateAt >= timeAfter)
+                                 .filter(story => story.lastUpdateAt >= timeAfter);
     const storiesPromise = storiesUpdated.map(story => writeStory(story));
     Promise.all(storiesPromise.map(p => p.catch(e => e)))
     .then((res) => resolve(res.filter(result => !result.success)))
     .catch((err) => reject(err));
+    // if(storiesUpdated.length > 0) {
+    //   let errors = [];
+    //   storiesUpdated.reduce((curr, next) => {
+    //     return curr.then(() =>
+    //       writeStory(next)
+    //       .then((res) => {
+    //         if(res && !res.success) errors.push(res);
+    //       })
+    //     );
+    //   }, Promise.resolve())
+    //   .then(() => resolve(errors))
+    //   .catch((err) => reject(err));
+    // }
   });
 
 const deleteStory = (id) =>

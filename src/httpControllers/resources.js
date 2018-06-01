@@ -25,7 +25,8 @@ export const createResource = (req, res) => {
       payload: {
         storyId,
         resourceId: id,
-        resource: result
+        resource: result,
+        lastUpdateAt: parseInt(req.query.lastUpdateAt),
       }
     });
     socket.to(storyId).emit('action', {
@@ -33,7 +34,8 @@ export const createResource = (req, res) => {
       payload: {
         storyId,
         resourceId: id,
-        resource: result
+        resource: result,
+        lastUpdateAt: parseInt(req.query.lastUpdateAt),
       }
     });
     res.status(200).json(result);
@@ -58,7 +60,8 @@ export const updateResource = (req, res) => {
       payload: {
         storyId,
         resourceId: id,
-        resource: result
+        resource: result,
+        lastUpdateAt: parseInt(req.query.lastUpdateAt)
       }
     });
     socket.to(storyId).emit('action', {
@@ -66,7 +69,8 @@ export const updateResource = (req, res) => {
       payload: {
         storyId,
         resourceId: id,
-        resource: result
+        resource: result,
+        lastUpdateAt: parseInt(req.query.lastUpdateAt)
       }
     });
     res.status(200).json(result);
@@ -87,8 +91,22 @@ export const deleteResource = (req, res) => {
   const socket = req.io.sockets.sockets[req.query.userId];
   manager.deleteResource(storyId, id)
   .then((result) => {
-    store.dispatch({type: 'DELETE_RESOURCE', payload: {storyId, resourceId: id}});
-    socket.to(storyId).emit('action', {type: 'DELETE_RESOURCE_BROADCAST', payload: {storyId, resourceId: id}});
+    store.dispatch({
+      type: 'DELETE_RESOURCE',
+      payload: {
+        storyId,
+        resourceId: id,
+        lastUpdateAt: parseInt(req.query.lastUpdateAt)
+      }
+    });
+    socket.to(storyId).emit('action', {
+      type: 'DELETE_RESOURCE_BROADCAST',
+      payload: {
+        storyId,
+        resourceId: id,
+        lastUpdateAt: parseInt(req.query.lastUpdateAt)
+      }
+    });
     res.status(200).json(result);
   })
   .catch((err) => {

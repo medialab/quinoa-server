@@ -76,7 +76,7 @@ export const getStory = (req, res) => {
 }
 
 export const updateStory = (req, res) => {
-  manager.writeStory(req.params.id)
+  manager.writeStory(req.body)
   .then((result) => {
     res.status(200).json(result);
   })
