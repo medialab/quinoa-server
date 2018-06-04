@@ -89,27 +89,38 @@ export const getResource = (req, res) => {
 export const deleteResource = (req, res) => {
   const {id, storyId} = req.params;
   const socket = req.io.sockets.sockets[req.query.userId];
-  manager.deleteResource(storyId, id)
-  .then((result) => {
-    store.dispatch({
-      type: 'DELETE_RESOURCE',
-      payload: {
-        storyId,
-        resourceId: id,
-        lastUpdateAt: parseInt(req.query.lastUpdateAt)
-      }
+  const {locking} = store.getState().connections;
+  const locks = (locking[storyId] && locking[storyId].locks) || {};
+  const blockList = Object.keys(locks)
+                    .map((id) => locks[id])
+                    .filter((lock) => {
+                      return lock.status === 'active' && lock.location === 'resource';
+                    })
+                    .map((lock)=> lock.blockId);
+  if (blockList.length === 0 || blockList.indexOf(id) === -1) {
+    manager.deleteResource(storyId, id)
+    .then((result) => {
+      store.dispatch({
+        type: 'DELETE_RESOURCE',
+        payload: {
+          storyId,
+          resourceId: id,
+          lastUpdateAt: parseInt(req.query.lastUpdateAt)
+        }
+      });
+      socket.to(storyId).emit('action', {
+        type: 'DELETE_RESOURCE_BROADCAST',
+        payload: {
+          storyId,
+          resourceId: id,
+          lastUpdateAt: parseInt(req.query.lastUpdateAt)
+        }
+      });
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      res.status(403).json({message: err.message})
     });
-    socket.to(storyId).emit('action', {
-      type: 'DELETE_RESOURCE_BROADCAST',
-      payload: {
-        storyId,
-        resourceId: id,
-        lastUpdateAt: parseInt(req.query.lastUpdateAt)
-      }
-    });
-    res.status(200).json(result);
-  })
-  .catch((err) => {
-    res.status(403).json({message: err.message})
-  });
+  }
+  else res.status(403).json({message: 'resource is being edit by other user'});
 }

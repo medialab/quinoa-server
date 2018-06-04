@@ -27,21 +27,27 @@ export default (io, store) => {
 
     socket.on('action', (action) => {
       const {payload} = action;
-      if (action.type === 'ENTER_BLOCK') {
+      if (action.type === 'ENTER_BLOCK' || action.type === 'DELETE_BLOCK') {
         const {locking} = store.getState().connections;
-        const {locks} = locking[payload.storyId] || {};
-        const blockList = Object.keys(locks)
-                          .map((id) => locks[id])
-                          .filter((lock) => {
-                            return lock.status === 'active' && lock.location === payload.location;
-                          })
-                          .map((lock)=> lock.blockId);
-        if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
-          store.dispatch(action);
-          socket.emit('action', {type: `${action.type}_SUCCESS`, payload});
-          socket.to(action.meta.room).emit('action', {type: `${action.type}_BROADCAST`, payload});
+        const block = store.getState().stories[payload.storyId][payload.location];
+        if ((payload.location === 'resource' || payload.location === 'section') && !block[payload.blockId]) {
+          socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
         }
-        else socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
+        else {
+          const locks = (locking[payload.storyId] && locking[payload.storyId].locks) || {};
+          const blockList = Object.keys(locks)
+                            .map((id) => locks[id])
+                            .filter((lock) => {
+                              return lock.status === 'active' && lock.location === payload.location;
+                            })
+                            .map((lock)=> lock.blockId);
+          if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
+            store.dispatch(action);
+            socket.emit('action', {type: `${action.type}_SUCCESS`, payload});
+            socket.to(action.meta.room).emit('action', {type: `${action.type}_BROADCAST`, payload});
+          }
+          else socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
+        }
       }
 
       else {
