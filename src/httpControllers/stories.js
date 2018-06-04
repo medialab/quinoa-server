@@ -1,13 +1,13 @@
 import manager from '../services/stories';
 import store from '../store/configureStore';
-// import {validateStory} from '../lib/schemaValidator';
+import validateStory from '../validators/schemaValidator';
 
 export const createStory = (req, res) => {
-  //TODO: handle module level validation - storySchema
-  // const validation = validateStory(req.body.payload);
-  // if (validation.errors) {
-  //   res.status(400).json({err: validation.errors})
-  // }
+  const validation = validateStory(req.body.payload);
+  if (validation.errors) {
+    return res.status(400).json({message: validation.errors})
+  }
+
   manager.createStory(req.body.payload, req.body.password)
   .then((result) => {
     req.io.emit('action', {type: 'CREATE_STORY_BROADCAST', payload: result.story});
@@ -76,6 +76,10 @@ export const getStory = (req, res) => {
 }
 
 export const updateStory = (req, res) => {
+  const validation = validateStory(req.body);
+  if (validation.errors) {
+    return res.status(400).json({message: validation.errors})
+  }
   manager.writeStory(req.body)
   .then((result) => {
     res.status(200).json(result);

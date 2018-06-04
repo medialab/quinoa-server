@@ -3,8 +3,7 @@ import {resolve} from 'path';
 
 import manager from '../services/resources';
 import store from '../store/configureStore';
-import {validateResource} from '../lib/schemaValidator';
-
+import validateResource from '../validators/resourceValidator';
 
 const dataPath = config.get('dataFolder');
 const storiesPath = resolve(`${dataPath}/stories`);
@@ -12,11 +11,12 @@ const storiesPath = resolve(`${dataPath}/stories`);
 export const createResource = (req, res) => {
   const {storyId} = req.params;
   const {id} = req.body;
-  //TODO: handle module level validation - resourceSchema
-  // const validation = validateStory(req.body);
-  // if (validation.errors) {
-  //   res.status(400).json({err: validation.errors})
-  // }
+
+  const validation = validateResource(req.body);
+  if (validation.error) {
+    return res.status(400).json({message: validation.error});
+  }
+
   const socket = req.io.sockets.sockets[req.query.userId];
   manager.createResource(storyId, id, req.body)
   .then((result) => {
@@ -47,11 +47,12 @@ export const createResource = (req, res) => {
 
 export const updateResource = (req, res) => {
   const {id, storyId} = req.params;
-  //TODO: handle module level validation - resourceSchema
-  // const validation = validateStory(req.body);
-  // if (validation.errors) {
-  //   res.status(400).json({err: validation.errors})
-  // }
+
+  const validation = validateResource(req.body);
+  if (validation.error) {
+    return res.status(400).json({message: validation.error});
+  }
+
   const socket = req.io.sockets.sockets[req.query.userId];
   manager.createResource(storyId, id, req.body)
   .then((result) => {

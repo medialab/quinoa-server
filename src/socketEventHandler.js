@@ -30,7 +30,7 @@ export default (io, store) => {
       if (action.type === 'ENTER_BLOCK' || action.type === 'DELETE_BLOCK') {
         const {locking} = store.getState().connections;
         const block = store.getState().stories[payload.storyId][payload.location];
-        if ((payload.location === 'resource' || payload.location === 'section') && !block[payload.blockId]) {
+        if ((payload.location === 'resources' || payload.location === 'sections') && !block[payload.blockId]) {
           socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
         }
         else {
