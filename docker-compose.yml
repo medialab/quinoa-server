@@ -1,0 +1,7 @@
+version: "2"
+services:
+  api:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3001:3001"

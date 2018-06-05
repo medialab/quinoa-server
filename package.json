@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo",
     "dev": "nodemon src/server.js --exec babel-node --config nodemon.json",
-    "start": "NODE_ENV=production babel-node src/server.js"
+    "start": "NODE_ENV=production babel-node src/server.js",
+    "compose": "docker-compose up"
   },
   "author": "Mengying Du",
   "license": "MIT",
