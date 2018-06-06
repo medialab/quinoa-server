@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
 
 
-import {CREATE_SECTION, DELETE_SECTION, INACTIVATE_STORY} from './stories';
+import {CREATE_SECTION, DELETE_SECTION, INACTIVATE_STORY, DELETE_STORY} from './stories';
 
 export const ENTER_STORY = 'ENTER_STORY';
 export const LEAVE_STORY = 'LEAVE_STORY';
 
 const ENTER_BLOCK = 'ENTER_BLOCK';
+const IDLE_BLOCK = 'IDLE_BLOCK';
 const LEAVE_BLOCK = 'LEAVE_BLOCK';
 
 const USER_CONNECTED = 'USER_CONNECTED';
@@ -42,8 +43,8 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
   const {payload} = action;
   let locks;
   let newState;
-  const DEFAULT_LOCK = {
-    location: 'summary',
+  const DEFAULT_LOCKS = {
+    summary: true,
   };
   switch (action.type) {
     case ENTER_STORY:
@@ -54,11 +55,12 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
           ...state[payload.storyId],
           locks: {
             ...locks,
-            [payload.userId]: DEFAULT_LOCK
-          }
-        }
-      }
+            [payload.userId]: DEFAULT_LOCKS,
+          },
+        },
+      };
     case INACTIVATE_STORY:
+    case DELETE_STORY:
       newState = {...state};
       delete newState[payload.id];
       return newState;
@@ -81,13 +83,16 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
           locks: {
             ...locks,
             [payload.userId]: {
-              blockId: payload.sectionId,
-              status: 'active',
-              location: 'section',
-            }
-          }
-        }
-      }
+              ...locks[payload.userId],
+              sections: {
+                blockId: payload.sectionId,
+                status: 'active',
+                location: 'sections',
+              },
+            },
+          },
+        },
+      };
     case ENTER_BLOCK:
       locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
       return {
@@ -97,10 +102,31 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
           locks: {
             ...locks,
             [payload.userId]: {
-              ...payload,
-              status: 'active',
-            }
-          }
+              ...locks[payload.userId],
+              [payload.location]: {
+                ...payload,
+                status: 'active',
+              },
+            },
+          },
+        },
+      };
+    case IDLE_BLOCK:
+      locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          locks: {
+            ...locks,
+            [payload.userId]: {
+              ...locks[payload.userId],
+              [payload.location]: {
+                ...payload,
+                status: 'idle',
+              },
+            },
+          },
         }
       }
     case LEAVE_BLOCK:
@@ -112,7 +138,10 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
           ...state[payload.storyId],
           locks: {
             ...locks,
-            [payload.userId]: DEFAULT_LOCK,
+            [payload.userId]: {
+              ...locks[payload.userId],
+              [payload.location]: undefined,
+            },
           },
         },
       };
