@@ -22,8 +22,8 @@ export default (io, store) => {
         }, 2000);
     }
     store.dispatch({type:'USER_CONNECTED'});
-    io.emit('action', {type:'USER_CONNECTED', payload: store.getState()});
     socket.emit('action', {type:'SET_SOCKET_ID', payload: socket.id});
+    socket.emit('action', {type:'USER_CONNECTED', payload: store.getState().connections});
 
     socket.on('action', (action) => {
       const {payload} = action;
@@ -83,8 +83,8 @@ export default (io, store) => {
       io.emit('action', {type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});
     });
     socket.on('disconnect', () => {
-      store.dispatch({type:'USER_DISCONNECTED'});
-      io.emit('action', {type:'USER_DISCONNECTED', payload: store.getState()});
+      store.dispatch({type:'USER_DISCONNECTED', payload: {userId: socket.id}});
+      io.emit('action', {type:'USER_DISCONNECTED', payload: store.getState().connections});
       const {count} = store.getState().connections.users;
       if(count === 0) {
         clearInterval(autoSaveInterval);

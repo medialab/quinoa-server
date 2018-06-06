@@ -14,13 +14,26 @@ const USER_CONNECTED = 'USER_CONNECTED';
 const USER_DISCONNECTING = 'USER_DISCONNECTING';
 const USER_DISCONNECTED = 'USER_DISCONNECTED';
 
+const CREATE_USER = 'CREATE_USER';
+
 const USERS_DEFAULT_STATE = {
   count: 0,
+  users: {},
 };
 
 function users(state = USERS_DEFAULT_STATE, action) {
   let newCount;
+  let newUsers;
+  const {payload} = action;
   switch (action.type) {
+    case CREATE_USER:
+      return {
+        ...state,
+        users: {
+          ...state.users,
+          [payload.userId]: payload
+        },
+      }
     case USER_CONNECTED:
       newCount = state.count + 1;
       return {
@@ -29,8 +42,11 @@ function users(state = USERS_DEFAULT_STATE, action) {
       };
     case USER_DISCONNECTED:
       newCount = state.count - 1;
+      newUsers = {...state.users};
+      delete newUsers[payload.userId]
       return {
         ...state,
+        users: newUsers,
         count: newCount,
       };
     default:
