@@ -1,7 +1,6 @@
 import Ajv from 'ajv';
 
-import storySchema from './schemas/story.json';
-import resourceSchema from './schemas/resource.json';
+import storySchema from 'quinoa-schemas/story';
 
 const ajv = new Ajv();
 ajv.addMetaSchema(require('ajv/lib/refs/json-schema-draft-06.json'));
