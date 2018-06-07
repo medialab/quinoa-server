@@ -17,6 +17,7 @@ const updateStoryList = (story) =>
       else {
         stories[story.id] = {
           id: story.id,
+          metadata: story.metadata
         };
         return outputJson(storyListPath, stories);
       }
