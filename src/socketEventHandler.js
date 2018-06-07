@@ -22,8 +22,8 @@ export default (io, store) => {
         }, 2000);
     }
     store.dispatch({type:'USER_CONNECTED'});
-    socket.emit('action', {type:'SET_SOCKET_ID', payload: socket.id});
     socket.emit('action', {type:'USER_CONNECTED', payload: store.getState().connections});
+    socket.emit('action', {type:'SET_SOCKET_ID', payload: socket.id});
 
     socket.on('action', (action) => {
       const {payload} = action;
