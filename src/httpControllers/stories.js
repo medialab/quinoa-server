@@ -91,9 +91,9 @@ export const updateStory = (req, res) => {
 
 export const deleteStory = (req, res) => {
   // TODO: prevent delete if room is not empty
-  const {connections} = store.getState();
-  const users = connections[req.params.id] && Object.keys(connections[req.params.id]);
-  if (users.length === 0) {
+  const {locking} = store.getState().connections;
+  const users = locking[req.params.id] && Object.keys(locking[req.params.id].locks);
+  if (users && users.length > 0) {
     return res.status(400).json({message: 'the story is being edited, not allowed to delete'});
   }
   manager.deleteStory(req.params.id)
