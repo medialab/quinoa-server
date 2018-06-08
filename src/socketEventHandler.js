@@ -43,9 +43,9 @@ export default (io, store) => {
           const blockList = Object.keys(locks)
                             .map((id) => locks[id])
                             .filter((lock) => {
-                              return lock[payload.location] !== undefined && lock.status === 'active';
+                              return lock[payload.location] !== undefined && lock[payload.location].status === 'active';
                             })
-                            .map((lock) => lock.blockId);
+                            .map((lock) => lock[payload.location].blockId);
           // check if block is been taken
           if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
             store.dispatch(action);
