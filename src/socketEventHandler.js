@@ -28,8 +28,13 @@ export default (io, store) => {
     socket.on('action', (action) => {
       const {payload} = action;
       if (action.type === 'ENTER_BLOCK' || action.type === 'DELETE_SECTION' || action.type === 'DELETE_RESOURCE' ) {
+        // check if story is activate
+        if (!store.getState().stories[payload.storyId]) {
+          return socket.emit('action', {type:`${action.type}_FAIL`, payload: action.payload});
+        }
         const {locking} = store.getState().connections;
         const block = store.getState().stories[payload.storyId][payload.location];
+        // check if block is exist
         if ((payload.location === 'resources' || payload.location === 'sections') && !block[payload.blockId]) {
           socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
         }
@@ -41,7 +46,7 @@ export default (io, store) => {
                               return lock[payload.location] !== undefined && lock.status === 'active';
                             })
                             .map((lock) => lock.blockId);
-
+          // check if block is been taken
           if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
             store.dispatch(action);
             socket.emit('action', {type: `${action.type}_SUCCESS`, payload});
