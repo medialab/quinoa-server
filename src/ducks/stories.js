@@ -17,6 +17,7 @@ export const UPDATE_RESOURCE = 'UPDATE_RESOURCE';
 export const DELETE_RESOURCE = 'DELETE_RESOURCE';
 
 export const UPDATE_STORY_METADATA = 'UPDATE_STORY_METADATA';
+export const UPDATE_SECTIONS_ORDER = 'UPDATE_SECTIONS_ORDER';
 
 export const saveAllStories = (timeAfter) => ({
   type: SAVE_ALL_STORIES,
@@ -44,6 +45,15 @@ export default function stories(state = initialStoriesState, action) {
         [payload.storyId]: {
           ...state[payload.storyId],
           metadata: payload.metadata,
+          lastUpdateAt: payload.lastUpdateAt,
+        }
+      };
+    case UPDATE_SECTIONS_ORDER:
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          sectionsOrder: payload.sectionsOrder,
           lastUpdateAt: payload.lastUpdateAt,
         }
       };
