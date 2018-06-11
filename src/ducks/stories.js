@@ -58,6 +58,18 @@ export default function stories(state = initialStoriesState, action) {
         }
       };
     case CREATE_SECTION:
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          sections: {
+            ...state[payload.storyId].sections,
+            [payload.sectionId]: payload.section,
+          },
+          sectionsOrder: [...state[payload.storyId].sectionsOrder, payload.section.id],
+          lastUpdateAt: payload.lastUpdateAt,
+        }
+      };
     case UPDATE_SECTION:
       return {
         ...state,
