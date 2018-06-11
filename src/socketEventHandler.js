@@ -77,6 +77,10 @@ export default (io, store) => {
       }
     });
 
+    /**
+     * only socket disconnecting event has socket.rooms information
+     * so udpate locking system for each room here
+     */
     socket.on('disconnecting', () => {
       const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
       store.dispatch({type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});
@@ -87,6 +91,10 @@ export default (io, store) => {
       });
       io.emit('action', {type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});
     });
+
+    /**
+     * socket disconnect event triggered after disconnecting
+     */
     socket.on('disconnect', () => {
       store.dispatch({type:'USER_DISCONNECTED', payload: {userId: socket.id}});
       io.emit('action', {type:'USER_DISCONNECTED', payload: store.getState().connections});

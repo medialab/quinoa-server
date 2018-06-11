@@ -161,6 +161,9 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
           },
         },
       };
+    /**
+     * update locking system by room manually (server)
+     */
     case USER_DISCONNECTING:
       newState = {...state};
       payload.rooms.forEach((room) => {
