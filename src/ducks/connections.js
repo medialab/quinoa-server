@@ -90,25 +90,25 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
           locks,
         },
       };
-    case CREATE_SECTION:
-      locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
-      return {
-        ...state,
-        [payload.storyId]: {
-          ...state[payload.storyId],
-          locks: {
-            ...locks,
-            [payload.userId]: {
-              ...locks[payload.userId],
-              sections: {
-                blockId: payload.sectionId,
-                status: 'active',
-                location: 'sections',
-              },
-            },
-          },
-        },
-      };
+    // case CREATE_SECTION:
+    //   locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
+    //   return {
+    //     ...state,
+    //     [payload.storyId]: {
+    //       ...state[payload.storyId],
+    //       locks: {
+    //         ...locks,
+    //         [payload.userId]: {
+    //           ...locks[payload.userId],
+    //           sections: {
+    //             blockId: payload.sectionId,
+    //             status: 'active',
+    //             location: 'sections',
+    //           },
+    //         },
+    //       },
+    //     },
+    //   };
     case ENTER_BLOCK:
       locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
       return {
