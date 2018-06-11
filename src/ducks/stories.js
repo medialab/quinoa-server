@@ -91,6 +91,11 @@ export default function stories(state = initialStoriesState, action) {
         [payload.storyId]: {
           ...state[payload.storyId],
           sections: newSections,
+          sectionsOrder: state[payload.storyId].sectionsOrder
+            .filter(
+              thatSectionId => 
+                thatSectionId !== payload.sectionId
+            ),
           lastUpdateAt: payload.lastUpdateAt,
         }
       };
