@@ -29,7 +29,7 @@ export const login = (req, res) => {
 }
 
 export const resetPassword = (req, res) => {
-  manager.resetPassword(req.body.id, req.body.oldPassword, req.body.newPassword)
+  manager.resetPassword(req.body.storyId, req.body.oldPassword, req.body.newPassword)
   .then((token) => {
     res.status(200).json({token, auth: true})
   })
