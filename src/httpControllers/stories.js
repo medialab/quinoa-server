@@ -60,7 +60,8 @@ export const getStory = (req, res) => {
         }
       });
       socket.join(story.id);
-      socket.to(story.id).emit('action', {
+      socket.broadcast.emit('action', {
+      // socket.to(story.id).emit('action', {
         type: 'ENTER_STORY_BROADCAST',
         payload: {
           storyId: story.id,
