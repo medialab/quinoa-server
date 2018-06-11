@@ -16,12 +16,14 @@ export const CREATE_RESOURCE = 'CREATE_RESOURCE';
 export const UPDATE_RESOURCE = 'UPDATE_RESOURCE';
 export const DELETE_RESOURCE = 'DELETE_RESOURCE';
 
+export const UPDATE_STORY_METADATA = 'UPDATE_STORY_METADATA';
+
 export const saveAllStories = (timeAfter) => ({
   type: SAVE_ALL_STORIES,
   promise: () => {
     return writeStories(timeAfter);
   }
-})
+});
 
 export default function stories(state = initialStoriesState, action) {
   const {payload} = action;
@@ -36,6 +38,15 @@ export default function stories(state = initialStoriesState, action) {
       const newState = {...state};
       delete newState[payload.id];
       return newState;
+    case UPDATE_STORY_METADATA:
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          metadata: payload.metadata,
+          lastUpdateAt: payload.lastUpdateAt,
+        }
+      };
     case CREATE_SECTION:
     case UPDATE_SECTION:
       return {
