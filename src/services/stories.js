@@ -13,14 +13,11 @@ const updateStoryList = (story) =>
     const storyListPath = dataPath + '/storyList.json';
     readJson(storyListPath)
     .then((stories) => {
-      if (stories[story.id]) reject(new Error('story is exist'));
-      else {
-        stories[story.id] = {
-          id: story.id,
-          metadata: story.metadata
-        };
-        return outputJson(storyListPath, stories);
-      }
+      stories[story.id] = {
+        id: story.id,
+        metadata: story.metadata
+      };
+      return outputJson(storyListPath, stories);
     })
     .then(() => resolve())
     .catch((err) => reject(err))
@@ -78,7 +75,8 @@ const writeStory = (story) =>
   new Promise ((resolve, reject) => {
     const {id} = story;
     const addr = storiesPath + '/' + id + '/' + id + '.json';
-    return outputJson(addr, story)
+    return updateStoryList(story)
+          .then(() => outputJson(addr, story)) 
           .then((res) => resolve({id, success: true}))
           .catch((err) => reject({id, success: false}))
   });
