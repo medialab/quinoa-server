@@ -25,17 +25,19 @@ export default (io, store) => {
     socket.emit('action', {type:'USER_CONNECTED', payload: store.getState().connections});
     socket.emit('action', {type:'SET_SOCKET_ID', payload: socket.id});
 
-    socket.on('action', (action) => {
+    socket.on('action', (action, callback) => {
       const {payload} = action;
       if (action.type === 'ENTER_BLOCK' || action.type === 'DELETE_SECTION' || action.type === 'DELETE_RESOURCE' ) {
         // check if story is activate
         if (!store.getState().stories[payload.storyId]) {
+          if (callback) callback({message: 'story is not exist'});
           return socket.emit('action', {type:`${action.type}_FAIL`, payload: action.payload});
         }
         const {locking} = store.getState().connections;
         const block = store.getState().stories[payload.storyId][payload.location];
         // check if block is exist
         if ((payload.location === 'resources' || payload.location === 'sections') && !block[payload.blockId]) {
+          if (callback) callback({message: 'block is not exist'});
           socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
         }
         else {
@@ -49,13 +51,16 @@ export default (io, store) => {
           // check if block is been taken
           if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
             store.dispatch(action);
+            if (callback) callback(null, {type: `${action.type}_SUCCESS`, payload});
             socket.emit('action', {type: `${action.type}_SUCCESS`, payload});
             socket.to(action.meta.room).emit('action', {type: `${action.type}_BROADCAST`, payload});
           }
-          else socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
+          else {
+            if (callback) callback({message: 'block is taken by other user'});
+            socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
+          }
         }
       }
-
       else {
         store.dispatch(action);
         if (action.meta.broadcast) {
