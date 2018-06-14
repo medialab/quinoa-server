@@ -4,7 +4,7 @@
   "description": "quinoa server with socket.io",
   "main": "index.js",
   "scripts": {
-    "test": "echo",
+    "test": "echo \"No.\"",
     "dev": "nodemon src/server.js --exec babel-node --config nodemon.json",
     "start": "NODE_ENV=production babel-node src/server.js",
     "compose": "docker-compose up"
