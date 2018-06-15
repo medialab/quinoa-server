@@ -52,7 +52,7 @@ function stories(state = initialStoriesState, action) {
         }
       };
     case UPDATE_SECTIONS_ORDER:
-      const oldSectionsOrder = [...state.sectionsOrder];
+      const oldSectionsOrder = [...state[payload.storyId].sectionsOrder];
       const newSectionsOrder = [...payload.sectionsOrder];
       let resolvedSectionsOrder = [...payload.sectionsOrder];
       // new order is bigger than older order
@@ -73,7 +73,10 @@ function stories(state = initialStoriesState, action) {
       }
       return {
           ...state,
-          sectionsOrder: [...resolvedSectionsOrder],
+          [payload.storyId]: {
+            ...state[payload.storyId],
+            sectionsOrder: [...resolvedSectionsOrder],
+          },
           lastUpdateAt: payload.lastUpdateAt,
       };
     case CREATE_SECTION:

@@ -13,9 +13,11 @@ const updateStoryList = (story) =>
     const storyListPath = dataPath + '/storyList.json';
     readJson(storyListPath)
     .then((stories) => {
+      console.log(story.lastUpdateAt);
       stories[story.id] = {
         id: story.id,
-        metadata: story.metadata
+        metadata: story.metadata,
+        lastUpdateAt: story.lastUpdateAt
       };
       return outputJson(storyListPath, stories);
     })
