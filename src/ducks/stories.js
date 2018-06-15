@@ -1,3 +1,6 @@
+import { combineReducers } from 'redux';
+import {createStructuredSelector} from 'reselect';
+
 import {writeStories} from '../services/stories';
 
 const initialStoriesState = {};
@@ -26,7 +29,7 @@ export const saveAllStories = (timeAfter) => ({
   }
 });
 
-export default function stories(state = initialStoriesState, action) {
+function stories(state = initialStoriesState, action) {
   const {payload} = action;
   switch (action.type) {
     case ACTIVATE_STORY:
@@ -64,7 +67,7 @@ export default function stories(state = initialStoriesState, action) {
       // --> we add created sections to the new sections
       } else if (newSectionsOrder.length < oldSectionsOrder.length) {
         resolvedSectionsOrder = [
-          ...newSectionsOrder, 
+          ...newSectionsOrder,
           ...oldSectionsOrder.slice(newSectionsOrder.length)
         ];
       }
@@ -109,7 +112,7 @@ export default function stories(state = initialStoriesState, action) {
           sections: newSections,
           sectionsOrder: state[payload.storyId].sectionsOrder
             .filter(
-              thatSectionId => 
+              thatSectionId =>
                 thatSectionId !== payload.sectionId
             ),
           lastUpdateAt: payload.lastUpdateAt,
@@ -143,3 +146,18 @@ export default function stories(state = initialStoriesState, action) {
       return state;
   }
 }
+
+export default combineReducers({
+  stories,
+});
+/**
+ * ===================================================
+ * SELECTORS
+ * ===================================================
+ */
+
+const storiesMap = state => state.stories;
+
+export const selector = createStructuredSelector({
+  storiesMap
+});

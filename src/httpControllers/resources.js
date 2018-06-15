@@ -2,7 +2,7 @@ import config from 'config';
 import {resolve} from 'path';
 
 import manager from '../services/resources';
-import store from '../store/configureStore';
+import selectors from '../ducks';
 import validateResource from '../validators/resourceValidator';
 
 const dataPath = config.get('dataFolder');
@@ -90,8 +90,8 @@ export const getResource = (req, res) => {
 export const deleteResource = (req, res) => {
   const {id, storyId} = req.params;
   const socket = req.io.sockets.sockets[req.query.userId];
-  const {locking} = store.getState().connections;
-  const locks = (locking[storyId] && locking[storyId].locks) || {};
+  const {lockingMap} = selectors();
+  const locks = (lockingMap[storyId] && lockingMap[storyId].locks) || {};
   const blockList = Object.keys(locks)
                     .map((id) => locks[id])
                     .filter((lock) => {

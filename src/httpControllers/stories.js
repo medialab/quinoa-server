@@ -1,6 +1,7 @@
 import manager from '../services/stories';
 import store from '../store/configureStore';
 import validateStory from '../validators/schemaValidator';
+import selectors from '../ducks';
 
 export const createStory = (req, res) => {
   const validation = validateStory(req.body.payload);
@@ -34,10 +35,9 @@ export const getStory = (req, res) => {
     let story = result;
     const socket = req.io.sockets.sockets[req.query.userId];
     if(req.query.edit === 'true' && socket) {
-      const {stories, connections} = store.getState();
-      const {locking} = connections;
-      if (stories[req.params.id]) {
-        story = stories[req.params.id]
+      const {storiesMap, lockingMap} = selectors();
+      if (storiesMap[req.params.id]) {
+        story = storiesMap[req.params.id]
       }
       else {
         store.dispatch({
@@ -56,7 +56,7 @@ export const getStory = (req, res) => {
         type: 'ENTER_STORY_INIT',
         payload: {
           storyId: story.id,
-          locks: (locking[story.id] && locking[story.id].locks) || {},
+          locks: (lockingMap[story.id] && lockingMap[story.id].locks) || {},
         }
       });
       socket.join(story.id);
@@ -92,8 +92,8 @@ export const updateStory = (req, res) => {
 
 export const deleteStory = (req, res) => {
   // TODO: prevent delete if room is not empty
-  const {locking} = store.getState().connections;
-  const users = locking[req.params.id] && Object.keys(locking[req.params.id].locks);
+  const {lockingMap} = selectors();
+  const users = lockingMap[req.params.id] && Object.keys(lockingMap[req.params.id].locks);
   if (users && users.length > 0) {
     return res.status(400).json({message: 'the story is being edited, not allowed to delete'});
   }

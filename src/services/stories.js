@@ -2,8 +2,8 @@ import {v4 as uuid} from 'uuid';
 import {outputFile, outputJson, readJson, remove, ensureFile} from 'fs-extra';
 import {resolve} from 'path';
 import authManager from './auth';
-import store from '../store/configureStore';
 import config from 'config';
+import selectors from '../ducks';
 
 const dataPath = config.get('dataFolder');
 const storiesPath = resolve(`${dataPath}/stories`);
@@ -76,14 +76,14 @@ const writeStory = (story) =>
     const {id} = story;
     const addr = storiesPath + '/' + id + '/' + id + '.json';
     return updateStoryList(story)
-          .then(() => outputJson(addr, story)) 
+          .then(() => outputJson(addr, story))
           .then((res) => resolve({id, success: true}))
           .catch((err) => reject({id, success: false}))
   });
 
 const writeStories = (timeAfter) =>
   new Promise((resolve, reject) => {
-    const {stories} = store.getState();
+    const stories = selectors().storiesMap;
     const storiesUpdated = Object.keys(stories)
                                  .map(id => stories[id])
                                  .filter(story => story.lastUpdateAt >= timeAfter);
@@ -93,6 +93,7 @@ const writeStories = (timeAfter) =>
     .catch((err) => reject(err));
     // if(storiesUpdated.length > 0) {
     //   let errors = [];
+
     //   storiesUpdated.reduce((curr, next) => {
     //     return curr.then(() =>
     //       writeStory(next)

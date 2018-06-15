@@ -1,5 +1,7 @@
 // import {saveAllStories} from './ducks/stories';
 import {writeStories} from './services/stories';
+import store from './store/configureStore';
+import selectors from './ducks';
 
 let autoSaveInterval;
 
@@ -27,21 +29,21 @@ export default (io, store) => {
 
     socket.on('action', (action, callback) => {
       const {payload} = action;
+      const {storiesMap, lockingMap} = selectors()
       if (action.type === 'ENTER_BLOCK' || action.type === 'DELETE_SECTION' || action.type === 'DELETE_RESOURCE' ) {
         // check if story is activate
-        if (!store.getState().stories[payload.storyId]) {
+        if (!storiesMap[payload.storyId]) {
           if (callback) callback({message: 'story is not exist'});
-          return socket.emit('action', {type:`${action.type}_FAIL`, payload: action.payload});
+          return socket.emit('action', {type:`${action.type}_FAIL`, payload: action.payload, message: 'story is not exist'});
         }
-        const {locking} = store.getState().connections;
-        const block = store.getState().stories[payload.storyId][payload.location];
+        const block = storiesMap[payload.storyId][payload.location];
         // check if block is exist
         if ((payload.location === 'resources' || payload.location === 'sections') && !block[payload.blockId]) {
           if (callback) callback({message: 'block is not exist'});
-          socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
+          socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload, message: 'block is not exist'});
         }
         else {
-          const locks = (locking[payload.storyId] && locking[payload.storyId].locks) || {};
+          const locks = (lockingMap[payload.storyId] && lockingMap[payload.storyId].locks) || {};
           const blockList = Object.keys(locks)
                             .map((id) => locks[id])
                             .filter((lock) => {
@@ -57,7 +59,7 @@ export default (io, store) => {
           }
           else {
             if (callback) callback({message: 'block is taken by other user'});
-            socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload});
+            socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload, message:'block is taken by other user'});
           }
         }
       }

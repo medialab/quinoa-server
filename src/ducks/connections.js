@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-
+import {createStructuredSelector} from 'reselect';
 
 import {CREATE_SECTION, DELETE_SECTION, INACTIVATE_STORY, DELETE_STORY} from './stories';
 
@@ -180,4 +180,16 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
 export default combineReducers({
   locking,
   users,
+});
+
+/**
+ * ===================================================
+ * SELECTORS
+ * ===================================================
+ */
+
+const lockingMap = state => state.locking;
+
+export const selector = createStructuredSelector({
+  lockingMap
 });
