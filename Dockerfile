@@ -11,4 +11,5 @@ WORKDIR /quinoa-server
 RUN npm install --quiet --production false
 RUN apk del .build-deps
 
-ENTRYPOINT ["npm", "run", "start"]
+ENTRYPOINT ["su-exec", "node:node"]
+CMD ["/usr/local/bin/npm", "start"]
