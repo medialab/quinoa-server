@@ -1,0 +1,11 @@
+{
+  "port": {
+    "__name": "PORT",
+    "__format": "json"
+  },
+  "auth": {
+    "secret": "SECRET",
+    "adminPassword": "ADMIN_PASSWORD"
+  },
+  "dataFolder": "DATA_FOLDER"
+}
