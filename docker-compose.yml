@@ -8,9 +8,5 @@ services:
   client:
     build: ../fonio/
     restart: unless-stopped
-    volumes_from:
-      - api
-    links:
-      - api
     ports:
       - "3000:3000"
