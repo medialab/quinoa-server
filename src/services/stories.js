@@ -3,6 +3,8 @@ import {outputFile, outputJson, readJson, remove, ensureFile} from 'fs-extra';
 import {resolve} from 'path';
 import authManager from './auth';
 import config from 'config';
+import store from '../store/configureStore';
+
 import selectors from '../ducks';
 
 const dataPath = config.get('dataFolder');
@@ -13,7 +15,6 @@ const updateStoryList = (story) =>
     const storyListPath = dataPath + '/storyList.json';
     readJson(storyListPath)
     .then((stories) => {
-      console.log(story.lastUpdateAt);
       stories[story.id] = {
         id: story.id,
         metadata: story.metadata,
@@ -85,7 +86,7 @@ const writeStory = (story) =>
 
 const writeStories = (timeAfter) =>
   new Promise((resolve, reject) => {
-    const stories = selectors().storiesMap;
+    const stories = selectors(store.getState()).storiesMap;
     const storiesUpdated = Object.keys(stories)
                                  .map(id => stories[id])
                                  .filter(story => story.lastUpdateAt >= timeAfter);

@@ -2,6 +2,8 @@ import config from 'config';
 import {resolve} from 'path';
 
 import manager from '../services/resources';
+import store from '../store/configureStore';
+
 import selectors from '../ducks';
 import validateResource from '../validators/resourceValidator';
 
@@ -90,12 +92,12 @@ export const getResource = (req, res) => {
 export const deleteResource = (req, res) => {
   const {id, storyId} = req.params;
   const socket = req.io.sockets.sockets[req.query.userId];
-  const {lockingMap} = selectors();
+  const {lockingMap} = selectors(store.getState());
   const locks = (lockingMap[storyId] && lockingMap[storyId].locks) || {};
   const blockList = Object.keys(locks)
                     .map((id) => locks[id])
                     .filter((lock) => {
-                      return lock.status === 'active' && lock.location === 'resource';
+                      return lock.status === 'active' && lock.blockType === 'resources';
                     })
                     .map((lock)=> lock.blockId);
   if (blockList.length === 0 || blockList.indexOf(id) === -1) {

@@ -1,6 +1,7 @@
 import manager from '../services/stories';
 import store from '../store/configureStore';
 import validateStory from '../validators/schemaValidator';
+
 import selectors from '../ducks';
 
 export const createStory = (req, res) => {
@@ -35,9 +36,9 @@ export const getStory = (req, res) => {
     let story = result;
     const socket = req.io.sockets.sockets[req.query.userId];
     if(req.query.edit === 'true' && socket) {
-      const {storiesMap, lockingMap} = selectors();
+      const {storiesMap, lockingMap} = selectors(store.getState());
       if (storiesMap[req.params.id]) {
-        story = storiesMap[req.params.id]
+        story = storiesMap[req.params.id];
       }
       else {
         store.dispatch({
@@ -92,7 +93,7 @@ export const updateStory = (req, res) => {
 
 export const deleteStory = (req, res) => {
   // TODO: prevent delete if room is not empty
-  const {lockingMap} = selectors();
+  const {lockingMap} = selectors(store.getState());
   const users = lockingMap[req.params.id] && Object.keys(lockingMap[req.params.id].locks);
   if (users && users.length > 0) {
     return res.status(400).json({message: 'the story is being edited, not allowed to delete'});

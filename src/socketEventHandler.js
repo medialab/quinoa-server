@@ -29,32 +29,40 @@ export default (io, store) => {
 
     socket.on('action', (action, callback) => {
       const {payload} = action;
-      const {storiesMap, lockingMap} = selectors()
-      if (action.type === 'ENTER_BLOCK' || action.type === 'DELETE_SECTION' || action.type === 'DELETE_RESOURCE' ) {
-        // check if story is activate
-        if (!storiesMap[payload.storyId]) {
-          if (callback) callback({message: 'story is not exist'});
-          return socket.emit('action', {type:`${action.type}_FAIL`, payload: action.payload, message: 'story is not exist'});
-        }
-        const block = storiesMap[payload.storyId][payload.location];
-        // check if block is exist
-        if ((payload.location === 'resources' || payload.location === 'sections') && !block[payload.blockId]) {
+      const state = store.getState();
+      const {storiesMap, lockingMap} = selectors(state);
+      // check is storyId exist (room)
+      if (action.meta.room && !storiesMap[action.meta.room]) {
+        return socket.emit('action', {type:`${action.type}_FAIL`, payload: action.payload, message: 'story is not exist'});
+      }
+      else if (action.meta.room && action.meta.blockId && action.meta.blockType) {
+        const block = storiesMap[action.meta.room][action.meta.blockType];
+        /**
+         * check if block is exist
+         * ENTER_SECTION, ENTER_RESOURCE, UPDATE_SECTION, UPDATE_RESOURCE, DELETE_SECTION, DELETE_RESOURCE
+         */
+        if ((action.meta.blockType === 'resources' || action.meta.blockType === 'sections') && !block[action.meta.blockId]) {
           if (callback) callback({message: 'block is not exist'});
           socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload, message: 'block is not exist'});
         }
+        /**
+         * check if block is taken
+         * ENTER_BLOCK, UPDATE_SECTION, UPDATE_RESOURCE, DELETE_SECTION, DELETE_RESOURCE
+         */
         else {
-          const locks = (lockingMap[payload.storyId] && lockingMap[payload.storyId].locks) || {};
+          const locks = (lockingMap[action.meta.room] && lockingMap[action.meta.room].locks) || {};
           const blockList = Object.keys(locks)
                             .map((id) => locks[id])
                             .filter((lock) => {
-                              return lock[payload.location] !== undefined && lock[payload.location].status === 'active';
+                              return lock[action.meta.blockType] !== undefined && lock[action.meta.blockType].status === 'active';
                             })
-                            .map((lock) => lock[payload.location].blockId);
-          // check if block is been taken
-          if (blockList.length === 0 || blockList.indexOf(payload.blockId) === -1) {
+                            .map((lock) => lock[action.meta.blockType].blockId);
+          // block is empty
+          if (blockList.length === 0 || blockList.indexOf(action.meta.blockId) === -1 || (locks[action.meta.userId] && locks[action.meta.userId][action.meta.blockType] && locks[action.meta.userId][action.meta.blockType].userId === action.meta.userId)) {
             store.dispatch(action);
             if (callback) callback(null, {type: `${action.type}_SUCCESS`, payload});
             socket.emit('action', {type: `${action.type}_SUCCESS`, payload});
+            // broadcast to room (storyId)
             socket.to(action.meta.room).emit('action', {type: `${action.type}_BROADCAST`, payload});
           }
           else {

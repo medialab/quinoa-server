@@ -103,7 +103,7 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
     //           sections: {
     //             blockId: payload.sectionId,
     //             status: 'active',
-    //             location: 'sections',
+    //             blockType: 'sections',
     //           },
     //         },
     //       },
@@ -119,7 +119,7 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
             ...locks,
             [payload.userId]: {
               ...locks[payload.userId],
-              [payload.location]: {
+              [payload.blockType]: {
                 ...payload,
                 status: 'active',
               },
@@ -137,7 +137,7 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
             ...locks,
             [payload.userId]: {
               ...locks[payload.userId],
-              [payload.location]: {
+              [payload.blockType]: {
                 ...payload,
                 status: 'idle',
               },
@@ -156,7 +156,7 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
             ...locks,
             [payload.userId]: {
               ...locks[payload.userId],
-              [payload.location]: undefined,
+              [payload.blockType]: undefined,
             },
           },
         },
