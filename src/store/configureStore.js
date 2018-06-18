@@ -5,15 +5,26 @@ import { composeWithDevTools } from 'remote-redux-devtools';
 
 import rootReducer from './rootReducer';
 
-const composeEnhancers = composeWithDevTools(
-  {realtime: true, suppressConnectErrors: false}
-);
+const PROD = process.env.NODE_ENV === 'production';
 
 function configureStore(initialState={}) {
-  const store = createStore(rootReducer, initialState, composeEnhancers(
-    // applyMiddleware()
-  ));
-  // const store = createStore(rootReducer, initialState, devToolsEnhancer({realtime: true}));
+  let store;
+
+  // In prod, we don't use the remote dev server
+  if (PROD) {
+    store = createStore(rootReducer, initialState);
+  }
+  else {
+    const composeEnhancers = composeWithDevTools(
+      {realtime: true, suppressConnectErrors: false}
+    );
+
+    store = createStore(rootReducer, initialState, composeEnhancers(
+      // applyMiddleware()
+    ));
+    // const store = createStore(rootReducer, initialState, devToolsEnhancer({realtime: true}));
+  }
+
   return store;
 }
 
