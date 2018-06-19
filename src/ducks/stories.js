@@ -22,6 +22,15 @@ export const DELETE_RESOURCE = 'DELETE_RESOURCE';
 export const UPDATE_STORY_METADATA = 'UPDATE_STORY_METADATA';
 export const UPDATE_SECTIONS_ORDER = 'UPDATE_SECTIONS_ORDER';
 
+export const CREATE_CONTEXTUALIZER = 'CREATE_CONTEXTUALIZER';
+export const UPDATE_CONTEXTUALIZER = 'UPDATE_CONTEXTUALIZER';
+export const DELETE_CONTEXTUALIZER = 'DELETE_CONTEXTUALIZER';
+
+export const CREATE_CONTEXTUALIZATION = 'CREATE_CONTEXTUALIZATION';
+export const UPDATE_CONTEXTUALIZATION = 'UPDATE_CONTEXTUALIZATION';
+export const DELETE_CONTEXTUALIZATION = 'DELETE_CONTEXTUALIZATION';
+
+
 export const saveAllStories = (timeAfter) => ({
   type: SAVE_ALL_STORIES,
   promise: () => {
@@ -144,6 +153,69 @@ function stories(state = initialStoriesState, action) {
           resources: newResources,
           lastUpdateAt: payload.lastUpdateAt,
         },
+      };
+
+    /**
+     * CONTEXTUALIZATION RELATED
+     */
+    // contextualizations CUD
+    case UPDATE_CONTEXTUALIZATION:
+    case CREATE_CONTEXTUALIZATION:
+      const {
+        contextualizationId,
+        contextualization
+      } = payload;
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          contextualizations: {
+            ...state[payload.storyId].contextualizations,
+            [contextualizationId]: contextualization
+          }
+        }
+      };
+    case DELETE_CONTEXTUALIZATION:
+      contextualizations = {...state[payload.storyId].contextualizations};
+      delete contextualizations[payload.contextualizationId];
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          contextualizations
+        }
+      };
+
+    /**
+     * CONTEXTUALIZER RELATED
+     */
+    // contextualizers CUD
+    case UPDATE_CONTEXTUALIZER:
+    case CREATE_CONTEXTUALIZER:
+      // storyId = action.storyId;
+      const {
+        contextualizerId,
+        contextualizer
+      } = payload;
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          contextualizers: {
+            ...state[payload.storyId].contextualizers,
+            [contextualizerId]: contextualizer
+          }
+        }
+      };
+    case DELETE_CONTEXTUALIZER:
+      contextualizers = {...state[payload.storyId].contextualizers};
+      delete contextualizers[payload.contextualizerId];
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          contextualizers
+        }
       };
     default:
       return state;
