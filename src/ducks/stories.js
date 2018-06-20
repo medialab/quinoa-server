@@ -138,7 +138,10 @@ function stories(state = initialStoriesState, action) {
           ...state[payload.storyId],
           resources: {
             ...state[payload.storyId].resources,
-            [payload.resourceId]: payload.resource,
+            [payload.resourceId]: {
+              ...payload.resource,
+              lastUpdateAt: payload.lastUpdateAt
+            },
           },
           lastUpdateAt: payload.lastUpdateAt,
         }
