@@ -176,7 +176,7 @@ function stories(state = initialStoriesState, action) {
         }
       };
     case DELETE_CONTEXTUALIZATION:
-      contextualizations = {...state[payload.storyId].contextualizations};
+      const contextualizations = {...state[payload.storyId].contextualizations};
       delete contextualizations[payload.contextualizationId];
       return {
         ...state,
