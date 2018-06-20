@@ -97,9 +97,10 @@ export const deleteResource = (req, res) => {
   const blockList = Object.keys(locks)
                     .map((id) => locks[id])
                     .filter((lock) => {
-                      return lock.status === 'active' && lock.blockType === 'resources';
+                      return lock.resources && lock.resources.status === 'active';
                     })
-                    .map((lock)=> lock.blockId);
+                    .map((lock)=> lock.resources.blockId);
+
   if (blockList.length === 0 || blockList.indexOf(id) === -1) {
     manager.deleteResource(storyId, id)
     .then((result) => {
