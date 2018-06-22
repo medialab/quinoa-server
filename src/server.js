@@ -3,7 +3,6 @@ import cors from 'cors';
 import {resolve} from 'path';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
-import path from 'path';
 import config from 'config';
 
 import socketIO from 'socket.io';
@@ -56,7 +55,3 @@ apiRoutes.use('/auth', auth);
 apiRoutes.use('/stories', stories);
 apiRoutes.use('/resources', resources);
 
-// for collab testing use
-// const INDEX = path.join(__dirname, '/quinoa-socket-client/index.html');
-// app.use(express.static(__dirname + '/quinoa-socket-client/'))
-// .use((req, res) => res.sendFile(INDEX))

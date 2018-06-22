@@ -1,4 +1,6 @@
 import manager from '../services/stories';
+import bundleStory from '../helpers/storyBundler';
+
 import store from '../store/configureStore';
 import validateStory from '../validators/schemaValidator';
 
@@ -69,6 +71,15 @@ export const getStory = (req, res) => {
           userId: req.query.userId
         }
       });
+    }
+    else {
+      if (req.query.format === 'json')
+        res.send(story)
+      if (req.query.format === 'html') {
+        const bundleHtml = bundleStory(story);
+        res.setHeader('Content-Type', 'text/html');
+        res.send(bundleHtml);
+      }
     }
     res.status(200).json(story);
   })

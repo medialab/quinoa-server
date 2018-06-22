@@ -7,5 +7,6 @@
     "secret": "SECRET",
     "adminPassword": "ADMIN_PASSWORD"
   },
-  "dataFolder": "DATA_FOLDER"
+  "dataFolder": "DATA_FOLDER",
+  "buildsFolder": "BUILDS_FOLDER"
 }
