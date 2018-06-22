@@ -21,6 +21,7 @@ export const DELETE_RESOURCE = 'DELETE_RESOURCE';
 
 export const UPDATE_STORY_METADATA = 'UPDATE_STORY_METADATA';
 export const UPDATE_SECTIONS_ORDER = 'UPDATE_SECTIONS_ORDER';
+export const UPDATE_STORY_SETTINGS = 'UPDATE_STORY_SETTINGS';
 
 export const CREATE_CONTEXTUALIZER = 'CREATE_CONTEXTUALIZER';
 export const UPDATE_CONTEXTUALIZER = 'UPDATE_CONTEXTUALIZER';
@@ -57,6 +58,15 @@ function stories(state = initialStoriesState, action) {
         [payload.storyId]: {
           ...state[payload.storyId],
           metadata: payload.metadata,
+          lastUpdateAt: payload.lastUpdateAt,
+        }
+      };
+    case UPDATE_STORY_SETTINGS:
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          settings: payload.settings,
           lastUpdateAt: payload.lastUpdateAt,
         }
       };
@@ -211,7 +221,7 @@ function stories(state = initialStoriesState, action) {
         }
       };
     case DELETE_CONTEXTUALIZER:
-      contextualizers = {...state[payload.storyId].contextualizers};
+      const contextualizers = {...state[payload.storyId].contextualizers};
       delete contextualizers[payload.contextualizerId];
       return {
         ...state,
