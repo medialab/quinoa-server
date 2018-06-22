@@ -2,6 +2,7 @@ import {v4 as uuid} from 'uuid';
 import {outputFile, outputJson, readJson, remove, ensureFile} from 'fs-extra';
 import {resolve} from 'path';
 import authManager from './auth';
+import resourceManager from './resources';
 import config from 'config';
 import store from '../store/configureStore';
 
@@ -74,6 +75,34 @@ const getStory = (id) =>
           .catch((err) => reject(err))
   });
 
+const getStoryBundle = (storyId) =>
+  new Promise ((resolve, reject) => {
+    getStory(storyId)
+    .then((story) => {
+      const resourcesUploaded = Object.keys(story.resources)
+                                .map(id => story.resources[id])
+                                .filter(resource => resource.metadata.type === 'image' || resource.metadata.type === 'table');
+      const resourcesPromise = resourcesUploaded
+                                .map(resource => resourceManager.getResource(storyId, resource));
+      return Promise.all(resourcesPromise)
+            .then((resources) => {
+              const resourcesMap =
+                resources.reduce((result, item) => (
+                  {...result,[item.id]: item}), {});
+              const newStory = {
+                ...story,
+                resources: {
+                  ...story.resources,
+                  ...resourcesMap
+                }
+              };
+              resolve(newStory);
+            })
+            .catch((err) => reject(err))
+    })
+    .catch((err) => reject(err))
+  });
+
 const writeStory = (story) =>
   new Promise ((resolve, reject) => {
     const {id} = story;
@@ -124,6 +153,7 @@ module.exports = {
   createStory,
   getStories,
   getStory,
+  getStoryBundle,
   writeStory,
   writeStories,
   deleteStory,

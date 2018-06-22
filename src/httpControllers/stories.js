@@ -33,59 +33,66 @@ export const getStories = (req, res) => {
 }
 
 export const getStory = (req, res) => {
-  manager.getStory(req.params.id)
-  .then((result) => {
-    let story = result;
-    const socket = req.io.sockets.sockets[req.query.userId];
-    if(req.query.edit === 'true' && socket) {
-      const {storiesMap, lockingMap} = selectors(store.getState());
-      if (storiesMap[req.params.id]) {
-        story = storiesMap[req.params.id];
+  if (req.query.format)  {
+    manager.getStoryBundle(req.params.id)
+    .then((storyBundle) => {
+      if (req.query.format === 'html') {
+        const bundleHtml = bundleStory(storyBundle);
+        res.setHeader('Content-Type', 'text/html');
+        res.status(200).send(bundleHtml);
       }
-      else {
+      else res.status(200).json(storyBundle);
+    })
+    .catch((err) => {
+      res.status(403).json({message: err.message})
+    });
+  }
+  else {
+    manager.getStory(req.params.id)
+    .then((result) => {
+      let story = result;
+      const socket = req.io.sockets.sockets[req.query.userId];
+      if(req.query.edit === 'true' && socket) {
+        const {storiesMap, lockingMap} = selectors(store.getState());
+        if (storiesMap[req.params.id]) {
+          story = storiesMap[req.params.id];
+        }
+        else {
+          store.dispatch({
+            type: 'ACTIVATE_STORY',
+            payload: story
+          });
+        }
         store.dispatch({
-          type: 'ACTIVATE_STORY',
-          payload: story
+          type: 'ENTER_STORY',
+          payload: {
+            storyId: story.id,
+            userId: req.query.userId
+          }
+        });
+        socket.emit('action', {
+          type: 'ENTER_STORY_INIT',
+          payload: {
+            storyId: story.id,
+            locks: (lockingMap[story.id] && lockingMap[story.id].locks) || {},
+          }
+        });
+        socket.join(story.id);
+        socket.broadcast.emit('action', {
+        // socket.to(story.id).emit('action', {
+          type: 'ENTER_STORY_BROADCAST',
+          payload: {
+            storyId: story.id,
+            userId: req.query.userId
+          }
         });
       }
-      store.dispatch({
-        type: 'ENTER_STORY',
-        payload: {
-          storyId: story.id,
-          userId: req.query.userId
-        }
-      });
-      socket.emit('action', {
-        type: 'ENTER_STORY_INIT',
-        payload: {
-          storyId: story.id,
-          locks: (lockingMap[story.id] && lockingMap[story.id].locks) || {},
-        }
-      });
-      socket.join(story.id);
-      socket.broadcast.emit('action', {
-      // socket.to(story.id).emit('action', {
-        type: 'ENTER_STORY_BROADCAST',
-        payload: {
-          storyId: story.id,
-          userId: req.query.userId
-        }
-      });
-    }
-    else {
-      if (req.query.format === 'json')
-        res.send(story)
-      if (req.query.format === 'html') {
-        const bundleHtml = bundleStory(story);
-        res.setHeader('Content-Type', 'text/html');
-        res.send(bundleHtml);
-      }
-    }
-    res.status(200).json(story);
-  })
-  .catch((err) => {
-    res.status(403).json({message: err.message})
-  });
+      res.status(200).json(story);
+    })
+    .catch((err) => {
+      res.status(403).json({message: err.message})
+    });
+  }
 }
 
 export const updateStory = (req, res) => {

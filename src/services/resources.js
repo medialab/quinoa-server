@@ -1,5 +1,5 @@
 import {v4 as uuid} from 'uuid';
-import {outputFile, outputJson, readJson, remove, ensureFile} from 'fs-extra';
+import {outputFile, outputJson, readJson, remove, ensureFile, readFile} from 'fs-extra';
 import {resolve} from 'path';
 import authManager from './auth';
 import store from '../store/configureStore';
@@ -43,6 +43,26 @@ const createResource = (storyId, id, resource) =>
     }
   });
 
+const getResource = (storyId, resource) =>
+  new Promise ((resolve, reject) => {
+    if (resource.metadata.type === 'image') {
+      const {ext} = resource.metadata;
+      const filePath = `${storiesPath}/${storyId}/resources/${resource.id}/${resource.id}.${ext}`;
+      return readFile(filePath)
+      .then(result => {
+        const encodeString = new Buffer(result, 'binary').toString('base64');
+        return resolve({...resource, data: {base64: "data:image/" + ext + ";base64," + encodeString}});
+      })
+      .catch((err) => reject(err));
+    }
+    else {
+      const filePath = `${storiesPath}/${storyId}/resources/${resource.id}/${resource.id}.json`;
+      return readJson(filePath)
+      .then(result => resolve({...resource, data: {json: result}}))
+      .catch((err) => reject(err));
+    }
+  });
+
 const deleteResource = (storyId, id) =>
   new Promise ((resolve, reject) => {
     const resourcePath = `${storiesPath}/${storyId}/resources/${id}`;
@@ -55,4 +75,5 @@ const deleteResource = (storyId, id) =>
 module.exports = {
   createResource,
   deleteResource,
+  getResource,
 }
