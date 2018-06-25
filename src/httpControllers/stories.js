@@ -100,7 +100,7 @@ export const updateStory = (req, res) => {
   if (validation.errors) {
     return res.status(400).json({message: validation.errors})
   }
-  manager.writeStory(req.body)
+  manager.updateStory(req.body)
   .then((result) => {
     res.status(200).json(result);
   })

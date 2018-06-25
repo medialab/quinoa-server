@@ -42,17 +42,58 @@ const deleteStoryList = (id) =>
     .catch((err) => reject(err))
   });
 
+const trimStory = (story) =>
+  new Promise ((resolve, reject) => {
+    const resourcesUploaded = Object.keys(story.resources)
+                              .map(id => story.resources[id])
+                              .filter(resource => resource.metadata.type === 'image' || resource.metadata.type === 'table');
+    const resourcesPromise = resourcesUploaded
+                              .map(resource => resourceManager.createResource(story.id, resource.id,resource));
+    return Promise.all(resourcesPromise)
+            .then((resources) => {
+              const resourcesMap =
+                resources.reduce((result, item) => (
+                  {...result,[item.id]: item}), {});
+              const newStory = {
+                ...story,
+                resources: {
+                  ...story.resources,
+                  ...resourcesMap
+                }
+              };
+              resolve(newStory);
+            })
+            .catch((err) => reject(err))
+
+  });
+
 const createStory = (story, password) =>
   new Promise ((resolve, reject) => {
     const id = uuid();
     const storyPath = storiesPath + '/' + id;
     const addr = storyPath + '/' + id + '.json';
     story = {...story, id};
-    return outputJson(addr, story)
-           .then(() => updateStoryList(story))
-           .then(() => authManager.register(id, password))
-           .then(token => resolve({story, token}))
-           .catch(err => reject(err))
+    trimStory(story)
+    .then((newStory) => {
+      outputJson(addr, newStory)
+      .then(() => updateStoryList(newStory))
+      .then(() => authManager.register(id, password))
+      .then(token => resolve({story: newStory, token}))
+      .catch(err => reject(err));
+    })
+  });
+
+const updateStory = (story) =>
+  new Promise ((resolve, reject) => {
+    const storyPath = storiesPath + '/' + story.id;
+    const addr = storyPath + '/' + id + '.json';
+    trimStory(story)
+    .then((newStory) => {
+      outputJson(addr, newStory)
+      .then(() => updateStoryList(newStory))
+      .then(() => resolve(newStory))
+      .catch(err => reject(err));
+    })
   });
 
 const getStories = () =>
@@ -151,6 +192,7 @@ const deleteStory = (id) =>
 
 module.exports = {
   createStory,
+  updateStory,
   getStories,
   getStory,
   getStoryBundle,
