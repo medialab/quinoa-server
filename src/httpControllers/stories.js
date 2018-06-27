@@ -9,7 +9,7 @@ import selectors from '../ducks';
 export const createStory = (req, res) => {
   const validation = validateStory(req.body.payload);
   if (validation.errors) {
-    return res.status(400).json({message: validation.errors})
+    return res.status(400).json({message: validation.errors});
   }
 
   manager.createStory(req.body.payload, req.body.password)
@@ -98,7 +98,7 @@ export const getStory = (req, res) => {
 export const updateStory = (req, res) => {
   const validation = validateStory(req.body);
   if (validation.errors) {
-    return res.status(400).json({message: validation.errors})
+    return res.status(400).json({message: validation.errors});
   }
   manager.updateStory(req.body)
   .then((result) => {
