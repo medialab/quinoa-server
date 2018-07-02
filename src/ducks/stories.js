@@ -185,7 +185,8 @@ function stories(state = initialStoriesState, action) {
           contextualizations: {
             ...state[payload.storyId].contextualizations,
             [contextualizationId]: contextualization
-          }
+          },
+          lastUpdateAt: payload.lastUpdateAt,
         }
       };
     case DELETE_CONTEXTUALIZATION:
@@ -195,7 +196,8 @@ function stories(state = initialStoriesState, action) {
         ...state,
         [payload.storyId]: {
           ...state[payload.storyId],
-          contextualizations
+          contextualizations,
+          lastUpdateAt: payload.lastUpdateAt,
         }
       };
 
@@ -217,7 +219,8 @@ function stories(state = initialStoriesState, action) {
           contextualizers: {
             ...state[payload.storyId].contextualizers,
             [contextualizerId]: contextualizer
-          }
+          },
+          lastUpdateAt: payload.lastUpdateAt,
         }
       };
     case DELETE_CONTEXTUALIZER:
@@ -227,7 +230,8 @@ function stories(state = initialStoriesState, action) {
         ...state,
         [payload.storyId]: {
           ...state[payload.storyId],
-          contextualizers
+          contextualizers,
+          lastUpdateAt: payload.lastUpdateAt,
         }
       };
     default:

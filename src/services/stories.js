@@ -5,7 +5,7 @@ import authManager from './auth';
 import resourceManager from './resources';
 import config from 'config';
 import store from '../store/configureStore';
-import validateStory from '../validators/schemaValidator';
+import {validateStory} from '../validators/schemaValidator';
 
 import selectors from '../ducks';
 
@@ -152,7 +152,7 @@ const writeStory = (story) =>
      * TODO: relations checking validator
      */
     const validation = validateStory(story);
-    if (validation.errors) {
+    if (!validation.valid) {
       return reject({id, success: false})
     }
     const addr = storiesPath + '/' + id + '/' + id + '.json';
