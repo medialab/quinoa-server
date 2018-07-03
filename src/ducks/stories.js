@@ -41,6 +41,8 @@ export const saveAllStories = (timeAfter) => ({
 
 function stories(state = initialStoriesState, action) {
   const {payload} = action;
+  let contextualizations;
+  let contextualizers;
   switch (action.type) {
     case ACTIVATE_STORY:
       return {
@@ -159,11 +161,41 @@ function stories(state = initialStoriesState, action) {
     case DELETE_RESOURCE:
       const newResources = { ...state[payload.storyId].resources };
       delete newResources[payload.resourceId];
+
+      contextualizations = {...state[payload.storyId].contextualizations};
+      contextualizers = {...state[payload.storyId].contextualizers};
+      // for now as the app does not allow to reuse the same contextualizer for several resources
+      // we will delete associated contextualizers as well as associated contextualizations
+      // (forseeing long edition sessions in which user create and delete a large number of contextualizations
+      // if not doing so we would end up with a bunch of unused contextualizers in documents' data after a while)
+
+      // we will store contextualizers id to delete here
+      const contextualizersToDeleteIds = [];
+
+      // we will store contextualizations id to delete here
+      const contextualizationsToDeleteIds = [];
+      // spot all objects to delete
+      Object.keys(contextualizations)
+        .forEach(contextualizationId => {
+          if (contextualizations[contextualizationId].resourceId === payload.resourceId) {
+            contextualizationsToDeleteIds.push(contextualizationId);
+            contextualizersToDeleteIds.push(contextualizations[contextualizationId].contextualizerId);
+          }
+        });
+      // proceed to deletions
+      contextualizersToDeleteIds.forEach(contextualizerId => {
+        delete contextualizers[contextualizerId];
+      });
+      contextualizationsToDeleteIds.forEach(contextualizationId => {
+        delete contextualizations[contextualizationId];
+      });
       return {
         ...state,
         [payload.storyId]: {
           ...state[payload.storyId],
           resources: newResources,
+          contextualizers,
+          contextualizations,
           lastUpdateAt: payload.lastUpdateAt,
         },
       };
@@ -190,7 +222,7 @@ function stories(state = initialStoriesState, action) {
         }
       };
     case DELETE_CONTEXTUALIZATION:
-      const contextualizations = {...state[payload.storyId].contextualizations};
+      contextualizations = {...state[payload.storyId].contextualizations};
       delete contextualizations[payload.contextualizationId];
       return {
         ...state,
@@ -224,7 +256,7 @@ function stories(state = initialStoriesState, action) {
         }
       };
     case DELETE_CONTEXTUALIZER:
-      const contextualizers = {...state[payload.storyId].contextualizers};
+      contextualizers = {...state[payload.storyId].contextualizers};
       delete contextualizers[payload.contextualizerId];
       return {
         ...state,
