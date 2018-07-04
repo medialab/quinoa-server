@@ -3,11 +3,17 @@ import bundleStory from '../helpers/storyBundler';
 
 import store from '../store/configureStore';
 import {validateStory} from '../validators/schemaValidator';
+import validateStoryEntity from '../validators/entityValidator';
+
 
 import selectors from '../ducks';
 
 export const createStory = (req, res) => {
-  const validation = validateStory(req.body.payload);
+  let validation = validateStory(req.body.payload);
+  if (!validation.valid) {
+    return res.status(400).json({errors: validation.errors});
+  }
+  validation = validateStoryEntity(req.body.payload);
   if (!validation.valid) {
     return res.status(400).json({errors: validation.errors});
   }
@@ -96,10 +102,15 @@ export const getStory = (req, res) => {
 }
 
 export const updateStory = (req, res) => {
-  const validation = validateStory(req.body);
+  let validation = validateStory(req.body.payload);
   if (!validation.valid) {
     return res.status(400).json({errors: validation.errors});
   }
+  validation = validateStoryEntity(req.body.payload);
+  if (!validation.valid) {
+    return res.status(400).json({errors: validation.errors});
+  }
+
   manager.updateStory(req.body)
   .then((result) => {
     res.status(200).json(result);

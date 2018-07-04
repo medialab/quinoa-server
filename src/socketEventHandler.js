@@ -15,8 +15,8 @@ export default (io, store) => {
           .then((res) => {
             // check if lastUpdateAt timestamp changed
             if(res.length > 0) {
-              res.forEach((id) => {
-                io.in(id).emit('action', {type: `SAVE_STORIES_FAIL`, payload: {id}})
+              res.forEach((item) => {
+                io.in(item.id).emit('action', {type: `SAVE_STORY_FAIL`, payload: {id: item.id, errors: item.errors}})
               });
             }
           })

@@ -6,6 +6,7 @@ import resourceManager from './resources';
 import config from 'config';
 import store from '../store/configureStore';
 import {validateStory} from '../validators/schemaValidator';
+import validateStoryEntity from '../validators/entityValidator';
 
 import selectors from '../ducks';
 
@@ -148,13 +149,18 @@ const getStoryBundle = (storyId) =>
 const writeStory = (story) =>
   new Promise ((resolve, reject) => {
     const {id} = story;
-    /**
-     * TODO: relations checking validator
-     */
-    const validation = validateStory(story);
+    let validation = validateStory(story);
     if (!validation.valid) {
-      return reject({id, success: false})
+      return reject({id, success: false, errors: validation.errors})
     }
+    validation = validateStoryEntity(story);
+    if (!validation.valid) {
+      return reject({id, success: false, errors: validation.errors})
+    }
+    // const validation = validateStory(story);
+    // if (!validation.valid) {
+    //   return reject({id, success: false})
+    // }
     const addr = storiesPath + '/' + id + '/' + id + '.json';
     return updateStoryList(story)
           .then(() => outputJson(addr, story))

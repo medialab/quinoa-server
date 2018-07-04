@@ -27,6 +27,7 @@
     "image-webpack-loader": "^4.3.1",
     "jsonwebtoken": "^8.3.0",
     "kotatsu": "^0.15.2",
+    "lodash": "^4.17.10",
     "lowdb": "^1.0.0",
     "morgan": "^1.9.0",
     "node-sass": "^4.9.0",
