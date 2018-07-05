@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({limit: '20mb', extended: true}));
 const server = require('http').createServer(app);
 server.listen(PORT, '0.0.0.0', () => console.log(`Listening on ${ PORT }`));
 
-const io = socketIO(server);
+const io = socketIO(server, {path: '/sockets'});
 
 app.use(function(req, res, next) {
   req.io = io;
