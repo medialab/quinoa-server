@@ -31,6 +31,7 @@ export const CREATE_CONTEXTUALIZATION = 'CREATE_CONTEXTUALIZATION';
 export const UPDATE_CONTEXTUALIZATION = 'UPDATE_CONTEXTUALIZATION';
 export const DELETE_CONTEXTUALIZATION = 'DELETE_CONTEXTUALIZATION';
 
+export const SET_COVER_IMAGE = 'SET_COVER_IMAGE';
 
 export const saveAllStories = (timeAfter) => ({
   type: SAVE_ALL_STORIES,
@@ -263,6 +264,20 @@ function stories(state = initialStoriesState, action) {
         [payload.storyId]: {
           ...state[payload.storyId],
           contextualizers,
+          lastUpdateAt: payload.lastUpdateAt,
+        }
+      };
+    case SET_COVER_IMAGE:
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          metadata: {
+            ...state[payload.storyId].metadata,
+            coverImage: {
+              resourceId: payload.resourceId
+            }
+          },
           lastUpdateAt: payload.lastUpdateAt,
         }
       };
