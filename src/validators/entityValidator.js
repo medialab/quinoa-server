@@ -53,7 +53,7 @@ export default (story) => {
     };
   }
   // check if contextualizations - contextualizers valid
-  if (contexualizationsContexualizerList.length !== Object.keys(story.contextualizers).length || difference(contexualizationsContexualizerList, Object.keys(story.contextualizers)).length !== 0) {
+  if (difference(contexualizationsContexualizerList, Object.keys(story.contextualizers)).length !== 0) {
     errors.push('invalid contextualizations resources');
     validation = {
       valid: false,

@@ -151,10 +151,6 @@ const writeStory = (story) =>
     const {id} = story;
     getStory(id)
     .then((validStory) => {
-      store.dispatch({
-        type: 'ACTIVATE_STORY',
-        payload: validStory
-      });
       let validation = validateStory(story);
       if (!validation.valid) {
         store.dispatch({
