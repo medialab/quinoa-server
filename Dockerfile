@@ -12,9 +12,12 @@ RUN apk add --no-cache --virtual .build-deps make gcc g++ libc-dev libpng-dev au
     &&  apk del .build-deps \
     &&  rm -fr /root/.npm /root/.node-gyp
 
-RUN mkdir /quinoa-server/data && chown -R node:node /quinoa-server/data
+RUN mkdir /quinoa-server/data 
 
 VOLUME /quinoa-server/data
 
-ENTRYPOINT ["su-exec", "node:node"]
-CMD ["/usr/local/bin/npm", "start"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+
