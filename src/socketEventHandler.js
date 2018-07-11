@@ -1,7 +1,8 @@
 // import {saveAllStories} from './ducks/stories';
-import {writeStories} from './services/stories';
+import {writeStories, writeStory} from './services/stories';
 import store from './store/configureStore';
 import selectors from './ducks';
+import cleanStory from './validators/storyUtils';
 
 let autoSaveInterval;
 
@@ -85,7 +86,10 @@ export default (io, store) => {
           const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
           rooms.forEach((id) => {
             if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id]) {
-              store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
+              // INACTIVATE_STORY and clean story and write to disk;
+              const cleanedStory = cleanStory(storiesMap[id]);
+              writeStory(cleanedStory)
+              .then(() => store.dispatch({type: 'INACTIVATE_STORY', payload: {id}}));
             }
           });
         }
@@ -97,11 +101,18 @@ export default (io, store) => {
      * so udpate locking system for each room here
      */
     socket.on('disconnecting', () => {
+      const state = store.getState();
+      const {storiesMap, lockingMap} = selectors(state);
+
       const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
       store.dispatch({type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});
       rooms.forEach((id) => {
         if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id]) {
-          store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
+          // store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
+          const {storiesMap} = selectors(state);
+          const cleanedStory = cleanStory(storiesMap[id]);
+          writeStory(cleanedStory)
+          .then(() => store.dispatch({type: 'INACTIVATE_STORY', payload: {id}}));
         }
       });
       io.emit('action', {type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});

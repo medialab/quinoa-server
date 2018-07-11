@@ -5,6 +5,7 @@ import authManager from './auth';
 import store from '../store/configureStore';
 import config from 'config';
 
+// TODO: check if possible to remove serverUrl prefix and server it on client side
 const serverUrl = config.get('serverUri');
 const dataPath = config.get('dataFolder');
 const storiesPath = resolve(`${dataPath}/stories`);
