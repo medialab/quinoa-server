@@ -85,9 +85,10 @@ export default (io, store) => {
         if (action.type === 'LEAVE_STORY') {
           const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
           rooms.forEach((id) => {
-            if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id]) {
+            if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id] && storiesMap[id] !== undefined) {
+              const story = Object.assign({}, storiesMap[id]);
               // INACTIVATE_STORY and clean story and write to disk;
-              const cleanedStory = cleanStory(storiesMap[id]);
+              const cleanedStory = cleanStory(story);
               writeStory(cleanedStory)
               .then(() => store.dispatch({type: 'INACTIVATE_STORY', payload: {id}}));
             }
@@ -110,9 +111,11 @@ export default (io, store) => {
         if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id]) {
           // store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
           const {storiesMap} = selectors(state);
-          const cleanedStory = cleanStory(storiesMap[id]);
-          writeStory(cleanedStory)
-          .then(() => store.dispatch({type: 'INACTIVATE_STORY', payload: {id}}));
+          if (storiesMap[id]) {
+            const cleanedStory = cleanStory(storiesMap[id]);
+            writeStory(cleanedStory)
+            .then(() => store.dispatch({type: 'INACTIVATE_STORY', payload: {id}}));
+          }
         }
       });
       io.emit('action', {type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});
