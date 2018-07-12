@@ -47,7 +47,7 @@ socketEventHandler(io, store);
 
 // routers
 const storiesFolder = resolve(`${dataFolder}/stories`);
-app.use('/api/static', express.static(storiesFolder));
+app.use('/static', express.static(storiesFolder));
 const apiRoutes = express.Router();
 app.use('/api', apiRoutes);
 

@@ -5,7 +5,6 @@ import authManager from './auth';
 import store from '../store/configureStore';
 import config from 'config';
 
-const serverUrl = config.get('serverUri');
 const dataPath = config.get('dataFolder');
 const storiesPath = resolve(`${dataPath}/stories`);
 
@@ -23,7 +22,7 @@ const createResource = (storyId, id, resource) =>
       newResource = {
         ...resource,
         data: {
-          url: `${serverUrl}/static/${storyId}/resources/${id}/${id}.${ext}`
+          url: `/${storyId}/resources/${id}/${id}.${ext}`
         }
       }
       return outputFile(addr, buff)
@@ -34,7 +33,7 @@ const createResource = (storyId, id, resource) =>
       newResource = {
         ...resource,
         data: {
-          url: `${serverUrl}/static/${storyId}/resources/${id}/${id}.json`
+          url: `/${storyId}/resources/${id}/${id}.json`
         }
       }
       return outputJson(addr, resource.data.json)
