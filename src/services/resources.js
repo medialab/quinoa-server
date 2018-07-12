@@ -22,7 +22,7 @@ const createResource = (storyId, id, resource) =>
       newResource = {
         ...resource,
         data: {
-          url: `/${storyId}/resources/${id}/${id}.${ext}`
+          filePath: `/${storyId}/resources/${id}/${id}.${ext}`
         }
       }
       return outputFile(addr, buff)
@@ -33,7 +33,7 @@ const createResource = (storyId, id, resource) =>
       newResource = {
         ...resource,
         data: {
-          url: `/${storyId}/resources/${id}/${id}.json`
+          filePath: `/${storyId}/resources/${id}/${id}.json`
         }
       }
       return outputJson(addr, resource.data.json)
