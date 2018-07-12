@@ -1,4 +1,4 @@
-import {difference} from 'lodash';
+import {difference, uniq} from 'lodash';
 
 export default (story) => {
   const notesList = Object.keys(story.sections)
@@ -25,7 +25,7 @@ export default (story) => {
   const contextualizationsEntityList = entityList.filter((entity) => entity.type === 'INLINE_ASSET' || entity.type === 'BLOCK_ASSET').map(entity => entity.data.asset.id);
 
   const contextualizationsResourceList = Object.keys(story.contextualizations).map(id => story.contextualizations[id].resourceId);
-  const contexualizationsContexualizerList = Object.keys(story.contextualizations).map(id => story.contextualizations[id].contextualizerId);
+  const contexualizationsContexualizerList = uniq(Object.keys(story.contextualizations).map(id => story.contextualizations[id].contextualizerId));
   const errors = [];
   let validation = {valid: true};
   //check if notesEntity valid
@@ -53,13 +53,13 @@ export default (story) => {
     };
   }
   // check if contextualizations - contextualizers valid
-  if (difference(contexualizationsContexualizerList, Object.keys(story.contextualizers)).length !== 0) {
-    errors.push('invalid contextualizations resources');
+  if (contexualizationsContexualizerList.find(contextualizerId => story.contextualizers[contextualizerId] === undefined) !== undefined) {
+    errors.push('invalid contextualizations contextualizers');
     validation = {
       valid: false,
       errors
     };
   }
-
+  
   return validation;
 };
