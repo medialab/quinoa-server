@@ -96,6 +96,9 @@ export const getStory = (req, res) => {
       res.status(200).json(story);
     })
     .catch((err) => {
+      if (err.constructor === SyntaxError) {
+        return res.status(422).json({message: err});
+      }
       res.status(403).json({message: err.message})
     });
   }
