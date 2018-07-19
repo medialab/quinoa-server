@@ -4,6 +4,8 @@
     "secret": "supersecret",
     "adminPassword": "admin"
   },
+  "maxResourceSize": 4000000,
+  "maxStorySize": 50000000,
   "dataFolder": "./data",
   "buildsFolder": "./builds"
 }

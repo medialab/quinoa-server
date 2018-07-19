@@ -7,6 +7,8 @@
     "secret": "SECRET",
     "adminPassword": "ADMIN_PASSWORD"
   },
+  "maxResourceSize": "MAX_RESOURCE_SIZE",
+  "maxStorySize": "MAX_STORY_SIZE",
   "dataFolder": "DATA_FOLDER",
   "buildsFolder": "BUILDS_FOLDER"
 }

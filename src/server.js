@@ -17,6 +17,8 @@ import resources from './routes/resources';
 
 const PORT = config.get("port");
 const dataFolder = config.get('dataFolder');
+const maxStorySize = config.get('maxStorySize');
+const maxResourceSize = config.get('maxResourceSize');
 
 const app = express();
 app.use(cors());
@@ -29,9 +31,8 @@ app.use(function(req, res, next) {
 });
 
 app.use(morgan('dev'));
-// parse application/json
-app.use(bodyParser.json({limit: '20mb'}));
-app.use(bodyParser.urlencoded({limit: '20mb', extended: true}));
+
+app.use(bodyParser.urlencoded({limit: maxStorySize, extended: true}));
 
 const server = require('http').createServer(app);
 server.listen(PORT, '0.0.0.0', () => console.log(`Listening on ${ PORT }`));
@@ -52,6 +53,5 @@ const apiRoutes = express.Router();
 app.use('/api', apiRoutes);
 
 apiRoutes.use('/auth', auth);
-apiRoutes.use('/stories', stories);
-apiRoutes.use('/resources', resources);
-
+apiRoutes.use('/stories', bodyParser.json({limit: maxStorySize}), stories);
+apiRoutes.use('/resources', bodyParser.json({limit: maxResourceSize}), resources);
