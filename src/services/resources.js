@@ -34,7 +34,9 @@ const createResource = (storyId, id, resource) =>
         ...resource,
         data: {
           filePath: `/${storyId}/resources/${id}/${id}.json`
-        }
+        },
+        createdAt: new Date().getTime(),
+        lastUpdateAt: new Date().getTime()
       }
       return outputJson(addr, resource.data.json)
              .then(() => resolve(newResource))
