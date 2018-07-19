@@ -32,6 +32,7 @@ app.use(function(req, res, next) {
 
 app.use(morgan('dev'));
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({limit: maxStorySize, extended: true}));
 
 const server = require('http').createServer(app);
