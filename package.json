@@ -1,7 +1,7 @@
 {
-  "name": "quinoa-socket-server",
-  "version": "1.0.0",
-  "description": "quinoa server with socket.io",
+  "name": "quinoa-server",
+  "version": "0.3.0",
+  "description": "quinoa server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"No.\"",
@@ -10,7 +10,13 @@
     "build-apps": "rm -rf builds; mkdir builds; node src/helpers/storyAppBuilder/",
     "compose": "docker-compose up"
   },
-  "author": "Mengying Du",
+  "author": "médialab sciences po",
+  "contributors": [
+    "Mengying Du",
+    "Robin de Mourat",
+    "Guillaume Plique",
+    "Jérémy Richard"
+  ],
   "license": "MIT",
   "dependencies": {
     "ajv": "^6.5.1",
@@ -31,7 +37,7 @@
     "lowdb": "^1.0.0",
     "morgan": "^1.9.0",
     "node-sass": "^4.9.0",
-    "quinoa-schemas": "0.0.11",
+    "quinoa-schemas": "0.0.12",
     "quinoa-story-player": "^0.2.18",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

@@ -74,7 +74,7 @@ const createStory = (story, password) =>
     const id = uuid();
     const storyPath = storiesPath + '/' + id;
     const addr = storyPath + '/' + id + '.json';
-    story = {...story, id};
+    story = {...story, id, createdAt: new Date().getTime()};
     trimStory(story)
     .then((newStory) => {
       outputJson(addr, newStory)
