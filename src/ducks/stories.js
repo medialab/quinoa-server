@@ -22,6 +22,7 @@ export const DELETE_RESOURCE = 'DELETE_RESOURCE';
 export const UPDATE_STORY_METADATA = 'UPDATE_STORY_METADATA';
 export const UPDATE_SECTIONS_ORDER = 'UPDATE_SECTIONS_ORDER';
 export const UPDATE_STORY_SETTINGS = 'UPDATE_STORY_SETTINGS';
+export const SET_SECTION_LEVEL = 'SET_SECTION_LEVEL';
 
 export const CREATE_CONTEXTUALIZER = 'CREATE_CONTEXTUALIZER';
 export const UPDATE_CONTEXTUALIZER = 'UPDATE_CONTEXTUALIZER';
@@ -122,6 +123,24 @@ function stories(state = initialStoriesState, action) {
           sections: {
             ...state[payload.storyId].sections,
             [payload.sectionId]: payload.section,
+          },
+          lastUpdateAt: payload.lastUpdateAt,
+        }
+      };
+    case SET_SECTION_LEVEL:
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          sections: {
+            ...state[payload.storyId].sections,
+            [payload.sectionId]: {
+              ...state[payload.storyId].sections[payload.sectionId],
+              metadata: {
+                ...state[payload.storyId].sections[payload.sectionId].metadata,
+                level: payload.level
+              }
+            }
           },
           lastUpdateAt: payload.lastUpdateAt,
         }
