@@ -63,3 +63,5 @@ config.json
 # data folder
 data/
 
+#.DS_Store
+.DS_Store
