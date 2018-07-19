@@ -175,13 +175,9 @@ const writeStory = (story) =>
     })
   });
 
-const writeStories = (timeAfter) =>
+const writeStories = (stories) =>
   new Promise((resolve, reject) => {
-    const stories = selectors(store.getState()).storiesMap;
-    const storiesUpdated = Object.keys(stories)
-                                 .map(id => stories[id])
-                                 .filter(story => story.lastUpdateAt >= timeAfter);
-    const storiesPromise = storiesUpdated.map(story => writeStory(story));
+    const storiesPromise = stories.map(story => writeStory(story));
     Promise.all(storiesPromise.map(p => p.catch(e => e)))
     .then((res) => resolve(res.filter(result => !result.success)))
     .catch((err) => reject(err));

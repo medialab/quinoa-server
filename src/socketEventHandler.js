@@ -11,17 +11,27 @@ export default (io, store) => {
     const {count} = store.getState().connections.users;
     if(count === 0) {
         autoSaveInterval = setInterval(() => {
+          // check if lastUpdatedAt timeStamp changed
           const timeAfter = new Date().getTime() - 2000;
-          writeStories(timeAfter)
+          const {storiesMap} = selectors(store.getState());
+          const storiesUpdated = Object.keys(storiesMap)
+                                 .map(id => storiesMap[id])
+                                 .filter(story => story.lastUpdateAt >= timeAfter);
+          writeStories(storiesUpdated)
           .then((res) => {
-            // check if lastUpdateAt timestamp changed
-            if(res.length > 0) {
-              res.forEach((item) => {
-                io.in(item.id).emit('action', {type: `SAVE_STORY_FAIL`, payload: {id: item.id, errors: item.errors}})
-              });
-            }
+            const storiesFailed = res.reduce((result, item) => ({
+              ...result,
+              [item.id]: item
+            }), {});
+            storiesUpdated.forEach((story) => {
+              if (Object.keys(storiesFailed).indexOf(story.id) !== -1) {
+                io.in(story.id).emit('action', {type: `SAVE_STORY_FAIL`, payload: {id: story.id, errors: storiesFailed[story.id]}});
+              }
+              else {
+                io.in(story.id).emit('action', {type: `SAVE_STORY_SUCCESS`});
+              }
+            })
           })
-          // store.dispatch(saveAllStories(timeAfter))
         }, 2000);
     }
     store.dispatch({type:'USER_CONNECTED'});
