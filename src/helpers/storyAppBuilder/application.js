@@ -17,11 +17,12 @@ const mountNode = document.getElementById('mount');
  * Handles the rendering of a quinoa-story-player-powered story
  * @param {object} story - the story to render
  */
-function renderStory (story) {
-  render(React.createElement(Story, {story: story}, null), mountNode);
+function renderStory (story, locale) {
+  console.log('render with locale', locale);
+  render(React.createElement(Story, {story: story, locale: locale}, null), mountNode);
 }
 // this is used in all-in-one html representations
 // in which story's data is stored as a js object
-renderStory(window.__story);
+renderStory(window.__story, window.__locale);
 
 module.exports = renderStory;

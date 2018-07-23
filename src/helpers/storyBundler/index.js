@@ -95,6 +95,7 @@ const buildMeta = (story = {metadata: {}}) => {
  */
 module.exports = function bundleStory (story = {}, options = {}) {
   const presJSON = JSON.stringify(story);
+  const locale = options.locale || 'en';
   // build html for indexing purpose
   // const seoHTML = buildSEOHTML(story);
   // build metadata html for the head
@@ -153,9 +154,6 @@ module.exports = function bundleStory (story = {}, options = {}) {
     {
       font-size: 6rem;
     }
-    .quinoa-story-player{
-      background: #f4f4f4;
-    }
   </style>
 </head>
 <body>
@@ -169,6 +167,7 @@ module.exports = function bundleStory (story = {}, options = {}) {
   <div id="mount"></div>
   <script>
     window.__story = ${presJSON}
+    window.__locale = "${locale}";
   </script>
   <script>
     ${jsBuild}

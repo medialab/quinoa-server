@@ -160,6 +160,7 @@ const writeStory = (story) =>
         return reject({id, success: false, errors: validation.errors})
       }
       validation = validateStoryEntity(story);
+      // console.log(validation);
       if (!validation.valid) {
         store.dispatch({
           type: 'ACTIVATE_STORY',
