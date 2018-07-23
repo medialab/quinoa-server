@@ -105,11 +105,11 @@ export const getStory = (req, res) => {
 }
 
 export const updateStory = (req, res) => {
-  let validation = validateStory(req.body.payload);
+  let validation = validateStory(req.body);
   if (!validation.valid) {
     return res.status(400).json({errors: validation.errors});
   }
-  validation = validateStoryEntity(req.body.payload);
+  validation = validateStoryEntity(req.body);
   if (!validation.valid) {
     return res.status(400).json({errors: validation.errors});
   }

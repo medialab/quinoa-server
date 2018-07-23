@@ -88,7 +88,7 @@ const createStory = (story, password) =>
 const updateStory = (story) =>
   new Promise ((resolve, reject) => {
     const storyPath = storiesPath + '/' + story.id;
-    const addr = storyPath + '/' + id + '.json';
+    const addr = storyPath + '/' + story.id + '.json';
     trimStory(story)
     .then((newStory) => {
       outputJson(addr, newStory)
