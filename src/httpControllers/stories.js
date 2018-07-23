@@ -105,6 +105,12 @@ export const getStory = (req, res) => {
 }
 
 export const updateStory = (req, res) => {
+  const {lockingMap} = selectors(store.getState());
+  const users = lockingMap[req.params.id] && Object.keys(lockingMap[req.params.id].locks);
+  if (users && users.length > 0) {
+    return res.status(400).json({message: 'the story is being edited, not allowed to override'});
+  }
+
   let validation = validateStory(req.body);
   if (!validation.valid) {
     return res.status(400).json({errors: validation.errors});
