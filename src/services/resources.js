@@ -1,5 +1,5 @@
 import {v4 as uuid} from 'uuid';
-import {outputFile, outputJson, readJson, remove, ensureFile, readFile, statSync} from 'fs-extra';
+import {outputFile, outputJson, readJson, remove, ensureFile, readFile, ensureDir} from 'fs-extra';
 import getSize from 'get-folder-size';
 import {resolve} from 'path';
 
@@ -18,47 +18,51 @@ const createResource = (storyId, id, resource) =>
     let newResource;
     const resourceFolderPath = `${storiesPath}/${storyId}/resources/`;
     let addr = `${storiesPath}/${storyId}/resources/${id}/${id}.json`;
-    if (type === 'image') {
-      const data = JSON.stringify(resource.data.base64).replace(/['"]+/g, '');
-      // const ext = data.substring("data:image/".length, data.indexOf(";base64"));
-      const dataString = data.replace(/^data:image\/\w+;base64,/, "");
-      const buff = new Buffer(dataString, 'base64');
-      addr = `${storiesPath}/${storyId}/resources/${id}/${id}.${ext}`;
-      newResource = {
-        ...resource,
-        data: {
-          filePath: `/${storyId}/resources/${id}/${id}.${ext}`
+    ensureDir(resourceFolderPath)
+    .then(() => {
+      if (type === 'image') {
+        const data = JSON.stringify(resource.data.base64).replace(/['"]+/g, '');
+        // const ext = data.substring("data:image/".length, data.indexOf(";base64"));
+        const dataString = data.replace(/^data:image\/\w+;base64,/, "");
+        const buff = new Buffer(dataString, 'base64');
+        addr = `${storiesPath}/${storyId}/resources/${id}/${id}.${ext}`;
+        newResource = {
+          ...resource,
+          data: {
+            filePath: `/${storyId}/resources/${id}/${id}.${ext}`
+          }
         }
+        getSize(resourceFolderPath, (err, folderSize) => {
+          if (err) return reject(err);
+          if ((folderSize + buff.byteLength) > maxFolderSize) {
+            return reject(new Error('extend maximum resources size'));
+          }
+          return outputFile(addr, buff)
+                  .then(() => resolve(newResource))
+                  .catch((err) => reject(err))
+        });
       }
-      getSize(resourceFolderPath, (err, folderSize) => {
-        if (err) return reject(err);
-        if ((folderSize + buff.byteLength) > maxFolderSize) {
-          return reject(new Error('extend maximum resources size'));
+      else {
+        newResource = {
+          ...resource,
+          data: {
+            filePath: `/${storyId}/resources/${id}/${id}.json`
+          },
+          createdAt: new Date().getTime(),
+          lastUpdateAt: new Date().getTime()
         }
-        return outputFile(addr, buff)
-                .then(() => resolve(newResource))
-                .catch((err) => reject(err))
-      });
-    }
-    else {
-      newResource = {
-        ...resource,
-        data: {
-          filePath: `/${storyId}/resources/${id}/${id}.json`
-        },
-        createdAt: new Date().getTime(),
-        lastUpdateAt: new Date().getTime()
+        getSize(resourceFolderPath, (err, folderSize) => {
+          if (err) return reject(err);
+          if ((folderSize + JSON.stringify(resource.data.json).length) > maxFolderSize) {
+            return reject(new Error('extend maximum resources size'));
+          }
+          return outputJson(addr, resource.data.json)
+               .then(() => resolve(newResource))
+               .catch(err => reject(err))
+        })
       }
-      getSize(resourceFolderPath, (err, folderSize) => {
-        if (err) return reject(err);
-        if ((folderSize + JSON.stringify(resource.data.json).length) > maxFolderSize) {
-          return reject(new Error('extend maximum resources size'));
-        }
-        return outputJson(addr, resource.data.json)
-             .then(() => resolve(newResource))
-             .catch(err => reject(err))
-      })
-    }
+    })
+    .catch(err => reject(err))
   });
 
 const getResource = (storyId, resource) =>
