@@ -1,6 +1,8 @@
 import {v4 as uuid} from 'uuid';
-import {outputFile, outputJson, readJson, remove, ensureFile, readFile} from 'fs-extra';
+import {outputFile, outputJson, readJson, remove, ensureFile, readFile, statSync} from 'fs-extra';
+import getSize from 'get-folder-size';
 import {resolve} from 'path';
+
 import authManager from './auth';
 import store from '../store/configureStore';
 import config from 'config';
@@ -8,10 +10,13 @@ import config from 'config';
 const dataPath = config.get('dataFolder');
 const storiesPath = resolve(`${dataPath}/stories`);
 
+const maxFolderSize = config.get('maxFolderSize');
+
 const createResource = (storyId, id, resource) =>
   new Promise ((resolve, reject) => {
     const {type, ext} = resource.metadata;
     let newResource;
+    const resourceFolderPath = `${storiesPath}/${storyId}/resources/`;
     let addr = `${storiesPath}/${storyId}/resources/${id}/${id}.json`;
     if (type === 'image') {
       const data = JSON.stringify(resource.data.base64).replace(/['"]+/g, '');
@@ -25,9 +30,15 @@ const createResource = (storyId, id, resource) =>
           filePath: `/${storyId}/resources/${id}/${id}.${ext}`
         }
       }
-      return outputFile(addr, buff)
-              .then(() => resolve(newResource))
-              .catch((err) => reject(err))
+      getSize(resourceFolderPath, (err, folderSize) => {
+        if (err) return reject(err);
+        if ((folderSize + buff.byteLength) > maxFolderSize) {
+          return reject(new Error('extend maximum resources size'));
+        }
+        return outputFile(addr, buff)
+                .then(() => resolve(newResource))
+                .catch((err) => reject(err))
+      });
     }
     else {
       newResource = {
@@ -38,9 +49,15 @@ const createResource = (storyId, id, resource) =>
         createdAt: new Date().getTime(),
         lastUpdateAt: new Date().getTime()
       }
-      return outputJson(addr, resource.data.json)
+      getSize(resourceFolderPath, (err, folderSize) => {
+        if (err) return reject(err);
+        if ((folderSize + JSON.stringify(resource.data.json).length) > maxFolderSize) {
+          return reject(new Error('extend maximum resources size'));
+        }
+        return outputJson(addr, resource.data.json)
              .then(() => resolve(newResource))
              .catch(err => reject(err))
+      })
     }
   });
 

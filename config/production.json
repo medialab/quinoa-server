@@ -5,7 +5,8 @@
     "adminPassword": "admin"
   },
   "maxResourceSize": 4000000,
-  "maxStorySize": 50000000,
+  "maxFolderSize": 50000000,
+  "maxStorySize": 60000000,
   "dataFolder": "./data",
   "buildsFolder": "./builds"
 }
