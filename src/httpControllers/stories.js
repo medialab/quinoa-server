@@ -122,6 +122,7 @@ export const updateStory = (req, res) => {
 
   manager.updateStory(req.body)
   .then((result) => {
+    req.io.emit('action', {type: 'OVERRIDE_STORY_BROADCAST', payload: result});
     res.status(200).json(result);
   })
   .catch((err) => {
