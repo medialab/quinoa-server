@@ -7,9 +7,18 @@
     "secret": "SECRET",
     "adminPassword": "ADMIN_PASSWORD"
   },
-  "maxResourceSize": "MAX_RESOURCE_SIZE",
-  "maxFolderSize": "MAX_FOLDER_SIZE",
-  "maxStorySize": "MAX_STORY_SIZE",
+  "maxResourceSize": {
+    "__name": "MAX_RESOURCE_SIZE",
+    "__format": "json"
+  },
+  "maxFolderSize": {
+    "__name": "MAX_FOLDER_SIZE",
+    "__format": "json"
+  },
+  "maxStorySize": {
+    "__name": "MAX_STORY_SIZE",
+    "__format": "json"
+  },
   "dataFolder": "DATA_FOLDER",
   "buildsFolder": "BUILDS_FOLDER"
 }
