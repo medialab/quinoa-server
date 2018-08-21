@@ -15,7 +15,7 @@ import stories from './routes/stories';
 import resources from './routes/resources';
 
 
-const PORT = config.get("port");
+const PORT = config.get('port');
 const dataFolder = config.get('dataFolder');
 const maxStorySize = config.get('maxStorySize');
 const maxResourceSize = config.get('maxResourceSize');
