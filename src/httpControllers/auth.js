@@ -3,7 +3,7 @@ import config from 'config';
 
 import manager from '../services/auth';
 
-const authConfig = config.get("auth");
+const authConfig = config.get('auth');
 
 export const register = (req, res) => {
   manger.register(req.body.id, req.body.password)

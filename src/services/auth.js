@@ -15,7 +15,7 @@ const adapter = new FileAsync(filePath);
 const hash = (password) => bcrypt.hash(password, salt);
 const comparePassword = (password, hash) => bcrypt.compare(password, hash);
 
-const authConfig = config.get("auth");
+const authConfig = config.get('auth');
 
 const buildToken = (id, secret, expiresIn = 86400) => {
   const payload = {

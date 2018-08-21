@@ -22,8 +22,8 @@ const createResource = (storyId, id, resource) =>
     .then(() => {
       if (type === 'image') {
         const data = JSON.stringify(resource.data.base64).replace(/['"]+/g, '');
-        // const ext = data.substring("data:image/".length, data.indexOf(";base64"));
-        const dataString = data.replace(/^data:image\/\w+;base64,/, "");
+        // const ext = data.substring('data:image/'.length, data.indexOf(';base64'));
+        const dataString = data.replace(/^data:image\/\w+;base64,/, '');
         const buff = new Buffer(dataString, 'base64');
         addr = `${storiesPath}/${storyId}/resources/${id}/${id}.${ext}`;
         newResource = {
@@ -73,7 +73,7 @@ const getResource = (storyId, resource) =>
       return readFile(filePath)
       .then(result => {
         const encodeString = new Buffer(result, 'binary').toString('base64');
-        return resolve({...resource, data: {base64: "data:image/" + ext + ";base64," + encodeString}});
+        return resolve({...resource, data: {base64: 'data:image/' + ext + ';base64,' + encodeString}});
       })
       .catch((err) => reject(err));
     }
