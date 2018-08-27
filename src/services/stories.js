@@ -203,6 +203,7 @@ const deleteStory = (id) =>
     const storyPath = storiesPath + '/' + id;
     return remove(storyPath)
            .then(deleteStoryList(id))
+           .then(() => authManager.deletePassword(id))
            .then(() => resolve())
            .catch(err => reject(err))
   });

@@ -56,6 +56,19 @@ const register = (id, password) =>
     });
   });
 
+const deletePassword = (id) =>
+  new Promise((resolve, reject) => {
+    low(adapter)
+    .then(db => {
+      db.defaults({credentials: []})
+        .get('credentials')
+        .remove({id})
+        .write()
+        .then(() => resolve())
+        .catch(err => reject(err));
+    });
+  });
+
 const login = (id, password) =>
   new Promise((resolve, reject) => {
     low(adapter)
@@ -148,5 +161,6 @@ const resetPassword = (id, oldPassword, newPassword) =>
 module.exports = {
   register,
   login,
-  resetPassword
+  resetPassword,
+  deletePassword
 }

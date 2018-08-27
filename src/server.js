@@ -48,7 +48,13 @@ socketEventHandler(io, store);
 
 // routers
 const storiesFolder = resolve(`${dataFolder}/stories`);
-app.use('/static', express.static(storiesFolder));
+
+// if nginx serves static file we don't need express to do it
+const NGINX_STATIC = process.env.NGINX_STATIC;
+console.log(NGINX_STATIC)
+if (!NGINX_STATIC)
+  app.use('/static', express.static(storiesFolder));
+
 const apiRoutes = express.Router();
 app.use('/api', apiRoutes);
 
