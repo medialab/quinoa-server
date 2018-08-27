@@ -1,6 +1,7 @@
 FROM node:8.11.3-alpine
 
 ENV NODE_ENV production
+ENV NGINX_STATIC true
 
 RUN apk add --no-cache su-exec
 
