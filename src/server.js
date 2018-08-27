@@ -51,7 +51,7 @@ const storiesFolder = resolve(`${dataFolder}/stories`);
 
 // if nginx serves static file we don't need express to do it
 const NGINX_STATIC = process.env.NGINX_STATIC;
-console.log(NGINX_STATIC)
+
 if (!NGINX_STATIC)
   app.use('/static', express.static(storiesFolder));
 
