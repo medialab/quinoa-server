@@ -7,10 +7,10 @@ const salt = 8;
 const low = require('lowdb');
 
 const dataPath = config.get('dataFolder');
-const filePath = resolve(`${dataPath}/db.json`);
+const databasePath = resolve(`${dataPath}/db.json`);
 
 const FileAsync = require('lowdb/adapters/FileAsync');
-const adapter = new FileAsync(filePath);
+const adapter = new FileAsync(databasePath);
 
 const hash = (password) => bcrypt.hash(password, salt);
 const comparePassword = (password, hash) => bcrypt.compare(password, hash);

@@ -10,38 +10,59 @@ import validateStoryEntity from '../validators/entityValidator';
 
 import selectors from '../ducks';
 
+const low = require('lowdb');
+
+const FileAsync = require('lowdb/adapters/FileAsync');
+
 const dataPath = config.get('dataFolder');
 const storiesPath = resolve(`${dataPath}/stories`);
 
+const databasePath = resolve(`${dataPath}/db.json`);
+const adapter = new FileAsync(databasePath);
+
+
 const updateStoryList = (story) =>
   new Promise((resolve, reject) => {
-    const storyListPath = dataPath + '/storyList.json';
-    readJson(storyListPath)
-    .then((stories) => {
-      stories[story.id] = {
-        id: story.id,
+    low(adapter)
+    .then(db => {
+      const {id} = story;
+      const shortStory = {
+        id,
         metadata: story.metadata,
         lastUpdateAt: story.lastUpdateAt
-      };
-      return outputJson(storyListPath, stories);
+      }
+      const findStory = db.defaults({stories: []})
+                    .get('stories')
+                    .find({id})
+                    .value();
+      if (findStory) {
+        db.get('stories')
+          .find({id})
+          .assign(shortStory)
+          .write()
+          .then(() => resolve());
+      }
+      else {
+        db.get('stories')
+          .push(shortStory)
+          .write()
+          .then(() => resolve());
+      }
     })
-    .then(() => resolve())
-    .catch((err) => reject(err))
+    .catch(err => reject(err));
   });
 
 const deleteStoryList = (id) =>
   new Promise((resolve, reject) => {
-    const storyListPath = dataPath + '/storyList.json';
-    readJson(storyListPath)
-    .then((stories) => {
-      if (!stories[id]) reject(new Error('story is not exist'));
-      else {
-        delete stories[id];
-        return outputJson(storyListPath, stories);
-      }
-    })
-    .then(() => resolve())
-    .catch((err) => reject(err))
+    low(adapter)
+    .then(db => {
+      db.defaults({stories: []})
+        .get('stories')
+        .remove({id})
+        .write()
+        .then(() => resolve())
+        .catch(err => reject(err));
+    });
   });
 
 const trimStory = (story) =>
@@ -100,14 +121,14 @@ const updateStory = (story) =>
 
 const getStories = () =>
   new Promise ((resolve, reject) => {
-    const storyListPath = dataPath + '/storyList.json';
-    return ensureFile(storyListPath)
-          .then(() => readJson(storyListPath))
-          .then((res) => resolve(res))
-          .catch(() => {
-            outputJson(storyListPath, {})
-          })
-          .catch((err) => reject(err));
+    low(adapter)
+    .then(db => {
+      const stories = db.defaults({stories: []})
+                        .get('stories')
+                        .value()
+      const storyList = stories.reduce((result, item) => ({...result,[item.id]: item}), {});
+      resolve(storyList);
+    });
   });
 
 const getStory = (id) =>
@@ -202,8 +223,19 @@ const deleteStory = (id) =>
   new Promise ((resolve, reject) => {
     const storyPath = storiesPath + '/' + id;
     return remove(storyPath)
-           .then(deleteStoryList(id))
-           .then(() => authManager.deletePassword(id))
+           .then(() => {
+              low(adapter)
+              .then(db => {
+                db.get('stories')
+                  .remove({id})
+                  .write()
+                  .then(() => {
+                    db.get('credentials')
+                    .remove({id})
+                    .write()
+                  })
+              });
+           })
            .then(() => resolve())
            .catch(err => reject(err))
   });
