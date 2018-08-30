@@ -84,6 +84,9 @@ export default (io, store) => {
       }
       else {
         store.dispatch(action);
+        if (callback && typeof callback === 'function') {
+          callback(null, {type: `${action.type}_SUCCESS`, payload});
+        }
         if (action.meta.broadcast) {
           if (action.meta.room) {
             socket.to(action.meta.room).emit('action', {type: `${action.type}_BROADCAST`, payload});
