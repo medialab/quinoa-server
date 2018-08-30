@@ -21,7 +21,7 @@ export default (story) => {
       ...note,
       ...Object.keys(cleanedSections[sectionId].notes).map(noteId => cleanedSections[sectionId].notes[noteId]),
     ], []);
-  const notesContents = notesList.map((note) => note.contents);
+  const notesContents = notesList.filter(n => n).map((note) => note.contents);
   const entityList = Object.keys(story.sections)
   .reduce((contents, sectionId) => [
       ...contents,
