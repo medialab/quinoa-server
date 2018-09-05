@@ -55,13 +55,42 @@ export default (io, store) => {
       .then(() => new Promise((resolve, reject) => {
         // check if storyId exists (room)
         if (action.meta.room && !storiesMap[action.meta.room]) {
-          // try to read story
+          // try to read story from disk
           getStory(action.meta.room)
+            // story was successfully loaded from disk
             .then((story) => {
-              store.dispatch({type: 'ACTIVATE_STORY', payload: story});
+              // activate story
+              store.dispatch({
+                type: 'ACTIVATE_STORY', 
+                payload: story
+              });
+              // register new user for story
+              store.dispatch({
+                type: 'ENTER_STORY',
+                payload: {
+                  storyId: story.id,
+                  userId: socket.id
+                }
+              });
+              socket.emit('action', {
+                type: 'ENTER_STORY_INIT',
+                payload: {
+                  storyId: story.id,
+                  locks: (lockingMap[story.id] && lockingMap[story.id].locks) || {},
+                }
+              });
+              // join corresponding room
+              socket.join(story.id);
+              socket.broadcast.emit('action', {
+                type: 'ENTER_STORY_BROADCAST',
+                payload: {
+                  storyId: story.id,
+                  userId: socket.id
+                }
+              });
               resolve();
             })
-            // story does not exist
+            // story does not exist -> return error
             .catch((error) => {
               if (typeof callback === 'function') {
                 callback({message: 'story does not exist'});
