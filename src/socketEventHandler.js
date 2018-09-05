@@ -42,19 +42,19 @@ export default (io, store) => {
       const {payload} = action;
       const state = store.getState();
       const {storiesMap, lockingMap} = selectors(state);
-      // check is storyId exist (room)
+      // check is storyId exists (room)
       if (action.meta.room && !storiesMap[action.meta.room]) {
         return socket.emit('action', {type:`${action.type}_FAIL`, payload: action.payload, message: 'story is not exist'});
       }
       else if (action.meta.room && action.meta.blockId && action.meta.blockType) {
         const block = storiesMap[action.meta.room][action.meta.blockType];
         /**
-         * check if block is exist
+         * check if block exists
          * ENTER_SECTION, ENTER_RESOURCE, UPDATE_SECTION, UPDATE_RESOURCE, DELETE_SECTION, DELETE_RESOURCE
          */
         if ((action.meta.blockType === 'resources' || action.meta.blockType === 'sections') && !block[action.meta.blockId]) {
-          if (callback) callback({message: 'block is not exist'});
-          socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload, message: 'block is not exist'});
+          if (callback) callback({message: 'block does not exist'});
+          socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload, message: 'block does not exist'});
         }
         /**
          * check if block is taken
