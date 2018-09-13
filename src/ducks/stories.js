@@ -47,6 +47,7 @@ function stories(state = initialStoriesState, action) {
   let contextualizers;
   let contextualizationsToDeleteIds;
   let contextualizersToDeleteIds;
+  let newSectionsOrder;
   switch (action.type) {
     case ACTIVATE_STORY:
       return {
@@ -78,7 +79,7 @@ function stories(state = initialStoriesState, action) {
       };
     case UPDATE_SECTIONS_ORDER:
       const oldSectionsOrder = [...state[payload.storyId].sectionsOrder];
-      const newSectionsOrder = [...payload.sectionsOrder];
+      newSectionsOrder = [...payload.sectionsOrder];
       let resolvedSectionsOrder = [...payload.sectionsOrder];
       // new order is bigger than older order
       // (probably because a user deleted a section in the meantime)
@@ -106,6 +107,17 @@ function stories(state = initialStoriesState, action) {
       };
     case CREATE_SECTION:
       const sectionOrder = payload.sectionOrder || state[payload.storyId].sectionsOrder.length - 1;
+      newSectionsOrder = sectionOrder < state[payload.storyId].sectionsOrder.length ?
+            [
+              ...state[payload.storyId].sectionsOrder.slice(0, sectionOrder),
+              payload.sectionId,
+              ...state[payload.storyId].sectionsOrder.slice(sectionOrder)
+            ]
+            :
+            [
+              ...state[payload.storyId].sectionsOrder,
+              payload.sectionId
+            ]
       return {
         ...state,
         [payload.storyId]: {
@@ -114,11 +126,7 @@ function stories(state = initialStoriesState, action) {
             ...state[payload.storyId].sections,
             [payload.sectionId]: payload.section,
           },
-          sectionsOrder: [
-            ...state[payload.storyId].sectionsOrder.slice(0, sectionOrder),
-            payload.sectionId,
-            ...state[payload.storyId].sectionsOrder.slice(sectionOrder),
-          ],
+          sectionsOrder: newSectionsOrder,
           lastUpdateAt: payload.lastUpdateAt,
         }
       };
