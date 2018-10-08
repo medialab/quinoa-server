@@ -1,5 +1,6 @@
 // import {saveAllStories} from './ducks/stories';
 import {writeStories, writeStory, getStory} from './services/stories';
+import {checkToken} from './services/auth';
 import store from './store/configureStore';
 import selectors from './ducks';
 import cleanStory from './validators/storyUtils';
@@ -103,7 +104,20 @@ export default (io, store) => {
         }
       }))
       /**
-       * Step 2 : verify requested object exists and is not locked by another user
+       * Step 2 : verify request provides a valid access token if trying to interact with a story
+       */
+      .then(() => new Promise((resolve, reject) => {
+        if (action.meta.room) {
+          checkToken(action.token, err => {
+            if (err) {
+              socket.emit('action', {type: `${action.type}_FAIL`, payload: action.payload, message: 'invalid token'});
+              return reject()
+            } else resolve('invalid token');
+          });
+        } else resolve();
+      }))
+      /**
+       * Step 3 : verify requested object exists and is not locked by another user
        */
       .then(() => new Promise((resolve, reject) => {
         if (action.meta.room && action.meta.blockId && action.meta.blockType) {
@@ -157,7 +171,7 @@ export default (io, store) => {
         }
       }))
       /**
-       * Step 3 : emit response and trigger broadcasts/callbacks if needed
+       * Step 4 : emit response and trigger broadcasts/callbacks if needed
        */
       .then(() => {
         socket.emit('action', {type: `${action.type}_SUCCESS`, payload});
@@ -185,7 +199,8 @@ export default (io, store) => {
             }
           });
         }
-      });
+      })
+      .catch(console.error)
     });
 
     /**
