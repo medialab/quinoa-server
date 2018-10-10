@@ -7,12 +7,14 @@ export const ENTER_STORY = 'ENTER_STORY';
 export const LEAVE_STORY = 'LEAVE_STORY';
 
 const ENTER_BLOCK = 'ENTER_BLOCK';
-const IDLE_BLOCK = 'IDLE_BLOCK';
 const LEAVE_BLOCK = 'LEAVE_BLOCK';
 
 const USER_CONNECTED = 'USER_CONNECTED';
 const USER_DISCONNECTING = 'USER_DISCONNECTING';
 const USER_DISCONNECTED = 'USER_DISCONNECTED';
+
+const SET_USER_AS_IDLE = 'SET_USER_AS_IDLE';
+const SET_USER_AS_ACTIVE = 'SET_USER_AS_ACTIVE';
 
 const CREATE_USER = 'CREATE_USER';
 
@@ -55,13 +57,16 @@ function users(state = USERS_DEFAULT_STATE, action) {
 }
 
 const LOCKING_DEFAULT_STATE = {};
+const DEFAULT_LOCKS = {
+  summary: true,
+};
 function locking(state = LOCKING_DEFAULT_STATE, action) {
-  const {payload} = action;
+  const {payload = {}} = action;
   let locks;
   let newState;
-  const DEFAULT_LOCKS = {
-    summary: true,
-  };
+  let userLocks;
+  let newLocks;
+  const now = new Date().getTime();
   switch (action.type) {
     case ENTER_STORY:
       locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
@@ -71,7 +76,11 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
           ...state[payload.storyId],
           locks: {
             ...locks,
-            [payload.userId]: DEFAULT_LOCKS,
+            [payload.userId]: {
+              ...DEFAULT_LOCKS,
+              lastActivityAt: now ,
+              status: 'active',
+            },
           },
         },
       };
@@ -123,12 +132,31 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
                 ...payload,
                 status: 'active',
               },
+              status: 'active',
+              lastActivityAt: now
             },
           },
         },
       };
-    case IDLE_BLOCK:
+    case SET_USER_AS_IDLE:
       locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
+      userLocks = locks[payload.userId] || {};
+      newLocks = Object.keys(userLocks).reduce((result, key) => {
+        const val = userLocks[key];
+        if (typeof val === 'object' && val.status) {
+          return {
+            ...result,
+            [key]: {
+              ...val,
+              status: 'idle'
+            }
+          };
+        }
+        return {
+          ...result,
+          [key]: val
+        }
+      }, {});
       return {
         ...state,
         [payload.storyId]: {
@@ -136,11 +164,41 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
           locks: {
             ...locks,
             [payload.userId]: {
-              ...locks[payload.userId],
-              [payload.blockType]: {
-                ...payload,
-                status: 'idle',
-              },
+              ...newLocks,
+              status: 'idle',
+            },
+          },
+        }
+      }
+    case SET_USER_AS_ACTIVE:
+      locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
+      userLocks = locks[payload.userId] || {};
+      newLocks = Object.keys(userLocks).reduce((result, key) => {
+        const val = userLocks[key];
+        if (typeof val === 'object' && val.status) {
+          return {
+            ...result,
+            [key]: {
+              ...val,
+              status: 'active'
+            }
+          };
+        }
+        return {
+          ...result,
+          [key]: val
+        }
+      }, {});
+      return {
+        ...state,
+        [payload.storyId]: {
+          ...state[payload.storyId],
+          locks: {
+            ...locks,
+            [payload.userId]: {
+              ...newLocks,
+              status: 'active',
+              lastActivityAt: now
             },
           },
         }
@@ -157,6 +215,7 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
               [payload.userId]: {
                 ...locks[payload.userId],
                 [payload.blockType]: undefined,
+                lastActivityAt: now,
               },
             },
           },
@@ -174,6 +233,40 @@ function locking(state = LOCKING_DEFAULT_STATE, action) {
       });
       return newState;
     default:
+      if (payload.userId && payload.storyId) {
+        locks = (state[payload.storyId] && state[payload.storyId].locks) || {};
+        const userLocks = locks[payload.userId] || {};
+        const newLocks = Object.keys(userLocks).reduce((result, key) => {
+          const val = userLocks[key];
+          if (typeof val === 'object' && val.status) {
+            return {
+              ...result,
+              [key]: {
+                ...val,
+                status: 'active'
+              }
+            };
+          }
+          return {
+            ...result,
+            [key]: val
+          }
+        }, {})
+        return {
+          ...state,
+          [payload.storyId]: {
+            ...state[payload.storyId],
+            locks: {
+              ...locks,
+              [payload.userId]: {
+                ...newLocks,
+                lastActivityAt: now,
+                status: 'active',
+              }
+            }
+          }
+        }
+      }
       return state;
   }
 }
