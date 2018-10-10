@@ -14,6 +14,7 @@ const IDLE_ACTIVITY_THRESHOLD = 15 * 60000;// idling time = 15 minutes
 export default (io, store) => {
   io.on('connection', (socket) => {
     const {count} = store.getState().connections.users;
+    socket.join('home');
     // if no users on server before this connection
     // then we start repeating routines
     if(count === 0) {
@@ -115,6 +116,7 @@ export default (io, store) => {
               });
               // join corresponding room
               socket.join(story.id);
+              socket.leave('home');
               socket.broadcast.emit('action', {
                 type: 'ENTER_STORY_BROADCAST',
                 payload: {
@@ -276,6 +278,10 @@ export default (io, store) => {
               .then(() => store.dispatch({type: 'INACTIVATE_STORY', payload: {id}}));
             }
           });
+        }
+        // special case for handling metadata update display in home
+        if (action.type === 'UPDATE_STORY_METADATA') {
+          io.to('home').emit('action', {type: `${action.type}_BROADCAST`, payload})
         }
       })
       .catch(console.error)
