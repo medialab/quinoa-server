@@ -153,12 +153,10 @@ export default (io, store) => {
        * Step 3 : verify requested object exists and is not locked by another user
        */
       .then(() => new Promise((resolve, reject) => {
-        if (action.meta.room && action.meta.blockId && action.meta.blockType) {
+        if (action.meta.room && action.meta.blockId && action.meta.blockType && !action.meta.noLock) {
           // a block is a lockable object (section, resource, story metadata, story design)
           const block = storiesMap[action.meta.room] && storiesMap[action.meta.room][action.meta.blockType];
-          if (!block) {
-            reject('block does not exist')
-          }
+          
           /**
            * check if block exists
            * ENTER_SECTION, ENTER_RESOURCE, UPDATE_SECTION, UPDATE_RESOURCE, DELETE_SECTION, DELETE_RESOURCE
@@ -245,7 +243,7 @@ export default (io, store) => {
             });
             io.to(action.payload.storyId).emit('action', {type: `SET_USER_AS_ACTIVE_BROADCAST`, payload: activePayload});
           }
-
+          resolve();
         } else {
           resolve();
         }

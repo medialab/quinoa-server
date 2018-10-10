@@ -57,9 +57,7 @@ function users(state = USERS_DEFAULT_STATE, action) {
 }
 
 const LOCKING_DEFAULT_STATE = {};
-const DEFAULT_LOCKS = {
-  summary: true,
-};
+const DEFAULT_LOCKS = {};
 function locking(state = LOCKING_DEFAULT_STATE, action) {
   const {payload = {}} = action;
   let locks;
