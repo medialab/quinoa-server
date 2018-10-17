@@ -163,7 +163,7 @@ export default (io, store) => {
            * check if block exists
            * ENTER_SECTION, ENTER_RESOURCE, UPDATE_SECTION, UPDATE_RESOURCE, DELETE_SECTION, DELETE_RESOURCE
            */
-          if ((action.meta.blockType === 'resources' || action.meta.blockType === 'sections') && !block[action.meta.blockId]) {
+          if ((action.meta.blockType === 'resources' || action.meta.blockType === 'sections') && (!block || !block[action.meta.blockId])) {
             if (typeof callback === 'function') {
               callback({message: 'block does not exist'});
             }
