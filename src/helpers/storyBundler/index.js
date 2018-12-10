@@ -8,11 +8,61 @@ const fs = require('fs');
 const path = require('path');
 const config = require('config');
 const draft = require('draft-js');
+// const sizeOf = require('image-size');
 const stateToHTML = require('draft-js-export-html').stateToHTML;
 
 const convertFromRaw = draft.convertFromRaw;
 const buildsFolder = config.get('buildsFolder');
 const buildPath = path.resolve(`${buildsFolder}/story/build.js`);
+
+
+/**
+ * Cover image related code is commented since
+ * neither facebook nor twitter accept base64 images in meta.
+ * This challenges the very principle of having a all-in-one html
+ * @todo find a workaround for image-related metas or drop the feature
+ */
+// const getBase64ImageDimensions = (base64, mimetype) => {
+//   const data = base64.replace(new RegExp(`^data:${mimetype.replace('jpeg', 'jpg')};base64,`), '');
+//   const imageData = new Buffer(data, 'base64');
+//   try {
+//     return sizeOf(imageData);
+//   } catch(error) {
+//     console.log('error from image-size', error);
+//     return {width: 500, height: 500}
+//   }
+// }
+
+// const buildCoverMeta = (story = {}) => {
+//   const {
+//     metadata = {},
+//     resources = {}
+//   } = story;
+
+
+//   if (metadata.coverImage && metadata.coverImage.resourceId) {
+//     if (resources[metadata.coverImage.resourceId]) {
+//       const imageRes = resources[metadata.coverImage.resourceId];
+//       if (imageRes.data && imageRes.data.base64) {
+//         const base64 = imageRes.data.base64;
+//         const mimetype = imageRes.metadata.mimetype;
+//         // dimensions
+//         const dimensions = getBase64ImageDimensions(base64, mimetype);
+//         return `
+// <meta name="twitter:image" content="${base64}" />
+// <meta name="twitter:image:alt" content="${imageRes.metadata.title || ''}" />
+// <meta property="og:image" content="${base64}" />
+// <meta property="og:image:type" content="${mimetype}" />
+// <meta property="og:image:width" content="${dimensions.width}" />
+// <meta property="og:image:height" content="${dimensions.height}" />
+// `
+//       }
+//       return '';
+//     }
+//     return '';
+//   }
+//   return '';
+// }
 
 /**
  * Builds simple html code aimed at being parsed by indexing robots (to prevent the "black box" effect of js-related-only content)
@@ -21,7 +71,7 @@ const buildPath = path.resolve(`${buildsFolder}/story/build.js`);
  */
 const buildSEOHTML = (story = {metadata: {}}) => {
   const title = story.metadata.title || 'Quinoa story';
-  const description = story.metadata.description || '';
+  const description = story.metadata.abstract || '';
   const contents = story.sectionsOrder.map(sectionId => {
     const section = story.sections[sectionId];
     // htmlify notes
@@ -57,32 +107,30 @@ const buildMeta = (story = {metadata: {}}) => {
     <title>${story.metadata.title}</title>
     <meta name="DC.Title" content="${story.metadata.title}"/>
     <meta name="twitter:title" content="${story.metadata.title}" />
-    <meta name="og:title" content="${story.metadata.title}" />
+    <meta property="og:title" content="${story.metadata.title}" />
   ` :  '<title>Quinoa story</title>';
-  const description = story.metadata.description ? `
-    <meta name="description" content="${story.metadata.description}"/>
-    <meta name="DC.Description" content="${story.metadata.description}"/>
-    <meta name="og:description" content="${story.metadata.description}" />
-    <meta name="twitter:description" content="${story.metadata.description}" />
+  const description = story.metadata.abstract ? `
+    <meta name="description" content="${story.metadata.abstract}"/>
+    <meta name="DC.Description" content="${story.metadata.abstract}"/>
+    <meta property="og:description" content="${story.metadata.abstract}" />
+    <meta name="twitter:description" content="${story.metadata.abstract}" />
   ` :  '';
   const authors = story.metadata.authors && story.metadata.authors.length
                   ?
                   story.metadata.authors.map(author => `
-                    <meta name="DC.Creator" content="${author}" />
-                    <meta name="author" content="${author}" />`)
+    <meta name="DC.Creator" content="${author}" />
+    <meta name="author" content="${author}" />`
+  )
                   : '';
-  // todo: use cover image and convert it to the right base64 dimensions for the social networks
+  // const covers = buildCoverMeta(story);
   return `
   <meta name = "DC.Format" content = "text/html">
   <meta name = "DC.Type" content = "data story">
   <meta name = "twitter:card" content="summary" />
-  <meta name = "twitter:site" content="@medialab_ScPo" />
-  <meta name = "og:url" content="https://medialab.sciencespo.fr" />
-  <meta name = "og:type" content="website" />
+  <meta property = "og:type" content="website" />
   ${title}
   ${authors}
   ${description}
-  ${covers}
 `;
 }
 
@@ -94,12 +142,18 @@ const buildMeta = (story = {metadata: {}}) => {
  */
 module.exports = function bundleStory (story = {}, options = {}) {
   return new Promise((resolve, reject) => {
-    const presJSON = JSON.stringify(story);
+    const storyJSON = JSON.stringify(story);
       const locale = options.locale || 'en';
       // build html for indexing purpose
-      // const seoHTML = buildSEOHTML(story);
+      const seoHTML = buildSEOHTML(story);
       // build metadata html for the head
-      const meta = buildMeta(story);
+      let meta;
+      try {
+        meta = buildMeta(story);
+      } catch(error) {
+        console.log(error);
+        return reject(error);
+      }
       // retrieve the story-player application js code
       const jsBuild = fs.readFileSync(buildPath, 'utf8').replace(/(^\/\/.*$)/gm, '');
       // render html
@@ -138,6 +192,8 @@ module.exports = function bundleStory (story = {}, options = {}) {
           flex-flow: row nowrap;
           justify-content: center;
           align-items: center;
+          left: 0;
+          top: 0;
         }
         .loader-container
         {
@@ -157,6 +213,9 @@ module.exports = function bundleStory (story = {}, options = {}) {
       </style>
     </head>
     <body>
+      <div class="shadow-content">
+        ${seoHTML}
+      </div>
       <div class="loader-wrapper">
         <div class="loader-container">
           <h3>Quinoa - by <a href="http://www.medialab.sciences-po.fr/fr/" target="blank">médialab sciences po</a></h3>
@@ -166,7 +225,7 @@ module.exports = function bundleStory (story = {}, options = {}) {
       </div>
       <div id="mount"></div>
       <script>
-        window.__story = ${presJSON}
+        window.__story = ${storyJSON}
         window.__locale = "${locale}";
       </script>
       <script>
