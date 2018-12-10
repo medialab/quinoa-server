@@ -73,14 +73,12 @@ const buildMeta = (story = {metadata: {}}) => {
                   : '';
   // todo: use cover image and convert it to the right base64 dimensions for the social networks
   return `
-  <meta name    = "DC.Format"
-          content = "text/html">
-  <meta name    = "DC.Type"
-          content = "data story">
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:site" content="@medialab_ScPo" />
-  <meta property="og:url" content="http://www.fonio.surge.sh" />
-  <meta name="og:type" content="website" />
+  <meta name = "DC.Format" content = "text/html">
+  <meta name = "DC.Type" content = "data story">
+  <meta name = "twitter:card" content="summary" />
+  <meta name = "twitter:site" content="@medialab_ScPo" />
+  <meta name = "og:url" content="https://medialab.sciencespo.fr" />
+  <meta name = "og:type" content="website" />
   ${title}
   ${authors}
   ${description}
