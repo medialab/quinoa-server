@@ -43,9 +43,15 @@ export const getStory = (req, res) => {
     manager.getStoryBundle(req.params.id)
     .then((storyBundle) => {
       if (req.query.format === 'html') {
-        const bundleHtml = bundleStory(storyBundle, {locale: req.query.locale});
-        res.setHeader('Content-Type', 'text/html');
-        res.status(200).send(bundleHtml);
+        bundleStory(storyBundle, {locale: req.query.locale})
+          .then(bundleHTML => {
+            res.setHeader('Content-Type', 'text/html');
+            res.status(200).send(bundleHTML);
+          })
+          .catch(error => {
+            res.status(500).send(error);
+          })
+            
       }
       else res.status(200).json(storyBundle);
     })

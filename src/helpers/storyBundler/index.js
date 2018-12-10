@@ -82,6 +82,7 @@ const buildMeta = (story = {metadata: {}}) => {
   ${title}
   ${authors}
   ${description}
+  ${covers}
 `;
 }
 
@@ -89,88 +90,92 @@ const buildMeta = (story = {metadata: {}}) => {
  * Builds the restory of a all-in-one html story out of a json story restory
  * @param {object} story - the story to bundle
  * @param {object} options - relative to the settings of the story interactions
- * @return {string} html - the resulting html
+ * @return {Promise} promise - promise for the resulting html
  */
 module.exports = function bundleStory (story = {}, options = {}) {
-  const presJSON = JSON.stringify(story);
-  const locale = options.locale || 'en';
-  // build html for indexing purpose
-  // const seoHTML = buildSEOHTML(story);
-  // build metadata html for the head
-  const meta = buildMeta(story);
-  // retrieve the story-player application js code
-  const jsBuild = fs.readFileSync(buildPath, 'utf8').replace(/(^\/\/.*$)/gm, '');
-  // render html
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-   ${meta}
+  return new Promise((resolve, reject) => {
+    const presJSON = JSON.stringify(story);
+      const locale = options.locale || 'en';
+      // build html for indexing purpose
+      // const seoHTML = buildSEOHTML(story);
+      // build metadata html for the head
+      const meta = buildMeta(story);
+      // retrieve the story-player application js code
+      const jsBuild = fs.readFileSync(buildPath, 'utf8').replace(/(^\/\/.*$)/gm, '');
+      // render html
+      const html = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+       ${meta}
 
-   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+       <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
 
-  <style>
-    body{
-      position: absolute;
-      padding: 0;
-      margin: 0;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      font-family: Source Sans Pro, sans serif;
-    }
-    .shadow-content
-    {
-      display: none;
-    }
-    .loader-wrapper
-    {
-      background: #353635;
-      color: #f4f4f4;
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: center;
-      align-items: center;
-    }
-    .loader-container
-    {
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: center;
-      align-items: center;
-    }
-    a,a:visited,a:active,a:hover{
-      color: inherit;
-      text-decoration: none;
-    }
-    .loader-container h1
-    {
-      font-size: 6rem;
-    }
-  </style>
-</head>
-<body>
-  <div class="loader-wrapper">
-    <div class="loader-container">
-      <h3>Quinoa - by <a href="http://www.medialab.sciences-po.fr/fr/" target="blank">médialab sciences po</a></h3>
-      <h1>${story.metadata.title || 'Quinoa story'}</h1>
-      <p>Loading ...</p>
-    </div>
-  </div>
-  <div id="mount"></div>
-  <script>
-    window.__story = ${presJSON}
-    window.__locale = "${locale}";
-  </script>
-  <script>
-    ${jsBuild}
-  </script>
-</body>
-</html>
-`
+      <style>
+        body{
+          position: absolute;
+          padding: 0;
+          margin: 0;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          font-family: Source Sans Pro, sans serif;
+        }
+        .shadow-content
+        {
+          display: none;
+        }
+        .loader-wrapper
+        {
+          background: #353635;
+          color: #f4f4f4;
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: center;
+          align-items: center;
+        }
+        .loader-container
+        {
+          display: flex;
+          flex-flow: column nowrap;
+          justify-content: center;
+          align-items: center;
+        }
+        a,a:visited,a:active,a:hover{
+          color: inherit;
+          text-decoration: none;
+        }
+        .loader-container h1
+        {
+          font-size: 6rem;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="loader-wrapper">
+        <div class="loader-container">
+          <h3>Quinoa - by <a href="http://www.medialab.sciences-po.fr/fr/" target="blank">médialab sciences po</a></h3>
+          <h1>${story.metadata.title || 'Quinoa story'}</h1>
+          <p>Loading ...</p>
+        </div>
+      </div>
+      <div id="mount"></div>
+      <script>
+        window.__story = ${presJSON}
+        window.__locale = "${locale}";
+      </script>
+      <script>
+        ${jsBuild}
+      </script>
+    </body>
+    </html>
+    `;
+
+    resolve(html);
+  });
 }
