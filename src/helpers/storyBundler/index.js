@@ -72,20 +72,27 @@ const buildPath = path.resolve(`${buildsFolder}/story/build.js`);
 const buildSEOHTML = (story = {metadata: {}}) => {
   const title = story.metadata.title || 'Quinoa story';
   const description = story.metadata.abstract || '';
-  const contents = story.sectionsOrder.map(sectionId => {
-    const section = story.sections[sectionId];
-    // htmlify notes
-    const notes = Object.keys(section.notes)
-      .map(noteId => {
-        const note = section.notes[noteId];
-        return stateToHTML(convertFromRaw(note.editorState));
-      });
-    // htmlify main content
-    const theseContents = section.contents;
-    const contentState = convertFromRaw(theseContents);
-    // return everything
-    return stateToHTML(contentState).concat(notes);
-  }).join('\n \n');
+  let contents = '';
+  try {
+    contents = story.sectionsOrder.map(sectionId => {
+      const section = story.sections[sectionId];
+      // htmlify notes
+      const notes = Object.keys(section.notes)
+        .map(noteId => {
+          const note = section.notes[noteId];
+          return stateToHTML(convertFromRaw(note.editorState));
+        });
+      // htmlify main content
+      const theseContents = section.contents;
+      const contentState = convertFromRaw(theseContents);
+      // return everything
+      return stateToHTML(contentState).concat(notes);
+    }).join('\n \n');
+  } catch(e) {
+    console.error(e);
+  }
+    
+
   return `
 <h1>${title}</h1>
 <p>
@@ -143,21 +150,25 @@ const buildMeta = (story = {metadata: {}}) => {
 module.exports = function bundleStory (story = {}, options = {}) {
   return new Promise((resolve, reject) => {
     const storyJSON = JSON.stringify(story);
-      const locale = options.locale || 'en';
-      // build html for indexing purpose
-      const seoHTML = buildSEOHTML(story);
-      // build metadata html for the head
-      let meta;
-      try {
-        meta = buildMeta(story);
-      } catch(error) {
-        console.log(error);
-        return reject(error);
-      }
-      // retrieve the story-player application js code
-      const jsBuild = fs.readFileSync(buildPath, 'utf8').replace(/(^\/\/.*$)/gm, '');
-      // render html
-      const html = `
+    const locale = options.locale || 'en';
+    // build html for indexing purpose
+    const seoHTML = buildSEOHTML(story);
+    console.log('3');
+    // build metadata html for the head
+    let meta;
+    try {
+      meta = buildMeta(story);
+    } catch(error) {
+      console.log(error);
+      return reject(error);
+    }
+    console.log('4');
+
+    // retrieve the story-player application js code
+    const jsBuild = fs.readFileSync(buildPath, 'utf8').replace(/(^\/\/.*$)/gm, '');
+    console.log('5');
+    // render html
+    const html = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
