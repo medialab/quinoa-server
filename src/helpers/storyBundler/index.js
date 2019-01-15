@@ -175,7 +175,8 @@ module.exports = function bundleStory (story = {}, options = {}) {
       <meta charset="UTF-8">
        ${meta}
 
-       <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+       <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Merriweather:400,400i,700,700i" rel="stylesheet">
 
       <style>
         body{

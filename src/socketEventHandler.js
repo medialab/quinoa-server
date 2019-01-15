@@ -88,8 +88,8 @@ export default (io, store) => {
        * Step 1 : verify story exists if needed
        */
       .then(() => new Promise((resolve, reject) => {
-        // check if storyId exists (room)
-        if (action.meta.room && !storiesMap[action.meta.room]) {
+        // check if storyId exists (room) except LEAVE_BLOCK scenario
+        if (action.meta.room && !storiesMap[action.meta.room] && action.type !== 'LEAVE_BLOCK') {
           // try to read story from disk
           getStory(action.meta.room)
             // story was successfully loaded from disk
