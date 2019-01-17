@@ -156,11 +156,16 @@ const resetPassword = (id, oldPassword, newPassword) =>
         }
       }
     });
-  })
+  });
+
+const checkToken = (token, callback) => {
+  jwt.verify(token, authConfig.secret, callback);
+}
 
 module.exports = {
   register,
   login,
   resetPassword,
-  deletePassword
+  deletePassword,
+  checkToken
 }

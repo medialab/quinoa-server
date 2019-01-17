@@ -21,26 +21,39 @@ const createResource = (storyId, id, resource) =>
     ensureDir(resourceFolderPath)
     .then(() => {
       if (type === 'image') {
-        const data = JSON.stringify(resource.data.base64).replace(/['"]+/g, '');
-        // const ext = data.substring('data:image/'.length, data.indexOf(';base64'));
-        const dataString = data.replace(/^data:image\/\w+;base64,/, '');
-        const buff = new Buffer(dataString, 'base64');
-        addr = `${storiesPath}/${storyId}/resources/${id}/${id}.${ext}`;
         newResource = {
           ...resource,
           data: {
             filePath: `/${storyId}/resources/${id}/${id}.${ext}`
-          }
+          },
+          createdAt: new Date().getTime(),
+          lastUpdateAt: new Date().getTime()
         }
-        getSize(resourceFolderPath, (err, folderSize) => {
-          if (err) return reject(err);
-          if ((folderSize + buff.byteLength) > maxFolderSize) {
-            return reject(new Error('extend maximum resources size'));
+        if (resource.data && resource.data.base64) {
+          const data = JSON.stringify(resource.data.base64).replace(/['"]+/g, '');
+          try{
+            // const ext = data.substring('data:image/'.length, data.indexOf(';base64'));
+            const dataString = data.replace(/^data:image\/\w+;base64,/, '');
+            const buff = new Buffer(dataString, 'base64');
+            addr = `${storiesPath}/${storyId}/resources/${id}/${id}.${ext}`;
+            getSize(resourceFolderPath, (err, folderSize) => {
+              if (err) return reject(err);
+              if ((folderSize + buff.byteLength) > maxFolderSize) {
+                return reject(new Error('extend maximum resources size'));
+              }
+              return outputFile(addr, buff)
+                      .then(() => resolve(newResource))
+                      .catch((err) => reject(err))
+            });
+          } catch(err) {
+            return reject(new Error('invalid data'));
           }
-          return outputFile(addr, buff)
+        } else {
+          return ensureDir(`${storiesPath}/${storyId}/resources/${id}`)
                   .then(() => resolve(newResource))
                   .catch((err) => reject(err))
-        });
+        }
+          
       }
       else {
         newResource = {
@@ -51,15 +64,23 @@ const createResource = (storyId, id, resource) =>
           createdAt: new Date().getTime(),
           lastUpdateAt: new Date().getTime()
         }
-        getSize(resourceFolderPath, (err, folderSize) => {
-          if (err) return reject(err);
-          if ((folderSize + JSON.stringify(resource.data.json).length) > maxFolderSize) {
-            return reject(new Error('extend maximum resources size'));
-          }
-          return outputJson(addr, resource.data.json)
-               .then(() => resolve(newResource))
-               .catch(err => reject(err))
-        })
+        if (resource.data && resource.data.json) {
+          getSize(resourceFolderPath, (err, folderSize) => {
+            if (err) {
+              return reject(err);
+            }
+            if ((folderSize + JSON.stringify(resource.data.json || {}).length) > maxFolderSize) {
+              return reject(new Error('extend maximum resources size'));
+            }
+            return outputJson(addr, resource.data.json)
+                 .then(() => resolve(newResource))
+                 .catch(err => reject(err))
+          })
+        } else {
+          return ensureDir(`${storiesPath}/${storyId}/resources/${id}`)
+                  .then(() => resolve(newResource))
+                  .catch((err) => reject(err))
+        }
       }
     })
     .catch(err => reject(err))
@@ -75,13 +96,23 @@ const getResource = (storyId, resource) =>
         const encodeString = new Buffer(result, 'binary').toString('base64');
         return resolve({...resource, data: {base64: 'data:image/' + ext + ';base64,' + encodeString}});
       })
-      .catch((err) => reject(err));
+      .catch((err) => {
+        if (err.code === 'ENOENT') {
+          return resolve(resource);
+        }
+        return reject(err)
+      });
     }
     else {
       const filePath = `${storiesPath}/${storyId}/resources/${resource.id}/${resource.id}.json`;
       return readJson(filePath)
       .then(result => resolve({...resource, data: {json: result}}))
-      .catch((err) => reject(err));
+      .catch((err) => {
+        if (err.code === 'ENOENT') {
+          return resolve(resource);
+        }
+        return reject(err)
+      });
     }
   });
 
