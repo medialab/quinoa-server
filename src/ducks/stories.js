@@ -106,12 +106,12 @@ function stories(state = initialStoriesState, action) {
           lastUpdateAt: payload.lastUpdateAt,
       };
     case CREATE_SECTION:
-      const sectionOrder = payload.sectionOrder || state[payload.storyId].sectionsOrder.length - 1;
-      newSectionsOrder = sectionOrder < state[payload.storyId].sectionsOrder.length ?
+      const sectionIndex = payload.sectionIndex || state[payload.storyId].sectionsOrder.length - 1;
+      newSectionsOrder = sectionIndex < state[payload.storyId].sectionsOrder.length ?
             [
-              ...state[payload.storyId].sectionsOrder.slice(0, sectionOrder),
+              ...state[payload.storyId].sectionsOrder.slice(0, sectionIndex),
               payload.sectionId,
-              ...state[payload.storyId].sectionsOrder.slice(sectionOrder)
+            ...state[payload.storyId].sectionsOrder.slice(sectionIndex)
             ]
             :
             [
