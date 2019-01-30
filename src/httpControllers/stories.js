@@ -82,13 +82,7 @@ export const getStory = (req, res) => {
             userId: req.query.userId
           }
         });
-        socket.emit('action', {
-          type: 'ENTER_STORY_INIT',
-          payload: {
-            storyId: story.id,
-            locks: (lockingMap[story.id] && lockingMap[story.id].locks) || {},
-          }
-        });
+        
         socket.join(story.id);
         socket.broadcast.emit('action', {
         // socket.to(story.id).emit('action', {

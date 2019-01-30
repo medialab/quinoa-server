@@ -107,13 +107,7 @@ export default (io, store) => {
                   userId: socket.id
                 }
               });
-              socket.emit('action', {
-                type: 'ENTER_STORY_INIT',
-                payload: {
-                  storyId: story.id,
-                  locks: (lockingMap[story.id] && lockingMap[story.id].locks) || {},
-                }
-              });
+
               // join corresponding room
               socket.join(story.id);
               socket.leave('home');
