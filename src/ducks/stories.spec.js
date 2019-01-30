@@ -9,29 +9,34 @@ import reducer, {
   CREATE_SECTION,
   DELETE_SECTION,
   DELETE_RESOURCE,
-} from '../ducks/stories';
+} from './stories';
 
 /**
  * * TESTING - Reducers
  */
 
 describe( 'story reducer test', () => {
+  let mockState;
+  let baseAction;
+  let action;
   describe( 'UPDATE_SECTIONS_ORDER action', () => {
-    const mockState = {
-      stories: {
-        storyOne: {
-          sectionsOrder: [ 'a', 'b', 'c', 'd' ]
+    beforeEach(() => {
+      mockState = {
+        stories: {
+          storyOne: {
+            sectionsOrder: [ 'a', 'b', 'c', 'd' ]
+          }
         }
-      }
-    };
-    const baseAction = {
-      type: UPDATE_SECTIONS_ORDER,
-      payload: {},
-    };
+      };
+      baseAction = {
+        type: UPDATE_SECTIONS_ORDER,
+        payload: {},
+      };
+    });
 
     it( 'should successfully update sections order in normal cases', () => {
       const providedSectionsOrder = [ 'b', 'a', 'c', 'd' ];
-      const action = {
+      action = {
         ...baseAction,
         payload: {
           storyId: 'storyOne',
@@ -44,7 +49,7 @@ describe( 'story reducer test', () => {
     it( 'should successfully update sections order after a section was deleted', () => {
       const providedSectionsOrder = [ 'b', 'a', 'c', 'e', 'd' ];
       const expectedSectionsOrder = [ 'b', 'a', 'c', 'd' ];
-      const action = {
+      action = {
         ...baseAction,
         payload: {
           storyId: 'storyOne',
@@ -58,7 +63,7 @@ describe( 'story reducer test', () => {
     it( 'should successfully update sections order after a section was added', () => {
       const providedSectionsOrder = [ 'b', 'a', 'c' ];
       const expectedSectionsOrder = [ 'b', 'a', 'c', 'd' ];
-      const action = {
+      action = {
         ...baseAction,
         payload: {
           storyId: 'storyOne',
@@ -72,26 +77,28 @@ describe( 'story reducer test', () => {
   } );
 
   describe( 'CREATE_SECTION action', () => {
-    const mockState = {
-      stories: {
-        storyOne: {
-          sections: {
-            a: {},
-            b: {},
-            c: {},
-            d: {},
-          },
-          sectionsOrder: [ 'a', 'b', 'c', 'd' ]
+    beforeEach(() => {
+      mockState = {
+        stories: {
+          storyOne: {
+            sections: {
+              a: {},
+              b: {},
+              c: {},
+              d: {},
+            },
+            sectionsOrder: [ 'a', 'b', 'c', 'd' ]
+          }
         }
-      }
-    };
-    const baseAction = {
-      type: CREATE_SECTION,
-      payload: {},
-    };
+      };
+      baseAction = {
+        type: CREATE_SECTION,
+        payload: {},
+      };
+    }); 
 
     it( 'a section was added in summary view, section should be appended in section orders', () => {
-      const action = {
+      action = {
         ...baseAction,
         payload: {
           storyId: 'storyOne',
@@ -106,7 +113,7 @@ describe( 'story reducer test', () => {
     } );
 
     it( 'a section was added in summary view, section should be appended in sections', () => {
-      const action = {
+      action = {
         ...baseAction,
         payload: {
           storyId: 'storyOne',
@@ -127,7 +134,7 @@ describe( 'story reducer test', () => {
     } );
 
     it( 'a section was added in section view, section should be inserted in section orders', () => {
-      const action = {
+      action = {
         ...baseAction,
         payload: {
           storyId: 'storyOne',
@@ -142,7 +149,7 @@ describe( 'story reducer test', () => {
     } );
 
     it( 'a section was added in section view, section should be inserted in sections', () => {
-      const action = {
+      action = {
         ...baseAction,
         payload: {
           storyId: 'storyOne',
@@ -164,40 +171,42 @@ describe( 'story reducer test', () => {
   } );
 
   describe( 'DELETE_SECTION action', () => {
-    const mockState = {
-      stories: {
-        storyOne: {
-          sections: {
-            a: {},
-            b: {},
-            c: {},
-            d: {},
-          },
-          sectionsOrder: [ 'a', 'b', 'c', 'd' ],
-          contextualizations: {
-            ctxtionOne: {
-              id: 'ctxtionOne',
-              resourceId: 'resourceOne',
-              contextualizerId: 'ctxlizerOne',
-              sectionId: 'b'
+    beforeEach(() => {
+      mockState = {
+        stories: {
+          storyOne: {
+            sections: {
+              a: {},
+              b: {},
+              c: {},
+              d: {},
             },
-          },
-          contextualizers: {
-            ctxlizerOne: {
-              id: 'ctxlizerOne',
-              type: 'image'
+            sectionsOrder: [ 'a', 'b', 'c', 'd' ],
+            contextualizations: {
+              ctxtionOne: {
+                id: 'ctxtionOne',
+                resourceId: 'resourceOne',
+                contextualizerId: 'ctxlizerOne',
+                sectionId: 'b'
+              },
+            },
+            contextualizers: {
+              ctxlizerOne: {
+                id: 'ctxlizerOne',
+                type: 'image'
+              }
             }
           }
         }
-      }
-    };
-    const action = {
-      type: DELETE_SECTION,
-      payload: {
-        storyId: 'storyOne',
-        sectionId: 'b'
-      },
-    };
+      };
+      action = {
+        type: DELETE_SECTION,
+        payload: {
+          storyId: 'storyOne',
+          sectionId: 'b'
+        },
+      };
+    })
 
     it( 'a section was delete, section order should be updated', () => {
       const expectedSectionsOrder = [ 'a', 'c', 'd' ];
@@ -229,37 +238,39 @@ describe( 'story reducer test', () => {
   } );
 
   describe( 'DELETE_RESOURCE action', () => {
-    const mockState = {
-      stories: {
-        storyOne: {
-          resources: {
-            resourceOne: {}
-          },
-          contextualizations: {
-            ctxtionOne: {
-              id: 'ctxtionOne',
-              resourceId: 'resourceOne',
-              contextualizerId: 'ctxlizerOne',
-              sectionId: 'a'
-            }
-          },
-          contextualizers: {
-            ctxlizerOne: {
-              id: 'ctxlizerOne',
-              type: 'image'
+    beforeEach(() => {
+      mockState = {
+        stories: {
+          storyOne: {
+            resources: {
+              resourceOne: {}
+            },
+            contextualizations: {
+              ctxtionOne: {
+                id: 'ctxtionOne',
+                resourceId: 'resourceOne',
+                contextualizerId: 'ctxlizerOne',
+                sectionId: 'a'
+              }
+            },
+            contextualizers: {
+              ctxlizerOne: {
+                id: 'ctxlizerOne',
+                type: 'image'
+              }
             }
           }
         }
-      }
-    };
-
-    const action = {
-      type: DELETE_RESOURCE,
-      payload: {
-        storyId: 'storyOne',
-        resourceId: 'resourceOne'
-      }
-    };
+      };
+  
+      action = {
+        type: DELETE_RESOURCE,
+        payload: {
+          storyId: 'storyOne',
+          resourceId: 'resourceOne'
+        }
+      };
+    })
 
     it( 'a resource was delete, contextualizations should be updated', () => {
       const expectedContextualizations = {};
