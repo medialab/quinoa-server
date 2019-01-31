@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import {createStructuredSelector} from 'reselect';
 
-import {CREATE_SECTION, DELETE_SECTION, INACTIVATE_STORY, DELETE_STORY} from './stories';
+import {INACTIVATE_STORY, DELETE_STORY} from './stories';
 
 export const ENTER_STORY = 'ENTER_STORY';
 export const LEAVE_STORY = 'LEAVE_STORY';
@@ -9,9 +9,9 @@ export const LEAVE_STORY = 'LEAVE_STORY';
 export const ENTER_BLOCK = 'ENTER_BLOCK';
 export const LEAVE_BLOCK = 'LEAVE_BLOCK';
 
-const USER_CONNECTED = 'USER_CONNECTED';
-const USER_DISCONNECTING = 'USER_DISCONNECTING';
-const USER_DISCONNECTED = 'USER_DISCONNECTED';
+export const USER_CONNECTED = 'USER_CONNECTED';
+export const USER_DISCONNECTING = 'USER_DISCONNECTING';
+export const USER_DISCONNECTED = 'USER_DISCONNECTED';
 
 export const SET_USER_AS_IDLE = 'SET_USER_AS_IDLE';
 export const SET_USER_AS_ACTIVE = 'SET_USER_AS_ACTIVE';
