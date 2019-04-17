@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --no-cache",
-    "dev": "nodemon src/server.js --exec babel-node --ignore data --verbose",
+    "dev": "nodemon src/server.js --exec babel-node --ignore data --ignore temp --verbose",
     "start": "NODE_ENV=production babel-node src/server.js",
     "build-apps": "rm -rf builds; mkdir builds; node src/helpers/storyAppBuilder/",
     "compose": "docker-compose up"
@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "ajv": "^6.6.2",
+    "archiver": "^3.0.0",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "config": "^1.30.0",
@@ -40,7 +41,7 @@
     "node-sass": "^4.11.0",
     "quinoa-design-library": "0.0.16",
     "quinoa-schemas": "^1.1.1",
-    "quinoa-story-player": "^0.3.50",
+    "quinoa-story-player": "^0.4.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^5.0.7",
