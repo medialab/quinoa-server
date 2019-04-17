@@ -496,7 +496,7 @@ const bundleStoryAsMultipleFiles = (story = {}, options = {}) => {
         filePath: jobZipPath, 
         callback: (err) => {
           try{
-            // fs.remove(jobFolderPath)
+            fs.remove(jobFolderPath)
           }catch(e) {
             console.error(e);
           }
