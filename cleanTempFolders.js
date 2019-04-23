@@ -15,7 +15,8 @@ module.exports = function() {
     const now = new Date().getTime();
     fs.readdir(tempFolder)
     .then(items => {
-        items.reduce( ( cur, item ) => {
+        console.log('%s items in temp folder', items.length);
+        return items.reduce( ( cur, item ) => {
             return cur.then(() => new Promise( ( resolve, reject ) => {
                 const itemPath = `${tempFolder}/${item}`;
                 fs.lstat(itemPath)
@@ -34,9 +35,9 @@ module.exports = function() {
                 .catch(reject); 
             }));
         }, Promise.resolve())
-        .then(() => console.log('all cleaning done'))
-        .catch(console.error)
-    });
+    })
+    .then(() => console.log('all cleaning done'))
+    .catch(console.error)
 
 }
 
