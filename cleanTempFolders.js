@@ -7,11 +7,12 @@ const tempFolder = __dirname + '/temp';
 const fs = require('fs-extra');
 
 const HOUR = 1000 * 3600;
-const now = new Date().getTime();
+
 
 
 module.exports = function() {
     console.log('cleaning the temp folder %s', tempFolder);
+    const now = new Date().getTime();
     fs.readdir(tempFolder)
     .then(items => {
         items.reduce( ( cur, item ) => {
