@@ -1,5 +1,4 @@
 import manager from '../services/stories';
-import fs from 'fs-extra';
 import {bundleStoryAsSingleFile, bundleStoryAsMultipleFiles} from '../helpers/storyBundler';
 
 import store from '../store/configureStore';
@@ -49,14 +48,7 @@ export const getStory = (req, res) => {
           manager.getStory(req.params.id)
           .then(story => bundleStoryAsMultipleFiles(story, {locale: req.query.locale}))
           .then(({filePath, callback}) => {
-            res.setHeader('Content-Type', 'application/zip');
-            const pipe = fs.createReadStream(filePath).pipe(res);
-            pipe.on('finish', (err) => {
-              callback(err);
-            });
-            pipe.on('error', err => {
-              callback(err);
-            });
+            res.sendFile(filePath, callback);
           })
           .catch(error => {
             res.status(500).send(error);
