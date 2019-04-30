@@ -436,7 +436,23 @@ const bundleStoryAsMultipleFiles = (story = {}, options = {}) => {
     .then(() => fs.copy(readmeEnPath, `${jobTempPath}/README.txt`))
     .then(() => fs.copy(readmeFrPath, `${jobTempPath}/LISEZ-MOI.md`))
     .then(() => fs.copy(readmeEnPath, `${jobTempPath}/README.md`))
-    .then(() => fs.copy(`${dataPath}/stories/${story.id}/resources`, `${jobTempPath}/resources`))
+    .then(() => {
+      // copy resources only if there is a resources folder
+      return new Promise((res, rej) => {
+        fs.pathExists(`${dataPath}/stories/${story.id}/resources`)
+          .then(exists => {
+            if (exists) {
+              fs.copy(`${dataPath}/stories/${story.id}/resources`, `${jobTempPath}/resources`)
+              .then(res)
+              .catch(rej)
+            } else {
+              res();
+            }
+          })
+          .catch(rej)
+      })
+      
+    })
     .then(() => fs.writeFile(`${jobTempPath}/story.json`, storyJSON, 'utf8'))
     .then(() => fs.writeFile(`${jobTempPath}/bundle.js`, bundle), 'utf8')
     .then(() => fs.writeFile(`${jobTempPath}/index.html`, html, 'utf8'))
