@@ -263,6 +263,7 @@ export default (io, store) => {
         }
         if (
           action.type === 'LEAVE_STORY' &&
+          io.sockets.adapter.rooms[payload.storyId] &&
           io.sockets.adapter.rooms[payload.storyId].length === 1 && 
           io.sockets.adapter.rooms[payload.storyId].sockets[payload.userId] && 
           storiesMap[payload.storyId] !== undefined
