@@ -1,7 +1,7 @@
 {
   "name": "quinoa-server",
   "version": "0.3.0",
-  "description": "quinoa server",
+  "description": "a server application for fonio",
   "main": "index.js",
   "scripts": {
     "test": "jest --no-cache",
@@ -17,7 +17,7 @@
     "Guillaume Plique",
     "Jérémy Richard"
   ],
-  "license": "MIT",
+  "license": "AGPL-3.0",
   "dependencies": {
     "ajv": "^6.6.2",
     "archiver": "^3.0.0",
@@ -63,7 +63,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.3.1",
     "babel-jest": "^24.0.0",
-    "jest": "^24.0.0",
+    "jest": "^24.8.0",
     "nodemon": "^1.18.9",
     "remote-redux-devtools": "^0.5.14",
     "remotedev-server": "^0.3.1"
