@@ -32,6 +32,9 @@ export const CREATE_CONTEXTUALIZATION = 'CREATE_CONTEXTUALIZATION';
 export const UPDATE_CONTEXTUALIZATION = 'UPDATE_CONTEXTUALIZATION';
 export const DELETE_CONTEXTUALIZATION = 'DELETE_CONTEXTUALIZATION';
 
+export const CREATE_STORY_OBJECTS = 'CREATE_STORY_OBJECTS';
+
+
 export const SET_COVER_IMAGE = 'SET_COVER_IMAGE';
 
 export const saveAllStories = (timeAfter) => ({
@@ -255,6 +258,32 @@ function stories(state = initialStoriesState, action) {
           contextualizations,
           lastUpdateAt: payload.lastUpdateAt,
         },
+      };
+
+    /**
+     * CONTEXTUALIZATIONS AND CONTEXTUALIZERS RELATED
+     */
+    case CREATE_STORY_OBJECTS:
+      const {
+        contextualizations = {},
+        contextualizers = {},
+        storyId,
+        lastUpdateAt,
+      } = payload;
+      return {
+        ...state,
+        [storyId]: {
+          ...state[payload.storyId],
+          contextualizations: {
+            ...state[payload.storyId].contextualizations,
+            ...contextualizations,
+          },
+          contextualizers: {
+            ...state[payload.storyId].contextualizers,
+            ...contextualizers,
+          },
+          lastUpdateAt,
+        }
       };
 
     /**
