@@ -35,14 +35,13 @@
     "get-folder-size": "^2.0.0",
     "image-webpack-loader": "^4.6.0",
     "jsonwebtoken": "^8.4.0",
-    "kotatsu": "^0.17.0",
     "lodash": "^4.17.15",
     "lowdb": "^1.0.0",
     "morgan": "^1.9.1",
     "node-sass": "^4.11.0",
     "quinoa-design-library": "0.0.16",
     "quinoa-schemas": "^1.1.2",
-    "quinoa-story-player": "^0.4.6",
+    "quinoa-story-player": "^0.5.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^5.0.7",
@@ -53,8 +52,7 @@
     "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "^1.2.6",
     "uuid": "^3.2.1",
-    "validator": "^10.9.0",
-    "webpack": "^3.12.0"
+    "validator": "^10.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -64,9 +62,11 @@
     "@babel/preset-env": "^7.3.1",
     "babel-jest": "^24.0.0",
     "jest": "^24.8.0",
+    "kotatsu": "^0.17.0",
     "nodemon": "^1.18.9",
     "remote-redux-devtools": "^0.5.14",
-    "remotedev-server": "^0.3.1"
+    "remotedev-server": "^0.3.1",
+    "webpack": "^4.36.1"
   },
   "babel": {
     "plugins": [
