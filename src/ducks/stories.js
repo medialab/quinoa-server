@@ -265,8 +265,8 @@ function stories(state = initialStoriesState, action) {
      */
     case CREATE_STORY_OBJECTS:
       const {
-        contextualizations = {},
-        contextualizers = {},
+        contextualizations : newContextualizations = {},
+        contextualizers : newContextualizers = {},
         storyId,
         lastUpdateAt,
       } = payload;
@@ -276,11 +276,11 @@ function stories(state = initialStoriesState, action) {
           ...state[payload.storyId],
           contextualizations: {
             ...state[payload.storyId].contextualizations,
-            ...contextualizations,
+            ...newContextualizations,
           },
           contextualizers: {
             ...state[payload.storyId].contextualizers,
-            ...contextualizers,
+            ...newContextualizers,
           },
           lastUpdateAt,
         }
