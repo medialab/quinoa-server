@@ -68,3 +68,6 @@ temp/
 
 #.DS_Store
 .DS_Store
+
+# babel dist
+dist
