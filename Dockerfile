@@ -12,6 +12,7 @@ RUN apk add --no-cache --virtual .build-deps make gcc g++ libc-dev libpng-dev au
     &&  npm ci --quiet --production false --no-audit \
     &&  apk del .build-deps \
     &&  rm -fr /root/.npm /root/.node-gyp
+    &&  npm run postinstall
 
 RUN mkdir /quinoa-server/data
 
