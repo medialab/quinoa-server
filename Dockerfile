@@ -15,7 +15,7 @@ RUN apk add --no-cache --virtual .build-deps make gcc g++ libc-dev libpng-dev au
     &&  npm run postinstall \
     &&  npm run dist
 
-RUN mkdir /quinoa-server/data
+RUN mkdir -p /quinoa-server/data
 
 VOLUME /quinoa-server/data
 
