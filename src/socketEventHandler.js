@@ -88,7 +88,7 @@ export default (io, store) => {
        * Step 1 : verify story exists if needed
        */
       .then(() => new Promise((resolve, reject) => {
-        // check if storyId exists (room) except LEAVE_BLOCK scenario
+        // check if storyId exists (room) exceptLEAVE_BLOCK scenario (note LEAVE_STORY is called before LEAVE_BLOCK)
         if (action.meta.room && !storiesMap[action.meta.room] && action.type !== 'LEAVE_BLOCK') {
           // try to read story from disk
           getStory(action.meta.room)
@@ -107,13 +107,7 @@ export default (io, store) => {
                   userId: socket.id
                 }
               });
-              socket.emit('action', {
-                type: 'ENTER_STORY_INIT',
-                payload: {
-                  storyId: story.id,
-                  locks: (lockingMap[story.id] && lockingMap[story.id].locks) || {},
-                }
-              });
+
               // join corresponding room
               socket.join(story.id);
               socket.leave('home');
@@ -267,16 +261,20 @@ export default (io, store) => {
             socket.broadcast.emit('action', {type: `${action.type}_BROADCAST`, payload})
           }
         }
-        if (action.type === 'LEAVE_STORY') {
-          const rooms = Object.keys(socket.rooms).filter(d => d !== socket.id);
-          rooms.forEach((id) => {
-            if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id] && storiesMap[id] !== undefined) {
-              const story = Object.assign({}, storiesMap[id]);
-              // INACTIVATE_STORY and clean story and write to disk;
-              const cleanedStory = cleanStory(story);
-              writeStory(cleanedStory)
-              .then(() => store.dispatch({type: 'INACTIVATE_STORY', payload: {id}}));
-            }
+        if (
+          action.type === 'LEAVE_STORY' &&
+          io.sockets.adapter.rooms[payload.storyId] &&
+          io.sockets.adapter.rooms[payload.storyId].length === 1 && 
+          io.sockets.adapter.rooms[payload.storyId].sockets[payload.userId] && 
+          storiesMap[payload.storyId] !== undefined
+        ) {
+          const story = Object.assign({}, storiesMap[payload.storyId]);
+          // INACTIVATE_STORY and clean story and write to disk;
+          const cleanedStory = cleanStory(story);
+          writeStory(cleanedStory)
+          .then(() => {
+            store.dispatch({type: 'INACTIVATE_STORY', payload: {id: payload.storyId}});
+            io.emit('action', {type: 'INACTIVATE_STORY', payload: {id: payload.storyId}});
           });
         }
         // special case for handling metadata update display in home

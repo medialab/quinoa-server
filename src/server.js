@@ -14,6 +14,8 @@ import auth from './routes/auth';
 import stories from './routes/stories';
 import resources from './routes/resources';
 
+import chron from '../chron';
+
 
 const PORT = config.get('port');
 const dataFolder = config.get('dataFolder');

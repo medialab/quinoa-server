@@ -18,7 +18,6 @@ const mountNode = document.getElementById('mount');
  * @param {object} story - the story to render
  */
 function renderStory (story, locale) {
-  console.log('render with locale', locale);
   render(React.createElement(Story, {story: story, locale: locale, previewMode: false}, null), mountNode);
 }
 // this is used in all-in-one html representations

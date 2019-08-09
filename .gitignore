@@ -63,5 +63,11 @@ config.json
 # data folder
 data/
 
+# temp folder
+temp/
+
 #.DS_Store
 .DS_Store
+
+# babel dist
+dist

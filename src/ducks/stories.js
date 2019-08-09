@@ -32,6 +32,9 @@ export const CREATE_CONTEXTUALIZATION = 'CREATE_CONTEXTUALIZATION';
 export const UPDATE_CONTEXTUALIZATION = 'UPDATE_CONTEXTUALIZATION';
 export const DELETE_CONTEXTUALIZATION = 'DELETE_CONTEXTUALIZATION';
 
+export const CREATE_STORY_OBJECTS = 'CREATE_STORY_OBJECTS';
+
+
 export const SET_COVER_IMAGE = 'SET_COVER_IMAGE';
 
 export const saveAllStories = (timeAfter) => ({
@@ -106,12 +109,12 @@ function stories(state = initialStoriesState, action) {
           lastUpdateAt: payload.lastUpdateAt,
       };
     case CREATE_SECTION:
-      const sectionOrder = payload.sectionOrder || state[payload.storyId].sectionsOrder.length - 1;
-      newSectionsOrder = sectionOrder < state[payload.storyId].sectionsOrder.length ?
+      const sectionIndex = payload.sectionIndex || state[payload.storyId].sectionsOrder.length - 1;
+      newSectionsOrder = sectionIndex < state[payload.storyId].sectionsOrder.length ?
             [
-              ...state[payload.storyId].sectionsOrder.slice(0, sectionOrder),
+              ...state[payload.storyId].sectionsOrder.slice(0, sectionIndex),
               payload.sectionId,
-              ...state[payload.storyId].sectionsOrder.slice(sectionOrder)
+            ...state[payload.storyId].sectionsOrder.slice(sectionIndex)
             ]
             :
             [
@@ -255,6 +258,32 @@ function stories(state = initialStoriesState, action) {
           contextualizations,
           lastUpdateAt: payload.lastUpdateAt,
         },
+      };
+
+    /**
+     * CONTEXTUALIZATIONS AND CONTEXTUALIZERS RELATED
+     */
+    case CREATE_STORY_OBJECTS:
+      const {
+        contextualizations : newContextualizations = {},
+        contextualizers : newContextualizers = {},
+        storyId,
+        lastUpdateAt,
+      } = payload;
+      return {
+        ...state,
+        [storyId]: {
+          ...state[payload.storyId],
+          contextualizations: {
+            ...state[payload.storyId].contextualizations,
+            ...newContextualizations,
+          },
+          contextualizers: {
+            ...state[payload.storyId].contextualizers,
+            ...newContextualizers,
+          },
+          lastUpdateAt,
+        }
       };
 
     /**
