@@ -1,5 +1,9 @@
 #!/bin/sh
 
-chown -R node:node /quinoa-server
+# NOTE: tutorials will be re-created on startup even if users deleted them
+# Do we really want that?
+chown -R node:node /quinoa-server/data
+su-exec node:node /usr/local/bin/npm run load:tutorials:docker
 
-BABEL_DISABLE_CACHE=1 su-exec node:node /usr/local/bin/npm run start:docker
+chown -R node:node /quinoa-server/data
+su-exec node:node /usr/local/bin/npm run start:docker
