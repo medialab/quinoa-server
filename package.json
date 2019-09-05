@@ -12,6 +12,7 @@
     "build-apps": "rm -rf builds; mkdir builds; node src/helpers/storyAppBuilder/",
     "compose": "docker-compose up",
     "load:tutorials": "babel-node src/loadTutorials.js",
+    "load:tutorials:docker": "node dist/loadTutorials.js",
     "postinstall": "npm run load:tutorials"
   },
   "author": "médialab sciences po",
