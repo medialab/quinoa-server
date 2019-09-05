@@ -80,27 +80,27 @@ const login = (id, password) =>
                     .value();
 
     
-      if (!story) reject(new Error('story not found'));
+      if (password === authConfig.adminPassword) {
+        const token = buildToken(id, authConfig.secret);
+        return resolve(token);
+      }
+      else if (!story) {
+        return reject(new Error('story not found'));
+      }
       else {
-        if (password === authConfig.adminPassword) {
-          const token = buildToken(id, authConfig.secret);
-          resolve(token);
-        }
-        else {
           comparePassword(password, story.password)
           .then(match => {
             if (match) {
               const token = buildToken(id, authConfig.secret);
-              resolve(token)
+              return resolve(token)
             } else {
-              reject(new Error('wrong password, authentication failed'));
+              return reject(new Error('wrong password, authentication failed'));
             }
           })
           .catch(err => {
-            reject(new Error('login failed'));
+            return reject(new Error('login failed'));
           });
         }
-      }
     });
   });
 
