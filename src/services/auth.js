@@ -40,7 +40,7 @@ const register = (id, password) =>
       else {
         hash(password, salt)
         .then(hashedPassword => {
-          db.get('credentials')
+          return db.get('credentials')
           .push({id, password: hashedPassword})
           .write()
         })
@@ -79,6 +79,7 @@ const login = (id, password) =>
                     .find({id})
                     .value();
 
+    
       if (!story) reject(new Error('story not found'));
       else {
         if (password === authConfig.adminPassword) {
