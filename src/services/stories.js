@@ -90,9 +90,9 @@ const trimStory = (story) =>
 
   });
 
-const createStory = (story, password) =>
+const createStory = (story, password, inputId) =>
   new Promise ((resolve, reject) => {
-    const id = uuid();
+    const id = inputId || uuid();
     const storyPath = storiesPath + '/' + id;
     const addr = storyPath + '/' + id + '.json';
     story = {...story, id, createdAt: new Date().getTime(), lastUpdateAt: new Date().getTime()};
