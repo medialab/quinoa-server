@@ -17,7 +17,7 @@ const getOrCreateStory = (data, password, id, jobName) => {
       })
       .catch(() => {
         console.log('have to create', id);
-        manager.createStory(data, password, jobName)
+        manager.createStory(data, password, id)
         .then(resolve)
         .catch(reject)
       })
