@@ -1,9 +1,12 @@
 // import {saveAllStories} from './ducks/stories';
-import {writeStories, writeStory, getStory} from './services/stories';
+import {writeStories, writeStory, getStory, deleteStory, getStories} from './services/stories';
 import {checkToken} from './services/auth';
 import store from './store/configureStore';
 import selectors from './ducks';
 import cleanStory from './validators/storyUtils';
+import config from 'config';
+
+const demoMode = config.get('demoMode');
 
 let autoSaveInterval;
 let idleCheckInterval;
@@ -261,6 +264,7 @@ export default (io, store) => {
             socket.broadcast.emit('action', {type: `${action.type}_BROADCAST`, payload})
           }
         }
+        // last user leaves an active story
         if (
           action.type === 'LEAVE_STORY' &&
           io.sockets.adapter.rooms[payload.storyId] &&
@@ -269,13 +273,30 @@ export default (io, store) => {
           storiesMap[payload.storyId] !== undefined
         ) {
           const story = Object.assign({}, storiesMap[payload.storyId]);
-          // INACTIVATE_STORY and clean story and write to disk;
-          const cleanedStory = cleanStory(story);
-          writeStory(cleanedStory)
-          .then(() => {
-            store.dispatch({type: 'INACTIVATE_STORY', payload: {id: payload.storyId}});
-            io.emit('action', {type: 'INACTIVATE_STORY', payload: {id: payload.storyId}});
-          });
+          // demo mode: INACTIVATE_STORY and remove story from the disk
+          if (demoMode) {
+            console.log('deleting')
+            // normal mode: INACTIVATE_STORY and clean story and write to disk;
+            deleteStory(payload.storyId)
+            .then(() => {
+              getStories()
+              .then(stories => {
+                io.emit('action', {type: 'UPDATE_STORIES_LIST', payload: {stories}});
+                store.dispatch({type: 'INACTIVATE_STORY', payload: {id: payload.storyId}});
+                io.emit('action', {type: 'INACTIVATE_STORY', payload: {id: payload.storyId}});
+              })
+              
+            });
+          } else {
+            // normal mode: INACTIVATE_STORY and clean story and write to disk;
+            const cleanedStory = cleanStory(story);
+            writeStory(cleanedStory)
+            .then(() => {
+              store.dispatch({type: 'INACTIVATE_STORY', payload: {id: payload.storyId}});
+              io.emit('action', {type: 'INACTIVATE_STORY', payload: {id: payload.storyId}});
+            });
+          }
+          
         }
         // special case for handling metadata update display in home
         if (action.type === 'UPDATE_STORY_METADATA') {
