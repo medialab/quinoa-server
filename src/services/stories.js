@@ -233,10 +233,10 @@ const deleteStory = (id) =>
                     db.get('credentials')
                     .remove({id})
                     .write()
+                    .then(() => resolve())
                   })
               });
            })
-           .then(() => resolve())
            .catch(err => reject(err))
   });
 
