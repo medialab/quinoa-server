@@ -7,6 +7,10 @@
     "secret": "SECRET",
     "adminPassword": "ADMIN_PASSWORD"
   },
+  "demoMode": {
+    "__name": "DEMO_MODE",
+    "__format": "boolean"
+  },
   "maxResourceSize": {
     "__name": "MAX_RESOURCE_SIZE",
     "__format": "json"

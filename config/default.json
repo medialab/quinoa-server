@@ -4,6 +4,7 @@
     "secret": "supersecret",
     "adminPassword": "admin"
   },
+  "demoMode": false,
   "maxResourceSize": 4000000,
   "maxFolderSize": 50000000,
   "maxStorySize": 60000000,
