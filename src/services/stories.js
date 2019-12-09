@@ -1,5 +1,5 @@
 import {v4 as uuid} from 'uuid';
-import {outputFile, outputJson, readJson, remove, ensureFile} from 'fs-extra';
+import {outputFile, outputJson, readJson, remove, exists} from 'fs-extra';
 import {resolve} from 'path';
 import authManager from './auth';
 import resourceManager from './resources';
@@ -134,7 +134,12 @@ const getStories = () =>
 const getStory = (id) =>
   new Promise ((resolve, reject) => {
     const addr = storiesPath + '/' + id + '/' + id + '.json';
-    return readJson(addr)
+    return exists(addr)
+          .then(exists => {
+            if (exists) {
+              return readJson(addr)
+            } else reject('story does not exist')
+          })
           .then((res) => resolve(res))
           .catch((err) => reject(err))
   });
