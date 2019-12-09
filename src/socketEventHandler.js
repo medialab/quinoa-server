@@ -286,8 +286,8 @@ export default (io, store) => {
               })
               
             });
-            // normal mode: INACTIVATE_STORY and clean story and write to disk;
           } else {
+            // normal mode: INACTIVATE_STORY and clean story and write to disk;
             const cleanedStory = cleanStory(story);
             writeStory(cleanedStory)
             .then(() => {
@@ -317,9 +317,21 @@ export default (io, store) => {
       store.dispatch({type: 'USER_DISCONNECTING', payload: {userId: socket.id, rooms}});
       rooms.forEach((id) => {
         if(io.sockets.adapter.rooms[id].length === 1 && io.sockets.adapter.rooms[id].sockets[socket.id]) {
-          // store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
           const {storiesMap} = selectors(state);
-          if (storiesMap[id]) {
+          // in demo mode delete story
+          if (storiesMap[id] && demoMode && !storiesMap[id].metadata.isSpecial) {
+            console.log('deleting a story in demo mode')
+            deleteStory(id)
+            .then(() => {
+              getStories()
+              .then(stories => {
+                io.emit('action', {type: 'UPDATE_STORIES_LIST', payload: {stories}});
+                store.dispatch({type: 'INACTIVATE_STORY', payload: {id}});
+                io.emit('action', {type: 'INACTIVATE_STORY', payload: {id}});
+              })
+              
+            });
+          } else if (storiesMap[id]) {
             const cleanedStory = cleanStory(storiesMap[id]);
             writeStory(cleanedStory)
             .then(() => store.dispatch({type: 'INACTIVATE_STORY', payload: {id}}));
@@ -333,6 +345,7 @@ export default (io, store) => {
      * socket disconnect event triggered after disconnecting
      */
     socket.on('disconnect', () => {
+      console.log('disconnect');
       store.dispatch({type:'USER_DISCONNECTED', payload: {userId: socket.id}});
       io.emit('action', {type:'USER_DISCONNECTED', payload: store.getState().connections});
       const {count} = store.getState().connections.users;
