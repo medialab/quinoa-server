@@ -6,9 +6,30 @@ import config from 'config';
 const tutorialsFolder = path.resolve(`${__dirname}/../resources/tutorials`);
 let tutorialFr = JSON.parse(fs.readFileSync(`${tutorialsFolder}/tutorial-fr.json`, 'utf8').trim());
 let tutorialEn = JSON.parse(fs.readFileSync(`${tutorialsFolder}/tutorial-en.json`, 'utf8').trim());
-tutorialFr = Object.assign(tutorialFr, {isSpecial: true})
-tutorialEn = Object.assign(tutorialEn, {isSpecial: true})
-
+tutorialFr = Object.assign(
+  tutorialFr, 
+  {
+    metadata: Object.assign(
+      tutorialFr.metadata, 
+      {
+        isSpecial: true, 
+        specificLanguage: 'fr'
+      }
+    )
+  }
+)
+tutorialEn = Object.assign(
+  tutorialEn, 
+  {
+    metadata: Object.assign(
+      tutorialEn.metadata, 
+      {
+        isSpecial: true, 
+        specificLanguage: 'en'
+      }
+    )
+  }
+)
 const getOrCreateStory = (data, password, id, jobName) => {
   return new Promise((resolve, reject) => {
     console.log('attempting to get', jobName);
