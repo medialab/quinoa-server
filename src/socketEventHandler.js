@@ -274,9 +274,8 @@ export default (io, store) => {
         ) {
           const story = Object.assign({}, storiesMap[payload.storyId]);
           // demo mode: INACTIVATE_STORY and remove story from the disk
-          if (demoMode) {
-            console.log('deleting')
-            // normal mode: INACTIVATE_STORY and clean story and write to disk;
+          if (demoMode && story && !story.isSpecial) {
+            console.log('deleting a story in demo mode')
             deleteStory(payload.storyId)
             .then(() => {
               getStories()
@@ -287,8 +286,8 @@ export default (io, store) => {
               })
               
             });
-          } else {
             // normal mode: INACTIVATE_STORY and clean story and write to disk;
+          } else {
             const cleanedStory = cleanStory(story);
             writeStory(cleanedStory)
             .then(() => {
