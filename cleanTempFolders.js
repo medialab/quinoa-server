@@ -13,7 +13,8 @@ const HOUR = 1000 * 3600;
 module.exports = function() {
     console.log('cleaning the temp folder %s', tempFolder);
     const now = new Date().getTime();
-    fs.readdir(tempFolder)
+    fs.ensureDir(tempFolder)
+    .then(() => fs.readdir(tempFolder))
     .then(items => {
         console.log('%s items in temp folder', items.length);
         return items.reduce( ( cur, item ) => {
