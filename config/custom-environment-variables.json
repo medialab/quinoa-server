@@ -9,7 +9,7 @@
   },
   "demoMode": {
     "__name": "DEMO_MODE",
-    "__format": "boolean"
+    "__format": "json"
   },
   "maxResourceSize": {
     "__name": "MAX_RESOURCE_SIZE",
