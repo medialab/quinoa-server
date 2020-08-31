@@ -46,7 +46,7 @@
     "node-sass": "^4.11.0",
     "quinoa-design-library": "0.0.16",
     "quinoa-schemas": "^1.1.2",
-    "quinoa-story-player": "^0.5.5",
+    "quinoa-story-player": "^0.6.2",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-redux": "^5.0.7",
