@@ -14,6 +14,7 @@ const maxFolderSize = config.get('maxFolderSize');
 
 const createResource = (storyId, id, resource) =>
   new Promise ((resolve, reject) => {
+    
     const {type, ext} = resource.metadata;
     let newResource;
     const resourceFolderPath = `${storiesPath}/${storyId}/resources/`;

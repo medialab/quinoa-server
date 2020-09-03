@@ -6,6 +6,7 @@ import config from 'config';
 const tutorialsFolder = path.resolve(`${__dirname}/../resources/tutorials`);
 let tutorialFr = JSON.parse(fs.readFileSync(`${tutorialsFolder}/tutorial-fr.json`, 'utf8').trim());
 let tutorialEn = JSON.parse(fs.readFileSync(`${tutorialsFolder}/tutorial-en.json`, 'utf8').trim());
+let exampleStory = JSON.parse(fs.readFileSync(`${tutorialsFolder}/naturpradi-example.json`, 'utf8').trim());
 tutorialFr = Object.assign(
   tutorialFr, 
   {
@@ -26,6 +27,17 @@ tutorialEn = Object.assign(
       {
         isSpecial: true, 
         specificLanguage: 'en'
+      }
+    )
+  }
+)
+exampleStory = Object.assign(
+  exampleStory, 
+  {
+    metadata: Object.assign(
+      exampleStory.metadata, 
+      {
+        isSpecial: true
       }
     )
   }
@@ -51,6 +63,7 @@ console.log('creating tutorials as first stories')
 Promise.resolve()
   .then(() => getOrCreateStory(tutorialFr, 'tutoriel', tutorialFr.id, 'tutoriel fr'))
   .then(() => getOrCreateStory(tutorialEn, 'tutorial', tutorialEn.id, 'tutoriel en'))
+  .then(() => getOrCreateStory(exampleStory, 'Exemple de récit / Example story', exampleStory.id, 'example story'))
   .then(() => {
       console.log('done creating tutorials');
       process.exit()
