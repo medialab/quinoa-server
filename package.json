@@ -26,7 +26,7 @@
   "dependencies": {
     "ajv": "^6.6.2",
     "archiver": "^3.0.0",
-    "bcrypt": "^2.0.1",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "chron": "^0.1.1",
     "config": "^1.30.0",
